@@ -1,0 +1,30 @@
+site_name: 2025.2 • SMA & Swarm no Domínio Hospitalar
+site_url: https://SEU_USUARIO.github.io/2025.2_G2_SMA_SwarmDominioHospitalar/
+
+theme:
+  name: null
+  custom_dir: 'cinder'
+
+
+nav:
+  - Início: index.md
+  # - Guia: guia.md
+  # - Referências: referencias.md
+
+plugins:
+  - search
+  - git-revision-date
+   - glightbox
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
+  - admonition
+  - footnotes
+  - def_list
+  - attr_list
+
+repo_url: https://github.com/SEU_USUARIO/2025.2_G2_SMA_SwarmDominioHospitalar
+repo_name: 2025.2_G2_SMA_SwarmDominioHospitalar
+
