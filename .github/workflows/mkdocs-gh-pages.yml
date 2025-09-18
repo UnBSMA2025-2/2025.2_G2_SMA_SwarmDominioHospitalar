@@ -23,6 +23,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build MkDocs
+        working-directory: SwarmDominioHospitalar
         run: mkdocs build --clean
 
       - name: Deploy to gh-pages
@@ -30,5 +31,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./site
+          publish_dir: SwarmDominioHospitalar/site
           force_orphan: true
