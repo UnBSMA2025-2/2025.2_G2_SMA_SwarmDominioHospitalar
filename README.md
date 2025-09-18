@@ -1,26 +1,18 @@
-# RepositorioTemplate
-Esse repositório é para ser utilizado pelos grupos como um template inicial, da home page do Projeto.
-As seções do Template NÃO DEVEM SER OMITIDAS, sendo TODAS RELEVANTES.
-
-**!! *Atenção: Renomeie o seu repositório para (Ano.Semestre)_(Grupo)_SMA_(NomeDaFrenteDePesquisa)*. !!** 
-
-**!! *Não coloque os nomes dos alunos no título do repositório*. !!**
-
-**!! *Exemplo de título correto: 2025.2_G1_SMA_ProjetoComportamentoEmergente*. !!**
- 
- (Apague esses comentários)
-
-# NomeDoProjeto
+# SMA & Swarm no Domínio Hospitalar
 
 **Disciplina**: FGA0053 - Sistemas Multiagentes <br>
-**Nro do Grupo (de acordo com a Planilha de Divisão dos Grupos)**: XX<br>
-**Frente de Pesquisa**: XXXXXXXXXX<br>
+**Nro do Grupo (de acordo com a Planilha de Divisão dos Grupos)**: G2<br>
+**Frente de Pesquisa**: SMA & Swarm<br>
 
 ## Alunos
-|Matrícula | Aluno |
-| -- | -- |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| Matrícula  | Aluno                                   |
+|------------|-----------------------------------------|
+| 19/0085045 | Brenno da Silva Oliveira                |
+| 19/0115564 | Pedro Lucas Siqueira Fernandes          |
+| 20/0025791 | Pablo Guilherme de Jesus Batista Silva  |
+| 19/0020407 | Thiago Vivan Bastos                     |
+| 18/0014412 | Cainã Valença de Freitas                |
+| 15/018312  | Guilherme Lima Matos Leal               |
 
 ## Sobre 
 Descreva o seu projeto em linhas gerais. 
@@ -68,3 +60,25 @@ Quaisquer outras informações sobre o projeto podem ser descritas aqui. Não es
 ## Fontes
 Referencie, adequadamente, as referências utilizadas.
 Indique ainda sobre fontes de leitura complementares.
+
+
+## GithubPages:
+For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+
+-  Commands
+
+* `mkdocs new [dir-name]` - Create a new project.
+* `mkdocs serve` - Start the live-reloading docs server.
+* `mkdocs build` - Build the documentation site.
+* `mkdocs -h` - Print help message and exit.
+
+### Project layout
+
+    mkdocs.yml    # The configuration file.
+    docs/
+        index.md  # The documentation homepage.
+        ...       # Other markdown pages, images and other files.
+
+### Tema
+
+[Cinder](https://github.com/chrissimpkins/cinder)
