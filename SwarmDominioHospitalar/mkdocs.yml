@@ -14,7 +14,7 @@ nav:
 plugins:
   - search
   - git-revision-date
-   - glightbox
+  - glightbox
 
 markdown_extensions:
   - toc:
