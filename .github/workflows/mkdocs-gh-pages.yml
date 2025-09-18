@@ -19,9 +19,8 @@ jobs:
           python-version: '3.x'
           cache: 'pip'
 
-      - name: Install MkDocs + plugins (se precisar)
-        run: |
-          pip install mkdocs==1.6.1
+      - name: Install deps
+        run: pip install -r requirements.txt
 
       - name: Build MkDocs
         run: mkdocs build --clean
