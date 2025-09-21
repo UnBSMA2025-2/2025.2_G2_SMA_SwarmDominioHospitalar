@@ -17,10 +17,10 @@ Cada agente possui uma **casa base (H)** de onde parte e para onde retorna no fi
 Exemplo de representação:
 
 Imagem real da cidade:  
-![Imagem da Cidade](../assets/googleImage.png)  
+![Imagem da Cidade](assets/googleImage.png)  
 
 Representação em quadrados:  
-![Representação da Cidade](../assets/squareImage.png)  
+![Representação da Cidade](assets/squareImage.png)  
 
 ---
 
