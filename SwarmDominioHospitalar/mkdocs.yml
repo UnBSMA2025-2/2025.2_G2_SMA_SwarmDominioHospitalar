@@ -5,10 +5,10 @@ theme:
   name: null
   custom_dir: 'cinder'
 
-
 nav:
   - Início: index.md
   - Investigando: investigando.md
+  - Problema V.1: problem.md
   # - Referências: referencias.md
 
 plugins:
@@ -24,7 +24,11 @@ markdown_extensions:
   - footnotes
   - def_list
   - attr_list
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML
 
 repo_url: https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar
 repo_name: 2025.2_G2_SMA_SwarmDominioHospitalar
-
