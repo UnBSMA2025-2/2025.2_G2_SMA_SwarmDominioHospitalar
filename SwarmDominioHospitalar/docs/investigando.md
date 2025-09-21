@@ -1,39 +1,30 @@
-# Módulo Investigando
+# Módulo de Investigação: A Primeira Etapa
 
-Pesquisa sobre **Sistemas Multiagentes (SMA) & Swarm no Domínio Hospitalar**.  
-Documento de registro da fase de investigação e coleta de periódicos.
+## Introdução
+
+O Módulo Investigando foi a fase inicial do nosso trabalho. Ele consistiu em aulas teóricas que nos proporcionaram um primeiro contato com sistemas multiagentes e suas diversas ramificações.
+
+O principal objetivo desta etapa foi capacitar a equipe para realizar pesquisas mais aprofundadas sobre um tópico específico. Com isso, selecionamos o seguinte tema de pesquisa: **Sistemas Multiagentes (SMA) e Swarm no Domínio Hospitalar**.
+
+Este documento, por sua vez, serve como um registro da nossa investigação inicial e da coleta de periódicos sobre o tema.
 
 ## Objetivos
 
-- Mapear artigos, frameworks, dados e métodos relevantes.  
-- Consolidar strings de busca e um protocolo reprodutível de revisão.  
-- Organizar referências por categoria temática:
-  - **Agendamento**
-  - **Fluxo**
-  - **Emergências**
-  - **Recursos / Otimização**
+Os objetivos desta etapa foram focados na busca e no aprofundamento de conteúdos relacionados ao tema. Nosso foco inicial foi em conceitos de sistemas multiagentes que pudessem se correlacionar com o nosso tópico, como:
+
+- **Comportamental:** a forma como os agentes reagem e interagem.
+- **Intencionalidade:** a capacidade dos agentes de agir com propósito.
+- **Swarm:** a coordenação de um grande número de agentes simples.
+
+Com base nesses conceitos, realizamos pesquisas de artigos, livros e documentos científicos para gerar ideias para a formulação do problema que será solucionado na próxima fase.
+
+Para atingir essa meta, definimos os seguintes objetivos específicos:
+- Mapear artigos, frameworks, dados e métodos relevantes.
+- Consolidar strings de busca e um protocolo reprodutível de revisão.
 
 ---
 
-### Buscas realizadas por *Seu_Nome*
-
-| String utilizada | Base consultada | Qtde. resultados | Critérios de inclusão/exclusão | Artigos selecionados |
-|------------------|-----------------|------------------|--------------------------------|-----------------------|
-| (string usada)   | (ex.: Google Scholar, IEEE, Scopus) | (ex.: 1200) | (ex.: inclusão: MAS em hospitais; exclusão: fora do domínio saúde) | (listar artigos) |
-
-### Artigos Selecionados
-
-- [Nome do Artigo](link)  
-
-- [Nome do Artigo](link)  
-
-### Observações
-
----
-
----
-
-### Buscas realizadas por *Guilherme Leal*  
+## Pesquisa Bibliográfica por *Guilherme Leal*  
 
 | String utilizada | Base consultada       | Qtde. resultados | Critérios de inclusão/exclusão | Artigos selecionados |
 |------------------|----------------------|------------------|--------------------------------|-----------------------|
@@ -62,7 +53,7 @@ Documento de registro da fase de investigação e coleta de periódicos.
 
 ---
 
-### Buscas Realizadas por *Pablo Guilherme*
+## Pesquisa Bibliográfica por *Pablo Guilherme*
 
 | Etapa | Descrição | Resultado |
 |-------|-----------|-----------|
@@ -90,9 +81,46 @@ Os artigos selecionados analisam como sociedades e grupos de agentes reagem dian
 
 Embora nenhum dos artigos faça menção direta ao ambiente JADE, escolhido pelo grupo para o desenvolvimento do projeto, todos trazem contribuições importantes para a compreensão do comportamento de sistemas multiagentes aplicados a epidemias. Eles apresentam modelos matemáticos e computacionais, como redes de pequeno mundo, modelos multi-camada e estruturas de agentes digitais, que descrevem a evolução de infecções e a difusão de informações. Essas formulações podem servir de base para orientar a modelagem e a parametrização do projeto, fornecendo equações e conceitos capazes de enriquecer a simulação de epidemias e apoiar a construção de cenários mais realistas.
 
-### Versionamento
+---
+
+## Pesquisa Bibliográfica por *Pedro Lucas*
+
+| Etapa | Descrição | Resultado |
+|-------|-----------|-----------|
+| 1. Estabelecer o Tema | Definição do foco da pesquisa | Simulações de contágio de doenças com sistemas multiagentes relacionados a SWARM e defesas com agentes intencionais |
+| 2. Especificar uma Questão | Elabore uma pergunta guia para a investigação | Como as doenças se comportam e se proliferam durante o contato diário de pessoas durantes situações normais e emergenciais |
+| 3. Identificar Palavras-chave |Liste os termos mais relevantes para a busca  | - Multiagent systems <br> - Attack <br >- Chaos <br> - Hospital <br >- Healthcare <br> - Swarm <br> - Behavior <br>|
+| 4. Identificar Autores | Principais especialistas na área |Durante minhas pesquisas, meu foco foi destinado a encontrar artigos que pudessem se relacionar com ambos lados, tanto do hospital quanto de agentes comportamentais em situações de doenças |
+| 5. Estabelecer Strings de Busca | Combinações de palavras-chave | A string de busca foi montada a partir das palavras chaves e alguns sinônimos |
+| 6. Escolher Bases Científicas | Base onde será realizada a busca | - [Google Scholar](https://scholar.google.com.br/schhp?hl=pt-BR&as_sdt=0,5) <br> - [IEEE](https://ieeexplore.ieee.org/Xplore/home.jsp)|
+| 7. Realizar as Buscas | Buscas na base usando as strings de busca | String utilizadas: <br> - ("Patient" AND "Flow" AND "multiagent") <br> - (("Hospital" OR "Healthcare") AND "Chaos" AND "multiagent") <br> - (("Hospital" OR "Healthcare") AND "emergency" AND "multiagent") <br> - ("Swarm" AND "Attack" AND "Simulation" AND "Hospital" AND "multiagent") |
+| 8. Manter Rastreabilidade | Registro da base consultada, string utilizada, filtros aplicados e numero de retornos | String utilizadas: <br> - ("Patient" AND "Flow" AND "multiagent") -> 15.000 resultados e 3 artigos separados. <br><br> - (("Hospital" OR "Healthcare") AND "Chaos" AND "multiagent") -> 1.770 resultados e 1 artigo separado. <br><br> - (("Hospital" OR "Healthcare") AND "emergency" AND "multiagent") -> 13.100 artigos e 1 artigo separado. <br><br> - ("Swarm" AND "Attack" AND "Simulation" AND "Hospital" AND "multiagent") -> 264 resultados e 2 artigos separados.  |
+| 9. Critérios de Inclusão | Critérios para seleção de artigos | Possuir informações sobre agendamento e ciclo de pacientes, assim como movimentação e interações de dia-a-dia representado em MAS. Fora isso, número de citação foi observado, mas não como um critério deterministico |
+| 10. Critérios de Exclusão | Critérios para descartar artigos | Não ser relacionado ao tema.|
+| 11. Aplicar Critérios | Filtragem das referências com base nos critérios | - [BioWar: scalable agent-based model of bioattacks](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1597399&casa_token=KqD3KQTqwEkAAAAA:C5fZv3CF5l_Dh8GumGga9Q9dar6yvCGNqdE9uyWpp_5hp-scGP2Lnuom6M23GTY02a_gSkvvtQ&tag=1) <br> - [An Intelligent real-time scheduler for out-patient clinics: A multi-agent system model](https://journals.sagepub.com/doi/pdf/10.1177/1460458220905380) <br> - [Research on Multi-Agent Simulation of Epidemic News Spread Characteristics](https://www.jasss.org/10/3/1.html) <br> - [Deep Reinforcement Learning Interdependent Healthcare Critical Infrastructure Simulation model for Dynamically Varying COVID-19 scenario – A case study of a Metro City](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9554875&casa_token=eVx9P9Rw5Q0AAAAA:uxGbGr67n8RnwoXvgH5W4eKnseCjdirnrjo8PUYlkLZFkvNmYvTKrCQQbIwejt0mVO3z0lPiHg) <br> - [Patient and Staff Scheduling Multi-Agent System](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1511541&casa_token=LcJlc7Y6TGMAAAAA:rv9w7OrXPtrz9sDKgi3zcT-B0X8xxGzeFy6a4Chc8xaQ2OPAr2NReRna0TbyUxMcFDPiMNxTGA) <br> - [Patient Flow Control Using Multi-Agent Systems](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8744825&casa_token=jIyXMLLMO5cAAAAA:F_tumg50_koXZt6hKnEvAhzsCJWgIcZiccdT9SFyx_jATBEQOvjDFtsIgBxY3thZHF5rVlJVfw)|
+| 12. Ler Resumos | Leitura e refinamento da seleção de referencias  | Todos acima foram selecionados como pertinentes ao tema em questão, porém 2 foram lidos na integra, com os outros na fila para serem usados como referencia durante o desenvolvimento |
+| 13. Apresentar Referências Finais | Apresentação das referencias selecionadas | - [BioWar: scalable agent-based model of bioattacks](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1597399&casa_token=KqD3KQTqwEkAAAAA:C5fZv3CF5l_Dh8GumGga9Q9dar6yvCGNqdE9uyWpp_5hp-scGP2Lnuom6M23GTY02a_gSkvvtQ&tag=1) <br> - [An Intelligent real-time scheduler for out-patient clinics: A multi-agent system model](https://journals.sagepub.com/doi/pdf/10.1177/1460458220905380) |
+
+<p align="center"> 
+  <strong>Fonte:</strong> <a href="https://github.com/PedroLSF">Pedro Lucas</a>
+</p>
+
+---
+
+Durante a pesquisa, dividi o trabalho em duas frentes distintas para explorar diferentes ângulos do nosso tema.
+
+Na primeira frente, meu foco foi nos hospitais. A ideia era entender como agentes movidos por intencionalidade poderiam atuar nesse ambiente. O principal objetivo era analisar como eles poderiam gerenciar o estresse e a demanda de múltiplos pacientes de forma simultânea.
+
+A segunda frente me direcionou para a perspectiva do paciente, modelando-o como um agente. Nela, meu enfoque foi no conceito de Swarm e no comportamento dos agentes. Eu explorei como eles se comportariam em um ambiente hospitalar e, principalmente, como a proliferação de doenças poderia ser simulada.
+
+A pesquisa me levou ao **BioWar: scalable agent-based model of bioattacks**. Este estudo me ofereceu uma visão ampla e profunda sobre nosso primeiro foco de desenvolvimento: o comportamento das pessoas. O artigo descreve um modelo de simulação que inclui 4 doenças resultantes de ataques e 58 doenças naturais, além de fatores de risco e outros tópicos que serão essenciais na estruturação do nosso problema.
+
+---
+
+## Versionamento
 
 | Versão | Data       | Autor/Responsável | Alterações Principais |
 |--------|------------|-------------------|-----------------------|
-| v0.1   | 2025-09-18 | Guilherme Leal         | Criação do template inicial e adição de investigação |
-| v0.2   | 2025-09-21 | Pablo Guilherme         | Adicionando minha contribuição na pesquisa |
+| v0.1   | 2025-09-18 | Guilherme Leal         | Criação do template inicial e adição de investigação. |
+| v0.2   | 2025-09-21 | Pablo Guilherme         | Adicionando minha contribuição na pesquisa. |
+| v1.2   | 2025-09-21 | Pedro Lucas        | Adicionando minha contribuição na pesquisa e reestruturando o documento. |
