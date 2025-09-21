@@ -17,10 +17,10 @@ Cada agente possui uma **casa base (H)** de onde parte e para onde retorna no fi
 Exemplo de representação:
 
 Imagem real da cidade:  
-![Imagem da Cidade](assets/googleImage.png)  
+![Imagem da Cidade](assets/googleImage.png){ width=100% }
 
 Representação em quadrados:  
-![Representação da Cidade](assets/squareImage.png)  
+![Representação da Cidade](assets/squareImage.png){ width=100% }
 
 ---
 
@@ -31,21 +31,30 @@ Os agentes serão modelados como **autômatos probabilísticos**, cada um com os
 - **Idade** (influencia rotina e suscetibilidade)  
 - **Papel social** (estudante, trabalhador, desempregado, etc.)  
 - **Estado de saúde**:  
+
   - Suscetível (S)  
   - Infectado (I)  
   - Recuperado (R)  
 
+Fluxo dos agentes:
+
+![Representação do fluxo do agente](assets/agentFluxo.png){ width=100% }
+
 ### Ciclo de Vida
-- O tempo é dividido em **ticks** (ex.: 3 a 4 por dia).  
+
+- O tempo é dividido em **ticks** (ex.: 3 a 4 por dia), que representam **passos discretos de tempo**.  
 - Em cada tick, o agente decide uma ação, que pode ser **controlada** (rotina) ou **esporádica** (aleatória).  
 
 #### Ações Controladas
+
 - Escola / Trabalho → ocorrem em 1 ou 2 ticks fixos do dia.  
 - Supermercado → ocorre de forma esporádica.  
 - Festa → ocorre em horários sociais (noites e finais de semana).  
 
 #### Ações em Caso de Doença
+
 Se infectado, o comportamento pode mudar:  
+
 - Faltar ao trabalho/escola.  
 - Permanecer em casa (repouso).  
 - Buscar atendimento médico (dependendo da gravidade dos sintomas).  
@@ -60,48 +69,131 @@ A **probabilidade de um agente realizar uma ação \(a\) em um tick \(t\)** é d
 P_a(t) = B_a \cdot A(t) \cdot M_i
 \]
 
-Onde:  
-- \( B_a \) → base da motivação da ação (constante, ex.: ir à escola = 0.9, ir à festa = 0.2).  
-- \( A(t) \) → ajuste temporal (função que considera hora, dia da semana, fim de semana, feriado).  
-- \( M_i \) → fator individual do agente (idade, papel social, sintomas).  
+**Explicação:**  
+- \(B_a\) → Base de motivação da ação: define a tendência natural do agente de realizar determinada ação.  
+- \(A(t)\) → Ajuste temporal: considera hora do dia, dia da semana e fins de semana.  
+- \(M_i\) → Fator individual: idade, papel social e sintomas de doença.
 
-Exemplos:  
-- Crianças → \( P_{escola}(t) \) alto em dias úteis pela manhã.  
-- Adultos trabalhadores → \( P_{trabalho}(t) \) alto em dias úteis, baixo em fins de semana.  
-- Todos → \( P_{supermercado}(t) \) moderado e aleatório.  
-- Jovens → \( P_{festa}(t) \) alto em fins de semana.  
+**Exemplo:**  
+- Crianças → \(P_{escola}(t)\) alto em dias úteis pela manhã.  
+- Adultos trabalhadores → \(P_{trabalho}(t)\) alto em dias úteis, baixo em fins de semana.  
+- Todos → \(P_{supermercado}(t)\) moderado e aleatório.  
+- Jovens → \(P_{festa}(t)\) alto em fins de semana.  
 
 ---
 
-## 4. Fórmulas de Contaminação
+## 4. Fórmulas de Contaminação e Progressão do Estado de Saúde (Tempo Discreto)
 
-A transmissão ocorre quando **um agente suscetível (S)** e **um agente infectado (I)** compartilham a mesma célula (local).  
+### 4.1 Contaminação
 
-A probabilidade de transmissão é definida por:
+A transmissão ocorre quando um agente **suscetível (S)** e um agente **infectado (I)** compartilham a mesma célula durante um tick:
 
 \[
 P_{trans}(i,j) = \beta \cdot C_{loc} \cdot S_i \cdot I_j
 \]
 
-Onde:  
-- \( \beta \) → taxa básica de transmissão da doença.  
-- \( C_{loc} \) → fator de contágio do local (ex.: escola = alta densidade, festa = muito alta, supermercado = média, trabalho = variável).  
-- \( S_i \) → suscetibilidade do agente \(i\) (idade, saúde, imunidade).  
-- \( I_j \) → infectividade do agente \(j\) (depende do estágio da doença).  
+**Explicação:**  
+- \(\beta\) → taxa básica de transmissão da doença.  
+- \(C_{loc}\) → fator de contágio do local.  
+- \(S_i\) → suscetibilidade do agente \(i\).  
+- \(I_j\) → infectividade do agente \(j\).
 
-### Progressão do Estado de Saúde
-- \( S \to I \) com probabilidade \( P_{trans}(i,j) \).  
-- \( I \to R \) com probabilidade \( P_{rec} \).  
-- \( I \to D \) (morte) com probabilidade \( P_{mort} \).  
+**Probabilidade composta para múltiplos infectados:**
+
+\[
+P_{infec}(i) = 1 - \prod_{j \in I_{celula}} \left( 1 - P_{trans}(i,j) \right)
+\]
+
+**Explicação:**  
+- Cada infectado \(j\) na célula oferece uma chance **independente** de infectar \(i\).  
+- \((1 - P_{trans}(i,j))\) → probabilidade de **não ser infectado por \(j\)** neste tick.  
+- O produto calcula a probabilidade de **não ser infectado por nenhum**.  
+- Subtraindo de 1, obtemos a chance de ser infectado por **pelo menos um** infectado nesse tick.
+
+**Exemplo:**  
+- Dois infectados na célula: \(P_{trans}(i,j_1)=0.1\), \(P_{trans}(i,j_2)=0.2\)  
+- Probabilidade de não ser infectado: \(0.9 \cdot 0.8 = 0.72\)  
+- Probabilidade de ser infectado: \(1-0.72 = 0.28\) (28% neste tick)
+
+---
+
+### 4.2 Progressão do Estado de Saúde
+
+Cada tick, o agente infectado \(I\) pode **recuperar, morrer ou permanecer infectado**.
+
+1. **Suscetível → Infectado**  
+
+\[
+S \xrightarrow{P_{infec}(i)} I
+\]
+
+- Probabilidade avaliada **em cada tick**, considerando todos os infectados na mesma célula.
+
+2. **Infectado → Recuperado**  
+
+\[
+I \xrightarrow{P_{rec}} R
+\]
+
+- \(P_{rec}\) → probabilidade **por tick** de recuperação, já ajustada para o modelo discreto.
+
+3. **Infectado → Morto**  
+
+\[
+I \xrightarrow{P_{mort}} D
+\]
+
+- \(P_{mort}\) → probabilidade **por tick** de morte, ajustada por fatores individuais.
+
+---
+
+### 4.3 Normalização das Probabilidades
+
+Para que recuperação e morte não ocorram simultaneamente no mesmo tick:
+
+\[
+P_{rec}' = P_{rec} \cdot (1 - P_{mort})
+\]
+
+\[
+P_{mort}' = P_{mort} \cdot (1 - P_{rec})
+\]
+
+- Mantém a soma das probabilidades \(\leq 1\) por tick.
+
+---
+
+### 4.4 Resumo das Transições (Tempo Discreto)
+
+\[
+\begin{cases}
+S \xrightarrow{P_{infec}(i)} I \\[2mm]
+I \xrightarrow{P_{rec}'} R \\[1mm]
+I \xrightarrow{P_{mort}'} D
+\end{cases}
+\]
+
+- Cada tick:  
+  1. Calcula-se infecção de suscetíveis.  
+  2. Aplica-se recuperação ou morte dos infectados.  
+- Permite acompanhar picos de contaminação, efeito do comportamento social e impacto das taxas de transmissão e mortalidade.
 
 ---
 
 ## 5. Objetivos da Simulação
 
-- Observar o impacto do comportamento social na propagação da doença.    
+- Observar o impacto do comportamento social na propagação da doença.  
 - Medir:  
   - Número de infectados ao longo do tempo.  
   - Picos de contaminação.  
-  - Tempo até estabilização (ou colapso das rotinas).  
+  - Tempo até estabilização (ou colapso das rotinas).
 
----
+## 6. Evoluções e outras perspectivas
+
+Durante a revisão bibliográfica e a elaboração deste documento, foram identificados alguns pontos relevantes que podem ser explorados em trabalhos futuros:
+
+* O **auto cuidado** pode ser realizado conforme a intensidade e a natureza dos sintomas apresentados.  
+* O **diagnóstico médico inicial** pode ser baseado nos sintomas observados e em sua intensidade.  
+* **Tratamentos** não são imediatos e podem ser modelados por uma **distribuição lognormal**, com média de 3 dias e intervalo de 0 a 10 dias, aplicável a todas as doenças.  
+* Aplicação do **princípio da homofilia**, atribuindo maior probabilidade de interação entre indivíduos com características semelhantes.  
+* Considerar o **vento** como fator de dispersão de doenças transmitidas ao ar livre, utilizando um modelo de **sopro gaussiano modificado** para simular a dispersão pelo vento.
