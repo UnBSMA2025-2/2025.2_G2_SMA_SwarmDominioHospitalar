@@ -190,8 +190,8 @@ Assim, os artigos selecionados oferecem subsídios conceituais e matemáticos es
 
 | Versão | Data       | Autor/Responsável | Alterações Principais |
 |--------|------------|-------------------|-----------------------|
-| v0.1   | 2025-09-18 | Guilherme Leal | Criação do template inicial e adição de investigação. |
-| v0.2   | 2025-09-21 | Pablo Guilherme | Adicionando minha contribuição na pesquisa. |
+| v1.0   | 2025-09-18 | Guilherme Leal | Criação do template inicial e adição de investigação. |
+| v1.1   | 2025-09-21 | Pablo Guilherme | Adicionando minha contribuição na pesquisa. |
 | v1.2   | 2025-09-21 | Pedro Lucas| Adicionando minha contribuição na pesquisa e reestruturando o documento. |
 | v1.3   | 2025-09-21 | Cainã Freitas | Adicionando minha contribuição na pesquisa |
 | v1.4   | 2025-09-21 | Thiago Vivan | Adicionando minha contribuição na pesquisa |

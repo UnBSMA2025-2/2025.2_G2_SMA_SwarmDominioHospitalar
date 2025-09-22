@@ -197,3 +197,13 @@ Durante a revisão bibliográfica e a elaboração deste documento, foram identi
 * **Tratamentos** não são imediatos e podem ser modelados por uma **distribuição lognormal**, com média de 3 dias e intervalo de 0 a 10 dias, aplicável a todas as doenças.  
 * Aplicação do **princípio da homofilia**, atribuindo maior probabilidade de interação entre indivíduos com características semelhantes.  
 * Considerar o **vento** como fator de dispersão de doenças transmitidas ao ar livre, utilizando um modelo de **sopro gaussiano modificado** para simular a dispersão pelo vento.
+* A implementação de mecanismos de compartilhamento de informações entre os agentes acerca do estado da calamidade pode incorporar elementos de percepção de risco ou medo de contaminação, tornando a simulação mais próxima do comportamento observado em cenários reais.
+* Futuramente, o grupo planeja implementar agentes especializados que representem uma rede hospitalar, a qual seria submetida a situações de estresse diante do aumento de agentes doentes. O objetivo é modelar cenários de crise, como pandemias ou contextos de guerra, nos quais os hospitais atingem sua capacidade máxima e precisam se organizar de forma estratégica para salvar o maior número possível de pacientes.
+
+## Versionamento
+
+| Versão | Data       | Autor/Responsável | Alterações Principais |
+|--------|------------|-------------------|-----------------------|
+| v1.0   | 2025-09-21 | Pedro Lucas | Criação do Documento e adição do problema. |
+| v1.1   | 2025-09-22 | Pablo Guilherme | Acrecimo de pontos no tópico 6. |
+
