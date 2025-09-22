@@ -147,6 +147,45 @@ Apesar de abordarem diferentes recortes, os estudos convergem na ideia de que mo
 
 ---
 
+
+## Pesquisa Bibliográfica por *Thiago Vivan*
+
+| Etapa | Descrição | Resultado |
+|-------|-----------|-----------|
+| 1. Estabelecer o Tema | Definição do foco da pesquisa | Simulações de contágio de doenças com sistemas multiagentes. |
+| 2. Especificar uma Questão | Elabore uma pergunta guia para a investigação | Como as doenças se comportam em contextos urbanos? |
+| 3. Identificar Palavras-chave | Liste os termos mais relevantes para a busca  | - Multiagent systems <br> - Swarm <br> - Behavior <br> - Diseases <br> - Infectious Diseases <br> - Epidemiology <br> - Disease transmission <br>|
+| 4. Identificar Autores | Principais especialistas na área |  |
+| 5. Estabelecer Strings de Busca | Combinações de palavras-chave | A string de busca foi montada a partir das palavras chaves e alguns sinônimos |
+| 6. Escolher Bases Científicas | Base onde será realizada a busca | - [Google Scholar](https://scholar.google.com.br/schhp?hl=pt-BR&as_sdt=0,5) |
+| 7. Realizar as Buscas | Buscas na base usando as strings de busca | String utilizadas: <br> - ("swarm" AND "multi agent" AND "disease") <br> -   |
+| 8. Manter Rastreabilidade | Registro da base consultada, string utilizada, filtros aplicados e numero de retornos | String utilizadas: <br> - ("swarm" AND "multi agent" AND "disease") -> 7.170 resultados e 2 artigos separados. <br><br> - ("swarm" AND ("multiagent" OR "multi agent') AND ("disease" OR "infectious diseases") AND "transmission" AND "simulation" ) -> 3.320 resultados e 1 artigos selecionado <br><br> "swarm" AND ("multiagent" OR "multi agent") AND ("disease" OR "infectious diseases") AND "Computational Epidemiology" -> 43 resultados e 1 selecionado*|
+| 9. Critérios de Inclusão | Critérios para seleção de artigos | Possuir informações sobre modelos de transmissão de doenças,  comportamento de pessoas doentes ou comportamento de instituições hospitalares utilizando Sistemas Multi Agentes. Possuir no mínimo 10 citações.|
+| 10. Critérios de Exclusão | Critérios para descartar artigos | Não ser relacionado ao tema.|
+| 11. Aplicar Critérios | Filtragem das referências com base nos critérios | - [Multi-agent systems in epidemiology: a first step for computational biology in the study of vector-borne disease transmission](https://link.springer.com/article/10.1186/1471-2105-9-435) <br> -[Swarm intelligence and multi agent system in healthcare](https://ieeexplore.ieee.org/abstract/document/7008044) <br> - ~~[An edge-driven multi-agent optimization model for infectious disease detection](https://pmc.ncbi.nlm.nih.gov/articles/PMC8898659/)~~ <br> - [Agent-Based Simulation Tools in Computational Epidemiology](https://link.springer.com/chapter/10.1007/11553762_21) <br> On Efficient Single-Core Execution of Agent-Based Epidemiological Models with Contact-Tracing Transmission (Artigo parece ser promissor porém precisei requisitar texto e não recebi ainda) |
+| 12. Ler Resumos | Leitura e refinamento da seleção de referencias  | Todos acima, com exceção do último, foram selecionados ou descartados após a leitura dos Abstracts, o primeiro foi lido na íntegra. |
+| 13. Apresentar Referências Finais | Apresentação das referencias selecionadas | -[Multi-agent systems in epidemiology: a first step for computational biology in the study of vector-borne disease transmission](https://link.springer.com/article/10.1186/1471-2105-9-435) <br> -[Swarm intelligence and multi agent system in healthcare](https://ieeexplore.ieee.org/abstract/document/7008044) <br> [Agent-Based Simulation Tools in Computational Epidemiology](https://link.springer.com/chapter/10.1007/11553762_21) |
+
+<p align="center"> 
+  <strong>Fonte:</strong> <a href="https://github.com/thiago-vivan">Thiago Vivan Bastos</a>
+</p>
+
+---
+
+Como o projeto está sendo estruturado em 2 etapas, sendo a primeira focada em simulações de doenças e transmissões para que na segunda etapa podemos introduzir os hospitais e estudar as dinâmicas relacionadas a eles, tentei manter um foco maior de pesquisa em artigos para a primeira etapa. 
+
+Os artigos que fundamentei minha análise destacam o potencial dos sistemas multiagentes e da inteligência coletiva (swarm) para modelar e compreender dinâmicas de transmissão de doenças infecciosas. Em “Multi-agent systems in epidemiology: a first step for computational biology in the study of vector-borne disease transmission”, os autores mostram como agentes virtuais representam indivíduos ou vetores (ex. mosquitos), permitindo a simulação detalhada de comportamentos, interações e padrões de mobilidade que influenciam a disseminação de infecções
+
+No artigo “Swarm intelligence and multi agent system in healthcare”, destaca-se o papel da inteligência baseada em enxames, onde múltiplos agentes colaboram adaptativamente para resolver problemas como detecção precoce, contenção e distribuição de recursos em situações de epidemias. Sendo mais útil na segunda etapa do projeto
+
+Em “Agent-Based Simulation Tools in Computational Epidemiology”, é apresentada uma revisão das ferramentas computacionais utilizadas para modelagem epidemiológica, com foco em simuladores de agentes. São abordadas arquiteturas e técnicas que permitem desde a reprodução do contágio local (por contato entre agentes). 
+
+O artigo requisitado sobre “single-core execution” aborda otimização computacional dessas simulações, mostrando um possível problema que podemos ter e, dessa forma, podendo ser de grande ajuda na otimização do nosso projeto.
+
+Assim, os artigos selecionados oferecem subsídios conceituais e matemáticos essenciais para simulações multiagentes em epidemiologia. Eles abordam: representações detalhadas de agentes individuais e coletivos, integração de elementos ambientais/hospitalares, além de estratégias de intervenção e consequências para o controle da propagação de doenças.
+
+---
+
 ## Versionamento
 
 | Versão | Data       | Autor/Responsável | Alterações Principais |
@@ -155,3 +194,4 @@ Apesar de abordarem diferentes recortes, os estudos convergem na ideia de que mo
 | v0.2   | 2025-09-21 | Pablo Guilherme | Adicionando minha contribuição na pesquisa. |
 | v1.2   | 2025-09-21 | Pedro Lucas| Adicionando minha contribuição na pesquisa e reestruturando o documento. |
 | v1.3   | 2025-09-21 | Cainã Freitas | Adicionando minha contribuição na pesquisa |
+| v1.4   | 2025-09-21 | Thiago Vivan | Adicionando minha contribuição na pesquisa |
