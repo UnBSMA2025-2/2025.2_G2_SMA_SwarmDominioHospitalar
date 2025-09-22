@@ -38,7 +38,7 @@ Os agentes serão modelados como **autômatos probabilísticos**, cada um com os
 
 Fluxo dos agentes:
 
-![Representação do fluxo do agente](assets/agentFluxo_V2.png)
+![Representação do fluxo do agente](assets/agentFluxo_V2.png){ width=100% }
 
 ### Ciclo de Vida
 
