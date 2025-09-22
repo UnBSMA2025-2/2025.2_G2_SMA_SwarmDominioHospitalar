@@ -117,10 +117,41 @@ A pesquisa me levou ao **BioWar: scalable agent-based model of bioattacks**. Est
 
 ---
 
+## Pesquisa Bibliográfica por *Cainã Freitas*
+
+| Etapa | Descrição | Resultado |
+|-------|-----------|-----------|
+|1. Estabelecer o Tema Definição do foco da pesquisa     | Definição do foco da pesquisa | Modelagem de crises epidêmicas e situações caóticas em hospitais usando sistemas multiagentes e swarm intelligence para avaliação de riscos e segurança.|
+| 2. Especificar uma Questão Elaborar uma pergunta guia para a investigação | Elabore uma pergunta guia para a investigação | Como sistemas multiagentes e swarm intelligence podem simular e mitigar riscos em epidemias, ataques biológicos e situações de caos hospitalar?|
+| 3. Identificar Palavras-chave     | Termos relevantes para busca      | - Multi-agent systems<br>- Epidemic<br>- Contagion<br>- Chaos<br>- Risk management<br>- Hospital<br>- Healthcare<br>- Swarm<br>- Security<br>- Simulation |
+| 4. Identificar Autores    | Principais especialistas na área  | Durante minhas pesquisas, meu foco foi direcionado a encontrar artigos que apresentassem uma correlação entre o domínio hospitalar e o comportamento de agentes em cenários de crise e epidemias. Busquei materiais que tratassem tanto da dinâmica de contágio e proliferação de doenças quanto das respostas hospitalares em situações de caos, risco e emergência, utilizando sistemas multiagentes e swarm intelligence como base de modelagem e simulação.       |
+| 5. Estabelecer Strings de Busca   | Combinações de palavras-chave     | As strings foram montadas a partir dos termos-chave e variações semânticas para capturar literatura de epidemias e caos hospitalar.      |
+| 6. Escolher Bases Científicas     | Bases de busca       | - Google Scholar|
+| 7. Realizar as Buscas | Buscas na base usando as strings de busca | String utilizadas: <br> - ("multi-agent systems" OR "swarm") AND ("risk management" OR "disaster response") AND ("healthcare" OR "hospital") <br> - ("multi-agent systems" OR "multiagent") AND ("contagion dynamics" OR "disease spread") AND ("healthcare system" OR "hospital network") <br> - ("hospital" OR "healthcare") AND ("chaos" OR "complex systems") AND ("multi-agent systems" OR "swarm intelligence") <br> - ("hospital resilience" OR "healthcare resilience") AND ("multi-agent systems" OR "swarm intelligence") |
+| 8. Manter Rastreabilidade | Registro da base consultada, string utilizada, filtros aplicados e numero de retornos | String utilizadas: <br> - ("multi-agent systems" OR "swarm") AND ("risk management" OR "disaster response") AND ("healthcare" OR "hospital") -> 13.200 resultados e 2 artigos separados. <br> - ("multi-agent systems" OR "multiagent") AND ("contagion dynamics" OR "disease spread") AND ("healthcare system" OR "hospital network") -> 96 resultados e 1 artigo separado. <br> - ("hospital" OR "healthcare") AND ("chaos" OR "complex systems") AND ("multi-agent systems" OR "swarm intelligence") -> 11800 resultados e 1 artigo separado. <br> - ("hospital resilience" OR "healthcare resilience") AND ("multi-agent systems" OR "swarm intelligence") -> 25 resultados e 1 artigo separado.|
+| 9. Critérios de Inclusão | Critérios para seleção de artigos | Possuir informações sobre contágio de doenças, da crise epidemica ou do caos gerado por ela, com foco em previsão e simulação de sistemas |
+| 10. Critérios de Exclusão | Critérios para descartar artigos | Não ser relacionado ao tema.|
+| 11. Aplicar Critérios | Filtragem das referências com base nos critérios | - [Simulating Robotic Swarms for Emergency Medical Logistics: A Multi-Agent Systems Approach](www.researchgate.net/profile/Mengkorn-Pum-2/publication/390920843_Simulating_Robotic_Swarms_for_Emergency_Medical_Logistics_A_Multi-Agent_Systems_Approach/links/68025ef3bd3f1930dd5ffde0/Simulating-Robotic-Swarms-for-Emergency-Medical-Logistics-A-Multi-Agent-Systems-Approach.pdf) <br> - ~~[An agent-based simulation study on the effect of ambulance dispatch policies on patient mortality in hospital systems: a disaster response test case](https://www.inderscienceonline.com/doi/abs/10.1504/IJEM.2024.143325)~~ <br> - ~~[Disaster Resilience of hospitals considering emergency ambulance services](https://ascelibrary.org/doi/abs/10.1061/9780784412848.246)~~ <br> - [A Multi-Agent System for Simulating the Spread of a Contagious Disease.](https://cris.unibo.it/retrieve/handle/11585/781511/e1dcb336-4570-7715-e053-1705fe0a6cc9/ProceedingsWOA2020.pdf#) <br> - ~~[Swarm Intelligence Based Multi-Agent Communication Model for Securing Healthcare Ecosystem](https://link.springer.com/chapter/10.1007/978-3-031-21333-5_5)~~|
+| 12. Ler Resumos | Refinamento da seleção| Os artigos selecionados foram avaliados pelos resumos, com prioridade para os que combinam mais com simulação de epidemias.|
+| 13. Apresentar Referências Finais| Conjunto de referências | - [A Multi-Agent System for Simulating the Spread of a Contagious Disease.](https://cris.unibo.it/retrieve/handle/11585/781511/e1dcb336-4570-7715-e053-1705fe0a6cc9/ProceedingsWOA2020.pdf#) <br> - [Simulating Robotic Swarms for Emergency Medical Logistics: A Multi-Agent Systems Approach](www.researchgate.net/profile/Mengkorn-Pum-2/publication/390920843_Simulating_Robotic_Swarms_for_Emergency_Medical_Logistics_A_Multi-Agent_Systems_Approach/links/68025ef3bd3f1930dd5ffde0/Simulating-Robotic-Swarms-for-Emergency-Medical-Logistics-A-Multi-Agent-Systems-Approach.pdf)|
+
+<p align="center"> 
+  <strong>Fonte:</strong> <a href="https://github.com/freitasc">Cainã Freitas</a>
+</p>
+
+---
+
+Os artigos selecionados exploram como sistemas multiagentes e enxames podem ser utilizados para modelar cenários de crise hospitalar, epidemias e respostas emergenciais. Um dos trabalhos enfatiza a simulação do contágio de doenças em redes de interação, enquanto outro destaca o uso de robôs em swarm para apoiar a logística médica em situações críticas. Ambos apontam para a importância da coordenação descentralizada de agentes, seja no fluxo de pacientes e informações ou no suporte à infraestrutura hospitalar, permitindo avaliar riscos e mitigar gargalos durante emergências.
+
+Apesar de abordarem diferentes recortes, os estudos convergem na ideia de que modelagens computacionais baseadas em agentes são eficazes para compreender dinâmicas complexas em ambientes de risco. Esses modelos, ao considerar fatores comportamentais, logísticos e estruturais, oferecem subsídios para prever padrões de propagação de epidemias e desenhar estratégias de contenção. Assim, os resultados encontrados podem servir como base para estruturar simulações no projeto, apoiando a formulação de cenários de caos hospitalar com foco tanto na disseminação da doença quanto na resiliência da infraestrutura de saúde.
+
+---
+
 ## Versionamento
 
 | Versão | Data       | Autor/Responsável | Alterações Principais |
 |--------|------------|-------------------|-----------------------|
-| v0.1   | 2025-09-18 | Guilherme Leal         | Criação do template inicial e adição de investigação. |
-| v0.2   | 2025-09-21 | Pablo Guilherme         | Adicionando minha contribuição na pesquisa. |
-| v1.2   | 2025-09-21 | Pedro Lucas        | Adicionando minha contribuição na pesquisa e reestruturando o documento. |
+| v0.1   | 2025-09-18 | Guilherme Leal | Criação do template inicial e adição de investigação. |
+| v0.2   | 2025-09-21 | Pablo Guilherme | Adicionando minha contribuição na pesquisa. |
+| v1.2   | 2025-09-21 | Pedro Lucas| Adicionando minha contribuição na pesquisa e reestruturando o documento. |
+| v1.3   | 2025-09-21 | Cainã Freitas | Adicionando minha contribuição na pesquisa |
