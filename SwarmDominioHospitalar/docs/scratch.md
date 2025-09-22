@@ -1,0 +1,6 @@
+# Problematização Geral
+A propagação de doenças infecciosas é um fenômeno complexo, intrinsecamente ligado ao comportamento social, mobilidade urbana e características demográficas de uma população. Modelos epidemiológicos tradicionais (como SIR e SEIR) são eficazes para descrever a dinâmica em nível macro, mas frequentemente simplificam as interações individuais e a heterogeneidade do ambiente.
+
+A questão central deste projeto é: Como a estrutura de um ambiente urbano e os padrões de comportamento individuais (rotinas, papéis sociais, reações à doença) influenciam o surgimento e a evolução de surtos epidêmicos?
+
+Para investigar essa questão, o projeto propõe o desenvolvimento de um Sistema Multiagentes (SMA) que simula a vida diária e as interações de uma população heterogênea em um ambiente geográfico definido. Ao contrário de modelos agregados, esta abordagem permite observar fenômenos emergentes, como picos de contaminação e formação de clusters de infecção, que resultam diretamente das ações e interações descentralizadas de agentes autônomos. O objetivo é criar um "laboratório digital" para analisar cenários e entender o impacto de diferentes comportamentos na dinâmica da doença.

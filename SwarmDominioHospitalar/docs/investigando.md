@@ -1,8 +1,8 @@
-# Módulo de Investigação: A Primeira Etapa
+# Módulo Investigando: A Primeira Etapa
 
 ## Introdução
 
-O Módulo Investigando foi a fase inicial do nosso trabalho. Ele consistiu em aulas teóricas que nos proporcionaram um primeiro contato com sistemas multiagentes e suas diversas ramificações.
+O Módulo Investigando foi a fase inicial do nosso trabalho, onde consistiu em aulas teóricas que nos proporcionaram um primeiro contato com sistemas multiagentes e suas diversas ramificações.
 
 O principal objetivo desta etapa foi capacitar a equipe para realizar pesquisas mais aprofundadas sobre um tópico específico. Com isso, selecionamos o seguinte tema de pesquisa: **Sistemas Multiagentes (SMA) e Swarm no Domínio Hospitalar**.
 
@@ -26,32 +26,25 @@ Para atingir essa meta, definimos os seguintes objetivos específicos:
 
 ## Pesquisa Bibliográfica por *Guilherme Leal*  
 
-| String utilizada | Base consultada       | Qtde. resultados | Critérios de inclusão/exclusão | Artigos selecionados |
-|------------------|----------------------|------------------|--------------------------------|-----------------------|
-| “multi agent systems” for hospitals | Google Scholar | ~16.100 | Inclusão: MAS aplicados a hospitais; Exclusão: artigos fora do domínio saúde | [Evaluation of a Multi-Agent System for Hospital Patient Scheduling](https://www.researchgate.net/publication/220675778) |
-| "multi agent systems" AND "planning" AND "swarm" AND "hospital healthcare" | IEEE/Scopus | ~1.010 | Inclusão: planejamento em saúde hospitalar; Exclusão: aplicações industriais fora do contexto médico | [Scheduling Patients in Hospitals Based on Multi-agent Systems](https://link.springer.com/chapter/10.1007/978-3-319-07455-9_4) |
-| multi agent system for hospital surge capacity | Google Scholar | ~27.500 | Inclusão: capacidade hospitalar e otimização de recursos; Exclusão: artigos militares | [Patient Flow Control Using Multi-Agent Systems](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8744825) |
-| "Patient" AND "Flow" AND "multiagent" | IEEE | ~15.000 | Inclusão: controle de fluxo de pacientes; Exclusão: papers genéricos de swarm sem relação com hospitais | [Patient and Staff Scheduling Multi-Agent System](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1511541) |
-| ("Hospital" OR "Healthcare") AND "emergency" AND "multiagent" | Scopus | ~13.100 | Inclusão: resposta a emergências em saúde; Exclusão: artigos de smart cities sem contexto hospitalar | [Implementing Multi-agent System for Dispatch and Control of Emergency Medical Care Ambulances](https://link.springer.com/chapter/10.1007/978-3-031-24434-6_18) |
-| "Swarm" AND "Attack" AND "Simulation" AND "Hospital" AND "multiagent" | IEEE | ~264 | Inclusão: modelos de simulação com enxames em hospitais; Exclusão: aplicações militares sem vínculo hospitalar | [BioWar: Scalable Agent-Based Model of Bioattacks](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1597399) |
+| Etapa | Descrição | Resultado |
+|-------|-----------|-----------|
+| 1. Estabelecer o Tema | Definição do foco da pesquisa | Sistemas Multiagentes e Swarm aplicados ao domínio hospitalar |
+| 2. Especificar uma Questão | Pergunta guia para a investigação | Como sistemas multiagentes e swarm podem apoiar hospitais em tarefas de agendamento, fluxo de pacientes e emergências? |
+| 3. Identificar Palavras-chave | Termos relevantes para busca | - Multi-agent systems <br> - Hospital <br> - Healthcare <br> - Patient flow <br> - Emergency <br> - Swarm <br> - Scheduling |
+| 4. Identificar Autores | Principais especialistas na área | Autores dos artigos analisados, como Franz Rothlauf, além de trabalhos clássicos de Wooldridge (fundamentos de agentes) |
+| 5. Estabelecer Strings de Busca | Combinações de palavras-chave | - “multi agent systems” for hospitals <br> - "multi agent systems" AND "planning" AND "swarm" AND "hospital healthcare" <br> - multi agent system for hospital surge capacity <br> - "Patient" AND "Flow" AND "multiagent" <br> - ("Hospital" OR "Healthcare") AND "emergency" AND "multiagent" <br> - "Swarm" AND "Attack" AND "Simulation" AND "Hospital" AND "multiagent" |
+| 6. Escolher Bases Científicas | Bases de busca | Google Scholar, IEEE, Scopus |
+| 7. Realizar as Buscas | Execução das buscas | Resultados variando de ~264 a ~27.500 dependendo da string |
+| 8. Manter Rastreabilidade | Registro de bases, strings, filtros, retornos | Anotado no quadro de strings acima |
+| 9. Critérios de Inclusão | Critérios de seleção | Artigos aplicados ao contexto hospitalar, saúde e emergências |
+| 10. Critérios de Exclusão | Critérios de descarte | Aplicações militares sem vínculo hospitalar, smart cities fora de saúde, áreas industriais não relacionadas |
+| 11. Aplicar Critérios | Filtragem | Selecionados 6 principais artigos para análise aprofundada |
+| 12. Ler Resumos | Refinamento | Abstracts lidos para confirmar aderência ao tema |
+| 13. Apresentar Referências Finais | Conjunto de referências | - [Evaluation of a Multi-Agent System for Hospital Patient Scheduling](https://www.researchgate.net/publication/220675778) <br> - [Scheduling Patients in Hospitals Based on Multi-agent Systems](https://link.springer.com/chapter/10.1007/978-3-319-07455-9_4) <br> - [Patient Flow Control Using Multi-Agent Systems](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8744825) <br> - [Patient and Staff Scheduling Multi-Agent System](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1511541) <br> - [Implementing Multi-agent System for Dispatch and Control of Emergency Medical Care Ambulances](https://link.springer.com/chapter/10.1007/978-3-031-24434-6_18) <br> - [BioWar: Scalable Agent-Based Model of Bioattacks](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1597399) |
 
-### Artigos Investigados
-
-- [An optimized multi agent-based modeling of smart rescue operation](https://isprs-archives.copernicus.org/articles/XLII-3-W4/93/2018/isprs-archives-XLII-3-W4-93-2018.pdf)  
-- [Implementing Multi-agent System for Dispatch and Control of Emergency Medical Care Ambulances](https://link.springer.com/chapter/10.1007/978-3-031-24434-6_18)  
-- [Scheduling Patients in Hospitals Based on Multi-agent Systems](https://link.springer.com/chapter/10.1007/978-3-319-07455-9_4)  
-- [Evaluation of a Multi-Agent System for Hospital Patient Scheduling](https://www.researchgate.net/publication/220675778)  
-- [Simulating use scenarios in hospitals using multi-agent narratives](https://www.tandfonline.com/doi/full/10.1080/19401493.2017.1332687)  
-- [Swarm intelligence and multi agent system in healthcare](https://ieeexplore.ieee.org/abstract/document/7008044)  
-- [Patient Flow Control Using Multi-Agent Systems](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8744825)  
-- [Patient and Staff Scheduling Multi-Agent System](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1511541)  
-- [An Intelligent real-time scheduler for out-patient clinics: A multi-agent system model](https://journals.sagepub.com/doi/pdf/10.1177/1460458220905380)  
-- [Deep Reinforcement Learning Interdependent Healthcare Critical Infrastructure Simulation (COVID-19 scenario)](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9554875)  
-- [Optimization of Healthcare Emergency Departments by Agent-Based Simulation]()  
-- [BioWar: Scalable Agent-Based Model of Bioattacks](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1597399)  
-- [Review of Virtual Simulation of Crowd Motion for Urban Emergency Management](https://journals.sagepub.com/doi/pdf/10.1177/03611981221141429)  
-
----
+<p align="center"> 
+  <strong>Fonte:</strong> <a href="https://github.com/gleal17">Guilherme Leal</a>
+</p>
 
 ## Pesquisa Bibliográfica por *Pablo Guilherme*
 
@@ -59,7 +52,7 @@ Para atingir essa meta, definimos os seguintes objetivos específicos:
 |-------|-----------|-----------|
 | 1. Estabelecer o Tema | Definição do foco da pesquisa | Simulações de contágio de doenças com sistemas multiagentes relacionados a SWARM |
 | 2. Especificar uma Questão | Elabore uma pergunta guia para a investigação | Como descrever/simular o contágio de uma doença com SWARM? |
-| 3. Identificar Palavras-chave |Liste os termos mais relevantes para a busca  | - Multiagent systems <br> - Contagion simulation <br> - Disease spread <br> - Swarm <br> - Behavior <br> - Epidememic modeling|
+| 3. Identificar Palavras-chave |Liste os termos mais relevantes para a busca  | - Multiagent systems <br> - Contagion simulation <br> - Disease spread <br> - Swarm <br> - Behavior <br> - Epidemic modeling|
 | 4. Identificar Autores | Principais especialistas na área | Os artigos selecionados são de autores diferentes, não notei um unico autor especifico como principal autor da área |
 | 5. Estabelecer Strings de Busca | Combinações de palavras-chave | A string de busca foi montada a partir das palavras chaves e alguns sinônimos |
 | 6. Escolher Bases Científicas | Base onde será realizada a busca | [Google Scholar](https://scholar.google.com.br/schhp?hl=pt-BR&as_sdt=0,5)|
@@ -68,7 +61,7 @@ Para atingir essa meta, definimos os seguintes objetivos específicos:
 | 9. Critérios de Inclusão | Critérios para seleção de artigos | Possuir informações que tangem a simulação de contágio de doenças utilizando SMA Swarm |
 | 10. Critérios de Exclusão | Critérios para descartar artigos | Não ser relacionado ao tema e ou possuir um contexto extremamente específico, não ser um artigo |
 | 11. Aplicar Critérios | Filtragem das referências com base nos critérios | - [Information coevolution spreading model and simulation based on self-organizing multi-agents](https://link.springer.com/article/10.1007/s40747-025-01940-7) <br> - ~~[Optimal Control Theory in Multi-Agent Systems with Stochastic Dynamics](https://www.researchgate.net/profile/Babatunde-Sanni-2/publication/390052763_Optimal_Control_Theory_in_Multi-Agent_Systems_with_Stochastic_Dynamics/links/67dd4364e62c604a0df7c6fc/Optimal-Control-Theory-in-Multi-Agent-Systems-with-Stochastic-Dynamics.pdf)~~ <br> - [Research on Multi-Agent Simulation of Epidemic News Spread Characteristics](https://www.jasss.org/10/3/1.html) <br> - [COVID-19 Spread Simulation in a Crowd Intelligence Network](https://ieeexplore.ieee.org/abstract/document/9853239)|
-| 12. Ler Resumos | Leitura e refinamento da seleção de referencias  | 3 artigos foram mantidos para leitura na integra devido ao tema ser focado na simulação de contágio, o artigo descartado tinha um tema mais focado em representar o contágio a partir de equações |
+| 12. Ler Resumos | Leitura e refinamento da seleção de referencias  | 3 artigos foram mantidos para leitura na íntegra devido ao tema ser focado na simulação de contágio, o artigo descartado tinha um tema mais focado em representar o contágio a partir de equações |
 | 13. Apresentar Referências Finais | Apresentação das referencias selecionadas | - [Information coevolution spreading model and simulation based on self-organizing multi-agents](https://link.springer.com/article/10.1007/s40747-025-01940-7) <br> - [Research on Multi-Agent Simulation of Epidemic News Spread Characteristics](https://www.jasss.org/10/3/1.html) <br> - [COVID-19 Spread Simulation in a Crowd Intelligence Network](https://ieeexplore.ieee.org/abstract/document/9853239)|
 
 <p align="center"> 
@@ -88,7 +81,7 @@ Embora nenhum dos artigos faça menção direta ao ambiente JADE, escolhido pelo
 | Etapa | Descrição | Resultado |
 |-------|-----------|-----------|
 | 1. Estabelecer o Tema | Definição do foco da pesquisa | Simulações de contágio de doenças com sistemas multiagentes relacionados a SWARM e defesas com agentes intencionais |
-| 2. Especificar uma Questão | Elabore uma pergunta guia para a investigação | Como as doenças se comportam e se proliferam durante o contato diário de pessoas durantes situações normais e emergenciais |
+| 2. Especificar uma Questão | Elabore uma pergunta guia para a investigação | Como as doenças se comportam e se proliferam durante o contato diário de pessoas durante situações normais e emergenciais |
 | 3. Identificar Palavras-chave |Liste os termos mais relevantes para a busca  | - Multiagent systems <br> - Attack <br >- Chaos <br> - Hospital <br >- Healthcare <br> - Swarm <br> - Behavior <br>|
 | 4. Identificar Autores | Principais especialistas na área |Durante minhas pesquisas, meu foco foi destinado a encontrar artigos que pudessem se relacionar com ambos lados, tanto do hospital quanto de agentes comportamentais em situações de doenças |
 | 5. Estabelecer Strings de Busca | Combinações de palavras-chave | A string de busca foi montada a partir das palavras chaves e alguns sinônimos |
@@ -159,7 +152,7 @@ Apesar de abordarem diferentes recortes, os estudos convergem na ideia de que mo
 | 5. Estabelecer Strings de Busca | Combinações de palavras-chave | A string de busca foi montada a partir das palavras chaves e alguns sinônimos |
 | 6. Escolher Bases Científicas | Base onde será realizada a busca | - [Google Scholar](https://scholar.google.com.br/schhp?hl=pt-BR&as_sdt=0,5) |
 | 7. Realizar as Buscas | Buscas na base usando as strings de busca | String utilizadas: <br> - ("swarm" AND "multi agent" AND "disease") <br> -   |
-| 8. Manter Rastreabilidade | Registro da base consultada, string utilizada, filtros aplicados e numero de retornos | String utilizadas: <br> - ("swarm" AND "multi agent" AND "disease") -> 7.170 resultados e 2 artigos separados. <br><br> - ("swarm" AND ("multiagent" OR "multi agent') AND ("disease" OR "infectious diseases") AND "transmission" AND "simulation" ) -> 3.320 resultados e 1 artigos selecionado <br><br> "swarm" AND ("multiagent" OR "multi agent") AND ("disease" OR "infectious diseases") AND "Computational Epidemiology" -> 43 resultados e 1 selecionado*|
+| 8. Manter Rastreabilidade | Registro da base consultada, string utilizada, filtros aplicados e numero de retornos | String utilizadas: <br> - ("swarm" AND "multi agent" AND "disease") -> 7.170 resultados e 2 artigos separados. <br><br> - ("swarm" AND ("multiagent" OR "multi agent') AND ("disease" OR "infectious diseases") AND "transmission" AND "simulation" ) -> 3.320 resultados e 1 artigo selecionado <br><br> "swarm" AND ("multiagent" OR "multi agent") AND ("disease" OR "infectious diseases") AND "Computational Epidemiology" -> 43 resultados e 1 selecionado*|
 | 9. Critérios de Inclusão | Critérios para seleção de artigos | Possuir informações sobre modelos de transmissão de doenças,  comportamento de pessoas doentes ou comportamento de instituições hospitalares utilizando Sistemas Multi Agentes. Possuir no mínimo 10 citações.|
 | 10. Critérios de Exclusão | Critérios para descartar artigos | Não ser relacionado ao tema.|
 | 11. Aplicar Critérios | Filtragem das referências com base nos critérios | - [Multi-agent systems in epidemiology: a first step for computational biology in the study of vector-borne disease transmission](https://link.springer.com/article/10.1186/1471-2105-9-435) <br> -[Swarm intelligence and multi agent system in healthcare](https://ieeexplore.ieee.org/abstract/document/7008044) <br> - ~~[An edge-driven multi-agent optimization model for infectious disease detection](https://pmc.ncbi.nlm.nih.gov/articles/PMC8898659/)~~ <br> - [Agent-Based Simulation Tools in Computational Epidemiology](https://link.springer.com/chapter/10.1007/11553762_21) <br> On Efficient Single-Core Execution of Agent-Based Epidemiological Models with Contact-Tracing Transmission (Artigo parece ser promissor porém precisei requisitar texto e não recebi ainda) |
@@ -190,8 +183,9 @@ Assim, os artigos selecionados oferecem subsídios conceituais e matemáticos es
 
 | Versão | Data       | Autor/Responsável | Alterações Principais |
 |--------|------------|-------------------|-----------------------|
-| v1.0   | 2025-09-18 | Guilherme Leal | Criação do template inicial e adição de investigação. |
-| v1.1   | 2025-09-21 | Pablo Guilherme | Adicionando minha contribuição na pesquisa. |
-| v1.2   | 2025-09-21 | Pedro Lucas| Adicionando minha contribuição na pesquisa e reestruturando o documento. |
-| v1.3   | 2025-09-21 | Cainã Freitas | Adicionando minha contribuição na pesquisa |
-| v1.4   | 2025-09-21 | Thiago Vivan | Adicionando minha contribuição na pesquisa |
+| v0.1   | 2025-09-18 | Guilherme Leal | Criação do template inicial e adição de investigação. |
+| v0.2   | 2025-09-21 | Pablo Guilherme | Adicionando minha contribuição na pesquisa. |
+| v0.3   | 2025-09-21 | Pedro Lucas| Adicionando minha contribuição na pesquisa e reestruturando o documento. |
+| v0.4   | 2025-09-21 | Cainã Freitas | Adicionando minha contribuição na pesquisa |
+| v0.5   | 2025-09-21 | Thiago Vivan | Adicionando minha contribuição na pesquisa |
+| v1.0   | 2025-09-22 | Guilherme Leal | Padronização de arquivo e revisão |
