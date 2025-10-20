@@ -1,4 +1,0 @@
-mkdocs==1.6.1
-mkdocs-git-revision-date-plugin
-mkdocs-glightbox
-pymdown-extensions
