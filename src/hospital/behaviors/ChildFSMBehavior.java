@@ -1,16 +1,11 @@
 package hospital.behaviors;
 
+import hospital.enums.Local;
 import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 
 public class ChildFSMBehavior extends FSMBehaviour {
-
-    private static final String CASA = "Casa";
-    private static final String ESCOLA = "Escola";
-    private static final String PARQUE = "Parque";
-    private static final String ATIVIDADE = "Atividade";
-    private static final String FIM = "FimDoDia";
 
     private int diasCompletos = 0;
     private final int LIMITE_DIAS = 3;
@@ -18,18 +13,18 @@ public class ChildFSMBehavior extends FSMBehaviour {
     public ChildFSMBehavior(Agent a) {
         super(a);
 
-        registerFirstState(new Casa(), CASA);
-        registerState(new Escola(), ESCOLA);
-        registerState(new Parque(), PARQUE);
-        registerState(new Atividade(), ATIVIDADE);
-        registerLastState(new FimDoDia(), FIM);
+        registerFirstState(new Casa(), String.valueOf(Local.CASA));
+        registerState(new Escola(), String.valueOf(Local.ESCOLA));
+        registerState(new Parque(), String.valueOf(Local.PARQUE));
+        registerState(new Atividade(), String.valueOf(Local.ATIVIDADE));
+        registerLastState(new FimDoDia(), String.valueOf(Local.FIM));
 
-        registerTransition(CASA, ESCOLA, 0);
-        registerTransition(ESCOLA, PARQUE, 1);
-        registerTransition(ESCOLA, ATIVIDADE, 2);
-        registerTransition(PARQUE, CASA, 0);
-        registerTransition(ATIVIDADE, CASA, 0);
-        registerTransition(CASA, FIM, 9);
+        registerTransition(String.valueOf(Local.CASA), String.valueOf(Local.ESCOLA), 0);
+        registerTransition(String.valueOf(Local.ESCOLA), String.valueOf(Local.PARQUE), 1);
+        registerTransition(String.valueOf(Local.ESCOLA), String.valueOf(Local.ATIVIDADE), 2);
+        registerTransition(String.valueOf(Local.PARQUE), String.valueOf(Local.CASA), 0);
+        registerTransition(String.valueOf(Local.ATIVIDADE), String.valueOf(Local.CASA), 0);
+        registerTransition(String.valueOf(Local.CASA), String.valueOf(Local.FIM), 9);
     }
 
     // Função auxiliar para dar pausas entre ações
