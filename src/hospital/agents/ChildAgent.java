@@ -12,6 +12,9 @@ public class ChildAgent extends Agent {
     private Bairro bairro;
     private int posX = 0;
     private int posY = 0;
+    private int homeX;
+    private int homeY;
+    private boolean casaDefinida = false;
 
     public int getPosX() {
         return posX;
@@ -50,7 +53,7 @@ public class ChildAgent extends Agent {
         System.out.println("👶 " + getLocalName() + " foi criado! Descrição: " + descricao);
 
         // Adiciona o agente à lista global do bairro
-        bairro.adicionarAgente(this);
+        bairro.adicionarAgenteChild(this);
 
         // Comportamento com movimentação e infecção
         addBehaviour(new ChildFSMBehavior(this, 1000, bairro));
@@ -73,6 +76,27 @@ public class ChildAgent extends Agent {
 
     public Doenca getDoenca() {
         return doenca;
+    }
+
+    public void setCasa(int x, int y) {
+        this.homeX = x;
+        this.homeY = y;
+    }
+
+    public int getHomeX() {
+        return homeX;
+    }
+
+    public int getHomeY() {
+        return homeY;
+    }
+
+    public boolean isCasaDefinida() {
+        return casaDefinida;
+    }
+
+    public void setCasaDefinida(boolean casaDefinida) {
+        this.casaDefinida = casaDefinida;
     }
 
     @Override

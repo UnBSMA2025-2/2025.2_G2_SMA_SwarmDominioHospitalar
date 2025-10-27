@@ -1,5 +1,6 @@
 package hospital.behaviors;
 
+import hospital.agents.AdultAgent;
 import hospital.agents.ChildAgent;
 import hospital.enums.Local;
 import hospital.model.Doenca;
@@ -28,19 +29,37 @@ public class ChildFSMBehavior extends TickerBehaviour {
     protected void onTick() {
         ChildAgent agente = (ChildAgent) myAgent;
 
-        Local proximoLocal = null;
-        switch (tickDoDia) {
-            case 0 -> proximoLocal = Local.ESCOLA;
-            case 1 -> proximoLocal = rand.nextBoolean() ? Local.PARQUE : Local.ATIVIDADE;
-            case 2 -> proximoLocal = Local.CASA;
+        // ===================== ATRIBUI CASA FIXA (apenas 1x) =====================
+        if (!agente.isCasaDefinida()) {
+            int[] posCasa = encontrarCasaDisponivel();
+            agente.setCasa(posCasa[0], posCasa[1]);
+            agente.setPos(posCasa[0], posCasa[1]); // começa na própria casa
+            agente.setCasaDefinida(true);
+            System.out.println("[" + agente.getLocalName() + "] ganhou casa em (" + posCasa[0] + "," + posCasa[1] + ")");
         }
 
-        // Escolher posição aleatória dentro do local
-        int[] pos = encontrarPosicaoLocal(proximoLocal);
-        agente.setPos(pos[0], pos[1]);
+        // ===================== ROTINA DIÁRIA =====================
+        Local localAtual = switch (tickDoDia) {
+            case 0 -> Local.ESCOLA;
+            case 1 -> rand.nextBoolean() ? Local.PARQUE : Local.ATIVIDADE;
+            case 2 -> Local.CASA;
+            default -> Local.CASA;
+        };
 
-        // Calcular infecção após mover
-        checarInfeccao(agente, proximoLocal);
+        // Atualiza a posição do agente
+        if (localAtual == Local.CASA) {
+            // volta para a casa fixa
+            agente.setPos(agente.getHomeX(), agente.getHomeY());
+        } else {
+            // escolhe posição aleatória dentro do local
+            int[] pos = encontrarPosicaoLocal(localAtual, agente);
+            agente.setPos(pos[0], pos[1]);
+        }
+
+        System.out.println("[" + agente.getLocalName() + "] está em: " + localAtual);
+
+        // Calcula infecção (na casa dele, pois todos ocupam fixamente suas casas)
+        checarInfeccao(agente, localAtual);
 
         // Próximo tick
         tickDoDia++;
@@ -48,50 +67,92 @@ public class ChildFSMBehavior extends TickerBehaviour {
             tickDoDia = 0;
             diasCompletos++;
             if (diasCompletos >= LIMITE_DIAS) {
-                System.out.println("Fim dos dias! [" + agente.getLocalName() + "] vai dormir para sempre.");
+                System.out.println("Fim dos dias! [" + agente.getLocalName() + "] finalizou simulação.");
                 myAgent.doDelete();
             }
         }
     }
 
-    private int[] encontrarPosicaoLocal(Local local) {
-        List<int[]> possiveis = new ArrayList<>();
+    // ===================== ESCOLHE UMA CASA DISPONÍVEL =====================
+    private int[] encontrarCasaDisponivel() {
+        List<int[]> casasLivres = new ArrayList<>();
+
         for (int i = 0; i < bairro.getLinhas(); i++) {
             for (int j = 0; j < bairro.getColunas(); j++) {
-                if (bairro.getLocal(i, j) == local) {
-                    possiveis.add(new int[]{i, j});
+                if (bairro.getLocal(i, j) == Local.CASA) {
+                    boolean ocupada = !bairro.getAgentesNoLocalChild(i, j).isEmpty();
+                    if (!ocupada) {
+                        casasLivres.add(new int[]{i, j});
+                    }
                 }
             }
         }
-        if (possiveis.isEmpty()) return new int[]{0, 0};
-        return possiveis.get(rand.nextInt(possiveis.size())); // posição aleatória
+
+        if (casasLivres.isEmpty()) return new int[]{0, 0};
+        return casasLivres.get(rand.nextInt(casasLivres.size()));
     }
 
+    // ===================== INFECÇÃO =====================
     private void checarInfeccao(ChildAgent agente, Local local) {
-        if (agente.isInfectado()) return; // já está infectado
+        if (agente.isInfectado()) return;
 
-        List<ChildAgent> agentesNaCelula = bairro.getAgentesNoLocal(agente.getPosX(), agente.getPosY());
+        // mas podemos considerar infecção entre os do mesmo local lógico
+        List<Object> agentesNaCasa = bairro.getTodosAgentesNoLocal(agente.getPosX(), agente.getPosY());
 
         double pNaoInfectado = 1.0;
-        double C_loc = 1.0; // fator do local
-        double S_i = 1.0;   // suscetibilidade do agente
+        double C_loc = 1.0;
+        double S_i = 1.0;
 
-        for (ChildAgent outro : agentesNaCelula) {
-            if (outro.isInfectado()) {
-                Doenca d = outro.getDoenca();
+        for (Object outro : agentesNaCasa) {
+            boolean infectado = false;
+            Doenca d = null;
+
+            if (outro instanceof ChildAgent c) {
+                infectado = c.isInfectado();
+                d = c.getDoenca();
+            } else if (outro instanceof AdultAgent a) {
+                infectado = a.isInfectado();
+                d = a.getDoenca();
+            }
+
+            if (infectado && d != null) {
                 double I_j = d.getInfectividade();
                 double pTrans = d.getBeta() * C_loc * S_i * I_j;
-                System.out.println("    Transmissão de " + outro.getLocalName() + ": Beta=" + d.getBeta() +
-                        ", Infectividade=" + I_j + ", pTrans=" + pTrans);
+                String nome = (outro instanceof ChildAgent c2) ? c2.getLocalName() : ((AdultAgent) outro).getLocalName();
+                System.out.println("    Transmissão de " + nome + ": pTrans=" + pTrans);
                 pNaoInfectado *= (1 - pTrans);
             }
         }
 
         double pInfeccao = 1 - pNaoInfectado;
-        double sorteio = rand.nextDouble(); // valor aleatório
+        double sorteio = rand.nextDouble();
 
         if (sorteio < pInfeccao) {
             agente.setInfectado(true);
+            System.out.println("    " + agente.getLocalName() + " foi infectado!");
         }
+    }
+
+    // ===================== ENCONTRAR POSICAO =====================
+    private int[] encontrarPosicaoLocal(Local local, ChildAgent agente) {
+        List<int[]> posicoes = new ArrayList<>();
+
+        for (int i = 0; i < bairro.getLinhas(); i++) {
+            for (int j = 0; j < bairro.getColunas(); j++) {
+                if (bairro.getLocal(i, j) == local) {
+                    // evita a posição atual do agente
+                    if (!(i == agente.getPosX() && j == agente.getPosY())) {
+                        posicoes.add(new int[]{i, j});
+                    }
+                }
+            }
+        }
+
+        // Se não sobrou nenhuma posição diferente, mantém na posição atual
+        if (posicoes.isEmpty()) {
+            return new int[]{agente.getPosX(), agente.getPosY()};
+        }
+
+        return posicoes.get(rand.nextInt(posicoes.size()));
     }
 }

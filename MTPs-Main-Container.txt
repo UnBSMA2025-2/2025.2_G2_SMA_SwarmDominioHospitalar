@@ -1,1 +1,1 @@
-http://PedroLucas.mshome.net:7778/acc
+http://PedroLucas:7778/acc

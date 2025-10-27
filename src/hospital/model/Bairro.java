@@ -1,6 +1,7 @@
 package hospital.model;
 
 import hospital.agents.ChildAgent;
+import hospital.agents.AdultAgent;
 import hospital.enums.Local;
 
 import java.util.ArrayList;
@@ -9,8 +10,9 @@ import java.util.List;
 public class Bairro {
     private final Local[][] mapa;
 
-    // Lista de todos os agentes
-    private final List<ChildAgent> todosAgentes = new ArrayList<>();
+    // Listas separadas para cada tipo de agente
+    private final List<ChildAgent> todosChild = new ArrayList<>();
+    private final List<AdultAgent> todosAdult = new ArrayList<>();
 
     public Bairro() {
         // Exemplo simples 3x3
@@ -47,22 +49,47 @@ public class Bairro {
     }
 
     // ====================== MÉTODOS DE AGENTES ======================
-    public void adicionarAgente(ChildAgent agente) {
-        todosAgentes.add(agente);
+    public void adicionarAgenteChild(ChildAgent agente) {
+        todosChild.add(agente);
     }
 
-    public List<ChildAgent> getTodosAgentes() {
-        return todosAgentes;
+    public void adicionarAgenteAdult(AdultAgent agente) {
+        todosAdult.add(agente);
+    }
+
+    public List<ChildAgent> getTodosChild() {
+        return todosChild;
+    }
+
+    public List<AdultAgent> getTodosAdult() {
+        return todosAdult;
     }
 
     // Retorna os agentes na célula (x,y)
-    public List<ChildAgent> getAgentesNoLocal(int x, int y) {
+    public List<ChildAgent> getAgentesNoLocalChild(int x, int y) {
         List<ChildAgent> lista = new ArrayList<>();
-        for (ChildAgent agente : todosAgentes) {
+        for (ChildAgent agente : todosChild) {
             if (agente.getPosX() == x && agente.getPosY() == y) {
                 lista.add(agente);
             }
         }
+        return lista;
+    }
+
+    public List<AdultAgent> getAgentesNoLocalAdult(int x, int y) {
+        List<AdultAgent> lista = new ArrayList<>();
+        for (AdultAgent agente : todosAdult) {
+            if (agente.getPosX() == x && agente.getPosY() == y) {
+                lista.add(agente);
+            }
+        }
+        return lista;
+    }
+
+    public List<Object> getTodosAgentesNoLocal(int x, int y) {
+        List<Object> lista = new ArrayList<>();
+        lista.addAll(getAgentesNoLocalChild(x, y));
+        lista.addAll(getAgentesNoLocalAdult(x, y));
         return lista;
     }
 }

@@ -1,130 +1,153 @@
 package hospital.behaviors;
 
+import hospital.agents.AdultAgent;
+import hospital.agents.ChildAgent;
 import hospital.enums.Local;
+import hospital.model.Doenca;
+import hospital.model.Bairro;
 import jade.core.Agent;
-import jade.core.behaviours.FSMBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 
-public class AdultFSMBehavior extends FSMBehaviour {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class AdultFSMBehavior extends TickerBehaviour {
 
     private int diasCompletos = 0;
     private final int LIMITE_DIAS = 3;
+    private int tickDoDia = 0; // 0=manhã, 1=tarde, 2=noite
+    private final Bairro bairro;
+    private final Random rand = new Random();
 
-    public AdultFSMBehavior(Agent a) {
-        super(a);
-
-        registerFirstState(new Casa(), String.valueOf(Local.CASA));
-        registerState(new Trabalho(), String.valueOf(Local.TRABALHO));
-        registerState(new Festa(), String.valueOf(Local.FESTA));
-        registerState(new Parque(), String.valueOf(Local.PARQUE));
-        registerLastState(new FimDoDia(), String.valueOf(Local.FIM));
-
-        registerTransition(String.valueOf(Local.CASA), String.valueOf(Local.TRABALHO), 1);
-        registerTransition(String.valueOf(Local.TRABALHO), String.valueOf(Local.FESTA), 2);
-        registerTransition(String.valueOf(Local.TRABALHO), String.valueOf(Local.PARQUE), 3);
-        registerTransition(String.valueOf(Local.TRABALHO), String.valueOf(Local.CASA), 4);
-        registerTransition(String.valueOf(Local.FESTA), String.valueOf(Local.CASA), 5);
-        registerTransition(String.valueOf(Local.PARQUE), String.valueOf(Local.CASA), 6);
-        registerTransition(String.valueOf(Local.CASA), String.valueOf(Local.FIM), 9);
+    public AdultFSMBehavior(Agent a, long period, Bairro bairro) {
+        super(a, period);
+        this.bairro = bairro;
     }
 
-    // Função auxiliar para pausas entre ações
-    private void esperar(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    @Override
+    protected void onTick() {
+        AdultAgent agente = (AdultAgent) myAgent;
+
+        // ===================== ATRIBUI CASA FIXA (apenas 1x) =====================
+        if (!agente.isCasaDefinida()) {
+            int[] posCasa = encontrarCasaDisponivel();
+            agente.setCasa(posCasa[0], posCasa[1]);
+            agente.setPos(posCasa[0], posCasa[1]);
+            agente.setCasaDefinida(true);
+            System.out.println("[" + agente.getLocalName() + "] ganhou casa em (" + posCasa[0] + "," + posCasa[1] + ")");
         }
-    }
 
-    private class Casa extends OneShotBehaviour {
-        private int transition;
+        // ===================== ROTINA DIÁRIA =====================
+        Local localAtual = switch (tickDoDia) {
+            case 0 -> Local.TRABALHO;
+            case 1 -> {
+                int escolha = rand.nextInt(3);
+                yield switch (escolha) {
+                    case 0 -> Local.FESTA;
+                    case 1 -> Local.PARQUE;
+                    default -> Local.CASA;
+                };
+            }
+            case 2 -> Local.CASA;
+            default -> Local.CASA;
+        };
 
-        @Override
-        public void action() {
+        // Atualiza a posição do agente
+        if (localAtual == Local.CASA) {
+            agente.setPos(agente.getHomeX(), agente.getHomeY());
+        } else {
+            int[] pos = encontrarPosicaoLocal(localAtual, agente);
+            agente.setPos(pos[0], pos[1]);
+        }
+
+        System.out.println("[" + agente.getLocalName() + "] está em: " + localAtual);
+
+        // Calcula infecção
+        checarInfeccao(agente);
+
+        // Próximo tick
+        tickDoDia++;
+        if (tickDoDia > 2) {
+            tickDoDia = 0;
             diasCompletos++;
-            System.out.println("🏡 [" + myAgent.getLocalName() + "] está em casa. Acordando e se preparando para o trabalho... (dia " + diasCompletos + ")");
-            esperar(1000);
-
             if (diasCompletos >= LIMITE_DIAS) {
-                System.out.println("🛏️ [" + myAgent.getLocalName() + "] finalizou o dia " + diasCompletos + " e vai dormir definitivamente.");
-                esperar(1500);
-                transition = 9; // fim
-            } else {
-                transition = 1; // vai para o trabalho
+                System.out.println("Fim dos dias! [" + agente.getLocalName() + "] finalizou simulação.");
+                myAgent.doDelete();
             }
-        }
-
-        @Override
-        public int onEnd() {
-            return transition;
         }
     }
 
-    private class Trabalho extends OneShotBehaviour {
-        private int transition;
-
-        @Override
-        public void action() {
-            System.out.println("💼 [" + myAgent.getLocalName() + "] está trabalhando... respondendo e-mails e participando de reuniões.");
-            esperar(1200);
-
-            // Escolhe aleatoriamente o próximo destino após o trabalho
-            int escolha = (int) (Math.random() * 3);
-            switch (escolha) {
-                case 0 -> {
-                    System.out.println("🍷 [" + myAgent.getLocalName() + "] decidiu ir a uma festa após o expediente.");
-                    transition = 2;
-                }
-                case 1 -> {
-                    System.out.println("🌳 [" + myAgent.getLocalName() + "] decidiu relaxar no parque após o trabalho.");
-                    transition = 3;
-                }
-                default -> {
-                    System.out.println("🚗 [" + myAgent.getLocalName() + "] terminou o expediente e está voltando para casa.");
-                    transition = 4;
+    // ===================== ESCOLHE UMA CASA DISPONÍVEL =====================
+    private int[] encontrarCasaDisponivel() {
+        List<int[]> casasLivres = new ArrayList<>();
+        for (int i = 0; i < bairro.getLinhas(); i++) {
+            for (int j = 0; j < bairro.getColunas(); j++) {
+                if (bairro.getLocal(i, j) == Local.CASA) {
+                    boolean ocupada = !bairro.getAgentesNoLocalAdult(i, j).isEmpty();
+                    if (!ocupada) casasLivres.add(new int[]{i, j});
                 }
             }
         }
+        if (casasLivres.isEmpty()) return new int[]{0, 0};
+        return casasLivres.get(rand.nextInt(casasLivres.size()));
+    }
 
-        @Override
-        public int onEnd() {
-            return transition;
+    // ===================== INFECÇÃO =====================
+    private void checarInfeccao(AdultAgent agente) {
+        if (agente.isInfectado()) return;
+
+        List<Object> agentesNoLocal = bairro.getTodosAgentesNoLocal(agente.getPosX(), agente.getPosY());
+        double pNaoInfectado = 1.0;
+        double C_loc = 1.0;
+        double S_i = 1.0;
+
+        for (Object outro : agentesNoLocal) {
+            boolean infectado = false;
+            Doenca d = null;
+
+            if (outro instanceof ChildAgent c) {
+                infectado = c.isInfectado();
+                d = c.getDoenca();
+            } else if (outro instanceof AdultAgent a) {
+                infectado = a.isInfectado();
+                d = a.getDoenca();
+            }
+
+            if (infectado && d != null) {
+                double I_j = d.getInfectividade();
+                double pTrans = d.getBeta() * C_loc * S_i * I_j;
+                String nome = (outro instanceof ChildAgent c2) ? c2.getLocalName() : ((AdultAgent) outro).getLocalName();
+                System.out.println("    Transmissão de " + nome + ": pTrans=" + pTrans);
+                pNaoInfectado *= (1 - pTrans);
+            }
+        }
+
+        double pInfeccao = 1 - pNaoInfectado;
+        if (rand.nextDouble() < pInfeccao) {
+            agente.setInfectado(true);
+            System.out.println("    " + agente.getLocalName() + " foi infectado!");
         }
     }
 
-    private class Festa extends OneShotBehaviour {
-        @Override
-        public void action() {
-            System.out.println("🎉 [" + myAgent.getLocalName() + "] está se divertindo em uma festa!");
-            esperar(1000);
+    // ===================== ENCONTRAR POSICAO =====================
+    private int[] encontrarPosicaoLocal(Local local, AdultAgent agente) {
+        List<int[]> posicoes = new ArrayList<>();
+
+        for (int i = 0; i < bairro.getLinhas(); i++) {
+            for (int j = 0; j < bairro.getColunas(); j++) {
+                if (bairro.getLocal(i, j) == local) {
+                    if (!(i == agente.getPosX() && j == agente.getPosY())) {
+                        posicoes.add(new int[]{i, j});
+                    }
+                }
+            }
         }
 
-        @Override
-        public int onEnd() {
-            return 5; // volta pra casa
-        }
-    }
-
-    private class Parque extends OneShotBehaviour {
-        @Override
-        public void action() {
-            System.out.println("🌳 [" + myAgent.getLocalName() + "] está caminhando no parque para relaxar.");
-            esperar(1000);
+        if (posicoes.isEmpty()) {
+            return new int[]{agente.getPosX(), agente.getPosY()};
         }
 
-        @Override
-        public int onEnd() {
-            return 6; // volta pra casa
-        }
-    }
-
-    private class FimDoDia extends OneShotBehaviour {
-        @Override
-        public void action() {
-            System.out.println("🌙 [" + myAgent.getLocalName() + "] encerrou suas atividades e foi dormir. Encerrando agente...");
-            esperar(1000);
-            myAgent.doDelete();
-        }
+        return posicoes.get(rand.nextInt(posicoes.size()));
     }
 }
