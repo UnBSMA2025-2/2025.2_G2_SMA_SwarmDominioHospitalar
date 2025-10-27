@@ -1,10 +1,12 @@
 package hospital.agents;
 
 import jade.core.Agent;
+import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import hospital.model.Bairro;
+import java.util.concurrent.CyclicBarrier;
 
 import java.util.Random;
 
@@ -19,6 +21,7 @@ public class LauncherAgents extends Agent {
         // Cria bairro compartilhado
         Bairro bairro = new Bairro();
 
+        // ===================== CRIA CRIANÇAS =====================
         String[][] criancas = {
                 {"Criança1", "idade: 8", "atividade: futebol"},
                 {"Criança2", "idade: 10", "atividade: natação"},
@@ -28,14 +31,13 @@ public class LauncherAgents extends Agent {
         };
 
         Random rand = new Random();
-        int indiceZero = rand.nextInt(criancas.length); // índice do paciente zero
+        int indiceZero = rand.nextInt(criancas.length); // paciente zero
 
         for (int i = 0; i < criancas.length; i++) {
             String[] dados = criancas[i];
             boolean isPacienteZero = (i == indiceZero);
 
             try {
-                // Passa bairro primeiro
                 Object[] argsChild = new Object[]{bairro, dados, isPacienteZero};
 
                 AgentController child = container.createNewAgent(
@@ -45,12 +47,12 @@ public class LauncherAgents extends Agent {
                 );
 
                 child.start();
-                System.out.println("👶 Agente " + dados[0] + " criado com sucesso! (" + dados[1] + ", " + dados[2] + ")");
             } catch (StaleProxyException e) {
                 System.err.println("Erro ao criar " + dados[0] + ": " + e.getMessage());
             }
         }
 
+        // ===================== CRIA IDOSOS =====================
         String[][] idosos = {
                 {"Idoso1", "idade: 72", "atividade: caminhada no parque"},
                 {"Idoso2", "idade: 68", "atividade: hidroginástica"},
@@ -59,25 +61,25 @@ public class LauncherAgents extends Agent {
 
         for (String[] dados : idosos) {
             try {
-                // Cria um array de argumentos para passar bairro + dados
                 Object[] elderArgs = new Object[dados.length + 1];
-                elderArgs[0] = bairro; // primeiro o bairro
+                elderArgs[0] = bairro;
                 for (int i = 0; i < dados.length; i++) {
                     elderArgs[i + 1] = dados[i];
                 }
 
                 AgentController elder = container.createNewAgent(
                         dados[0],
-                        "hospital.agents.AdultAgent",
+                        "hospital.agents.ElderAgent", // Corrigido: antes estava AdultAgent!
                         elderArgs
                 );
+
                 elder.start();
-                System.out.println("\uD83D\uDC74 Agente " + dados[0] + " criado com sucesso! (" + dados[1] + ", " + dados[2] + ")");
             } catch (StaleProxyException e) {
                 System.err.println("Erro ao criar " + dados[0] + ": " + e.getMessage());
             }
         }
 
+        // ===================== CRIA ADULTOS =====================
         String[][] adultos = {
                 {"Adulto1", "idade: 32", "profissão: engenheiro de software"},
                 {"Adulto2", "idade: 28", "profissão: professor de matemática"},
@@ -88,9 +90,8 @@ public class LauncherAgents extends Agent {
 
         for (String[] dados : adultos) {
             try {
-                // Cria um array de argumentos para passar bairro + dados
                 Object[] adultArgs = new Object[dados.length + 1];
-                adultArgs[0] = bairro; // primeiro o bairro
+                adultArgs[0] = bairro;
                 for (int i = 0; i < dados.length; i++) {
                     adultArgs[i + 1] = dados[i];
                 }
@@ -100,14 +101,38 @@ public class LauncherAgents extends Agent {
                         "hospital.agents.AdultAgent",
                         adultArgs
                 );
+
                 adult.start();
-                System.out.println("🧑‍💼 Agente " + dados[0] + " criado com sucesso! (" + dados[1] + ", " + dados[2] + ")");
             } catch (StaleProxyException e) {
                 System.err.println("Erro ao criar " + dados[0] + ": " + e.getMessage());
             }
         }
 
         System.out.println("✅ Todos os agentes (crianças, adultos e idosos) foram lançados com sucesso!");
+
+        try {
+            Object[] args = new Object[]{};
+            AgentController controller = container.createNewAgent(
+                    "InfectionController",
+                    "hospital.agents.InfectionControllerAgent",
+                    args
+            );
+            controller.start();
+        } catch (Exception e) {
+            System.err.println("Erro ao criar controlador: " + e.getMessage());
+        }
+
+        System.out.println("✅ Controlador foi lançado com sucesso!");
+
+
+        // ===================== MONITOR CENTRAL DO BAIRRO =====================
+        addBehaviour(new TickerBehaviour(this, 1200) {
+            private int tick = 0;
+            @Override
+            protected void onTick() {
+                bairro.imprimirEstado(tick++);
+            }
+        });
     }
 
     @Override

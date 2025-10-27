@@ -32,9 +32,6 @@ public abstract class PersonAgent extends Agent {
 
     public void setInfectado(boolean infectado) {
         this.infectado = infectado;
-        if (infectado) {
-            System.out.println("😷 [" + getLocalName() + "] foi infectado com " + doenca.getNome() + "!");
-        }
     }
 
     public Doenca getDoenca() { return doenca; }

@@ -113,4 +113,52 @@ public class Bairro {
         lista.addAll(getAgentesNoLocalElder(x, y));
         return lista;
     }
+
+    public void imprimirEstado(int tick) {
+        System.out.println("\nTick " + tick + ":");
+        for (int i = 0; i < getLinhas(); i++) {
+            for (int j = 0; j < getColunas(); j++) {
+                List<Object> agentesAqui = getTodosAgentesNoLocal(i, j);
+                StringBuilder celula = new StringBuilder("[ ");
+
+                for (Object a : agentesAqui) {
+                    String nome;
+                    boolean infectado = false;
+
+                    if (a instanceof ChildAgent c) {
+                        nome = c.getLocalName();
+                        infectado = c.isInfectado();
+                    } else if (a instanceof AdultAgent a2) {
+                        nome = a2.getLocalName();
+                        infectado = a2.isInfectado();
+                    } else if (a instanceof ElderAgent e) {
+                        nome = e.getLocalName();
+                        infectado = e.isInfectado();
+                    } else {
+                        nome = "?";
+                    }
+
+                    if (infectado) {
+                        celula.append("💀").append(nome).append(", ");
+                    } else {
+                        celula.append(nome).append(", ");
+                    }
+                }
+
+                if (!agentesAqui.isEmpty()) celula.setLength(celula.length() - 2); // remove última vírgula
+                celula.append(" ] ");
+                System.out.print(celula);
+            }
+            System.out.println();
+        }
+
+        // Contagem de infectados
+        long totalInfectados = todosChild.stream().filter(ChildAgent::isInfectado).count()
+                + todosAdult.stream().filter(AdultAgent::isInfectado).count()
+                + todosElder.stream().filter(ElderAgent::isInfectado).count();
+
+        long totalAgentes = todosChild.size() + todosAdult.size() + todosElder.size();
+        System.out.println("Infectados: " + totalInfectados + "/" + totalAgentes);
+    }
+
 }

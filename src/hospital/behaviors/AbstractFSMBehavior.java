@@ -18,8 +18,9 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     protected final Bairro bairro;
     protected final Random rand = new Random();
     protected int diasCompletos = 0;
-    protected final int LIMITE_DIAS = 3;
+    protected final int LIMITE_DIAS = 5;
     protected int tickDoDia = 0;
+    private static List<PersonAgent> aInfectarNoTick = new ArrayList<>();// controla o tick global
 
     public AbstractFSMBehavior(T agente, long period, Bairro bairro) {
         super(agente, period);
@@ -36,21 +37,17 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
             agente.setCasa(posCasa[0], posCasa[1]);
             agente.setPos(posCasa[0], posCasa[1]);
             agente.setCasaDefinida(true);
-            System.out.println("[" + agente.getLocalName() + "] ganhou casa em (" + posCasa[0] + "," + posCasa[1] + ")");
         }
 
         // ===================== ROTINA DIÁRIA =====================
         Local localAtual = definirLocalDoDia(agente, tickDoDia);
 
-        // Atualiza posição
         if (localAtual == Local.CASA) {
             agente.setPos(agente.getHomeX(), agente.getHomeY());
         } else {
             int[] pos = encontrarPosicaoLocal(localAtual, agente);
             agente.setPos(pos[0], pos[1]);
         }
-
-        System.out.println("[" + agente.getLocalName() + "] está em: " + localAtual);
 
         // ===================== CHECA INFECÇÃO =====================
         checarInfeccaoGenerica(agente, bairro.getTodosAgentesNoLocal(agente.getPosX(), agente.getPosY()));
@@ -61,7 +58,6 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
             tickDoDia = 0;
             diasCompletos++;
             if (diasCompletos >= LIMITE_DIAS) {
-                System.out.println("Fim dos dias! [" + agente.getLocalName() + "] finalizou simulação.");
                 myAgent.doDelete();
             }
         }
@@ -91,42 +87,28 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
 
     // ===================== MÉTODO GENÉRICO DE INFECÇÃO =====================
     protected void checarInfeccaoGenerica(T agente, List<Object> agentesNoLocal) {
-        double C_loc = 1.0;
-        double S_i = 1.0;
-        double pNaoInfectado = 1.0;
+        List<PersonAgent> paraInfectar = new ArrayList<>();
 
         for (Object outro : agentesNoLocal) {
-            boolean infectado = false;
-            Doenca d = null;
-
-            if (outro instanceof ChildAgent c) {
-                infectado = c.isInfectado();
-                d = c.getDoenca();
-            } else if (outro instanceof AdultAgent a) {
-                infectado = a.isInfectado();
-                d = a.getDoenca();
-            } else if (outro instanceof ElderAgent e) {
-                infectado = e.isInfectado();
-                d = e.getDoenca();
-            }
-
-            if (infectado && d != null) {
-                double pTrans = d.getBeta() * C_loc * S_i * d.getInfectividade();
-                String nome = (outro instanceof ChildAgent c2) ? c2.getLocalName()
-                        : (outro instanceof AdultAgent a2) ? a2.getLocalName()
-                        : ((ElderAgent) outro).getLocalName();
-                System.out.println("    Transmissão de " + nome + ": pTrans=" + pTrans);
-                pNaoInfectado *= (1 - pTrans);
+            if (outro instanceof PersonAgent p) {
+                if (p.isInfectado() && p.getDoenca() != null && !agente.isInfectado()) {
+                    double pTrans = p.getDoenca().getBeta() * p.getDoenca().getInfectividade();
+                    if (rand.nextDouble() < pTrans) {
+                        paraInfectar.add(agente); // marca para infectar
+                    }
+                }
             }
         }
 
-        double pInfeccao = 1 - pNaoInfectado;
-        if (rand.nextDouble() < pInfeccao) {
-            if (agente instanceof ChildAgent c) c.setInfectado(true);
-            else if (agente instanceof AdultAgent a) a.setInfectado(true);
-            else if (agente instanceof ElderAgent e) e.setInfectado(true);
-
-            System.out.println("    " + agente.getLocalName() + " foi infectado!");
+        // Atualiza a lista global de forma sincronizada
+        if (!paraInfectar.isEmpty()) {
+            synchronized (aInfectarNoTick) {
+                aInfectarNoTick.addAll(paraInfectar);
+            }
         }
+    }
+
+    public static List<PersonAgent> getAInfectarNoTick() {
+        return aInfectarNoTick;
     }
 }
