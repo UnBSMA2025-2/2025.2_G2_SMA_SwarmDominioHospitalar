@@ -32,13 +32,18 @@ public class LauncherAgents extends Agent {
 
         for (int i = 0; i < criancas.length; i++) {
             String[] dados = criancas[i];
-            boolean isPacienteZero = (i == indiceZero); // só 1 infectado no início
+            boolean isPacienteZero = (i == indiceZero);
+
             try {
+                // Passa bairro primeiro
+                Object[] argsChild = new Object[]{bairro, dados, isPacienteZero};
+
                 AgentController child = container.createNewAgent(
                         dados[0],
                         "hospital.agents.ChildAgent",
-                        new Object[]{dados, bairro, isPacienteZero}  // passa bairro + flag paciente zero
+                        argsChild
                 );
+
                 child.start();
                 System.out.println("👶 Agente " + dados[0] + " criado com sucesso! (" + dados[1] + ", " + dados[2] + ")");
             } catch (StaleProxyException e) {

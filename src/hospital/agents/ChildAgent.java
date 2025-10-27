@@ -1,106 +1,52 @@
 package hospital.agents;
 
 import hospital.model.Bairro;
-import jade.core.Agent;
-import hospital.behaviors.ChildFSMBehavior;
 import hospital.model.Doenca;
+import hospital.behaviors.ChildFSMBehavior;
+import jade.core.behaviours.TickerBehaviour;
 
-public class ChildAgent extends Agent {
+public class ChildAgent extends PersonAgent {
 
-    private boolean infectado = false;
-    private Doenca doenca;
-    private Bairro bairro;
-    private int posX = 0;
-    private int posY = 0;
-    private int homeX;
-    private int homeY;
-    private boolean casaDefinida = false;
-
-    public int getPosX() {
-        return posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    public void setPos(int x, int y) {
-        this.posX = x;
-        this.posY = y;
-    }
+    private boolean pacienteZero = false;
 
     @Override
     protected void setup() {
-        Object[] args = getArguments();
+        super.setup();
 
-        String descricao = "(sem descrição)";
-        if (args != null && args.length > 0) {
-            String[] dados = (String[]) args[0];    // descrição da criança
-            this.bairro = (Bairro) args[1];        // bairro compartilhado
-            boolean pacienteZero = (args.length > 2) && (boolean) args[2]; // flag paciente zero
-            this.infectado = pacienteZero;         // já infectado se for paciente zero
+        Object[] args = getArguments();
+        if (args.length > 2) {
+            String[] dados = (String[]) args[1];
+            boolean pacienteZero = (boolean) args[2];
+            if (pacienteZero) setPacienteZero(true);
 
             StringBuilder sb = new StringBuilder();
             for (String d : dados) sb.append(d).append(" | ");
-            descricao = sb.toString();
-
-            if (pacienteZero) {
-                System.out.println("⚠️ " + getLocalName() + " começou infectado! (Paciente Zero)");
-            }
+            System.out.println("👶 " + getLocalName() + " descrição: " + sb.toString());
         }
-
-        this.doenca = new Doenca("COVID", 0.1, 2.0);
-        System.out.println("👶 " + getLocalName() + " foi criado! Descrição: " + descricao);
-
-        // Adiciona o agente à lista global do bairro
-        bairro.adicionarAgenteChild(this);
-
-        // Comportamento com movimentação e infecção
-        addBehaviour(new ChildFSMBehavior(this, 1000, bairro));
-    }
-
-    public Bairro getBairro() {
-        return bairro;
-    }
-
-    public boolean isInfectado() {
-        return infectado;
-    }
-
-    public void setInfectado(boolean infectado) {
-        this.infectado = infectado;
-        if (infectado) {
-            System.out.println("😷 [" + getLocalName() + "] foi infectado com " + doenca.getNome() + "!");
-        }
-    }
-
-    public Doenca getDoenca() {
-        return doenca;
-    }
-
-    public void setCasa(int x, int y) {
-        this.homeX = x;
-        this.homeY = y;
-    }
-
-    public int getHomeX() {
-        return homeX;
-    }
-
-    public int getHomeY() {
-        return homeY;
-    }
-
-    public boolean isCasaDefinida() {
-        return casaDefinida;
-    }
-
-    public void setCasaDefinida(boolean casaDefinida) {
-        this.casaDefinida = casaDefinida;
     }
 
     @Override
-    protected void takeDown() {
-        System.out.println("👋 " + getLocalName() + " terminou seu dia e está sendo desligado.");
+    protected TickerBehaviour criarBehaviour() {
+        return new ChildFSMBehavior(this, 1000, bairro);
+    }
+
+    @Override
+    protected void adicionarAoBairro() {
+        bairro.adicionarAgenteChild(this);
+    }
+
+    @Override
+    protected Doenca criarDoenca() {
+        return new Doenca("COVID", 0.1, 2.0);
+    }
+
+    @Override
+    protected String getEmoji() {
+        return "👶";
+    }
+
+    public void setPacienteZero(boolean pacienteZero) {
+        this.pacienteZero = pacienteZero;
+        if (pacienteZero) this.infectado = true;
     }
 }
