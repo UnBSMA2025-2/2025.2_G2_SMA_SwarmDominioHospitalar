@@ -46,26 +46,32 @@ public class LauncherAgents extends Agent {
             }
         }
 
-//        String[][] idosos = {
-//                {"Idoso1", "idade: 72", "atividade: caminhada no parque"},
-//                {"Idoso2", "idade: 68", "atividade: hidroginástica"},
-//                {"Idoso3", "idade: 75", "atividade: leitura e descanso"}
-//        };
-//
-//        for (String[] dados : idosos) {
-//            try {
-//                AgentController elder = container.createNewAgent(
-//                        dados[0],
-//                        "hospital.agents.ElderAgent",
-//                        dados
-//                );
-//                elder.start();
-//                System.out.println("🧓 Agente " + dados[0] + " criado com sucesso! (" + dados[1] + ", " + dados[2] + ")");
-//            } catch (StaleProxyException e) {
-//                System.err.println("Erro ao criar " + dados[0] + ": " + e.getMessage());
-//            }
-//        }
-//
+        String[][] idosos = {
+                {"Idoso1", "idade: 72", "atividade: caminhada no parque"},
+                {"Idoso2", "idade: 68", "atividade: hidroginástica"},
+                {"Idoso3", "idade: 75", "atividade: leitura e descanso"}
+        };
+
+        for (String[] dados : idosos) {
+            try {
+                // Cria um array de argumentos para passar bairro + dados
+                Object[] elderArgs = new Object[dados.length + 1];
+                elderArgs[0] = bairro; // primeiro o bairro
+                for (int i = 0; i < dados.length; i++) {
+                    elderArgs[i + 1] = dados[i];
+                }
+
+                AgentController elder = container.createNewAgent(
+                        dados[0],
+                        "hospital.agents.AdultAgent",
+                        elderArgs
+                );
+                elder.start();
+                System.out.println("\uD83D\uDC74 Agente " + dados[0] + " criado com sucesso! (" + dados[1] + ", " + dados[2] + ")");
+            } catch (StaleProxyException e) {
+                System.err.println("Erro ao criar " + dados[0] + ": " + e.getMessage());
+            }
+        }
 
         String[][] adultos = {
                 {"Adulto1", "idade: 32", "profissão: engenheiro de software"},

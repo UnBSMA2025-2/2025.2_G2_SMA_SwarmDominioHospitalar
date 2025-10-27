@@ -2,6 +2,7 @@ package hospital.model;
 
 import hospital.agents.ChildAgent;
 import hospital.agents.AdultAgent;
+import hospital.agents.ElderAgent;
 import hospital.enums.Local;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class Bairro {
     // Listas separadas para cada tipo de agente
     private final List<ChildAgent> todosChild = new ArrayList<>();
     private final List<AdultAgent> todosAdult = new ArrayList<>();
+    private final List<ElderAgent> todosElder = new ArrayList<>();
 
     public Bairro() {
         // Exemplo simples 3x3
@@ -57,12 +59,20 @@ public class Bairro {
         todosAdult.add(agente);
     }
 
+    public void adicionarAgenteElder(ElderAgent agente) {
+        todosElder.add(agente);
+    }
+
     public List<ChildAgent> getTodosChild() {
         return todosChild;
     }
 
     public List<AdultAgent> getTodosAdult() {
         return todosAdult;
+    }
+
+    public List<ElderAgent> getTodosElder() {
+        return todosElder;
     }
 
     // Retorna os agentes na célula (x,y)
@@ -86,10 +96,21 @@ public class Bairro {
         return lista;
     }
 
+    public List<ElderAgent> getAgentesNoLocalElder(int x, int y) {
+        List<ElderAgent> lista = new ArrayList<>();
+        for (ElderAgent agente : todosElder) {
+            if (agente.getPosX() == x && agente.getPosY() == y) {
+                lista.add(agente);
+            }
+        }
+        return lista;
+    }
+
     public List<Object> getTodosAgentesNoLocal(int x, int y) {
         List<Object> lista = new ArrayList<>();
         lista.addAll(getAgentesNoLocalChild(x, y));
         lista.addAll(getAgentesNoLocalAdult(x, y));
+        lista.addAll(getAgentesNoLocalElder(x, y));
         return lista;
     }
 }
