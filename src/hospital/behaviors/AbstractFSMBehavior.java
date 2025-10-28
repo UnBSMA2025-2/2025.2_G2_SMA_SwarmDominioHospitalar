@@ -30,6 +30,8 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     protected void onTick() {
         T agente = (T) myAgent;
 
+        agente.avancarInfeccao();
+
         // ===================== ATRIBUI CASA FIXA =====================
         if (!agente.isCasaDefinida()) {
             int[] posCasa = encontrarCasaDisponivel(agente);

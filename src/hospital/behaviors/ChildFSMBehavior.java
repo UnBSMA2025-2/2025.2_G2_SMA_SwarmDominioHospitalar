@@ -1,6 +1,7 @@
 package hospital.behaviors;
 
 import hospital.agents.ChildAgent;
+import hospital.agents.PersonAgent;
 import hospital.enums.Local;
 import hospital.model.Bairro;
 
@@ -15,6 +16,18 @@ public class ChildFSMBehavior extends AbstractFSMBehavior<ChildAgent> {
 
     @Override
     protected Local definirLocalDoDia(ChildAgent agente, int tickDoDia) {
+
+        PersonAgent.GravidadeSintoma sintoma = agente.getSintomaAtual();
+
+        if (sintoma == PersonAgent.GravidadeSintoma.MORTE) {
+            myAgent.doDelete();
+            return null;
+        }
+
+        if(sintoma == PersonAgent.GravidadeSintoma.GRAVE){
+            return Local.CASA;
+        }
+
         return switch (tickDoDia) {
             case 0 -> Local.ESCOLA;
             case 1 -> rand.nextBoolean() ? Local.PARQUE : Local.ATIVIDADE;

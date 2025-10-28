@@ -19,6 +19,9 @@ public abstract class PersonAgent extends Agent {
     protected boolean infectado = false;
     protected Doenca doenca;
 
+    private int ticksDesdeInfeccao = 0;
+    private int diasDesdeInfeccao = -1;   // -1 significa que n esta infectado
+
     // ===================== POSIÇÃO =====================
     public int getPosX() { return posX; }
     public int getPosY() { return posY; }
@@ -38,6 +41,48 @@ public abstract class PersonAgent extends Agent {
     }
 
     public Doenca getDoenca() { return doenca; }
+
+    public void infectar(Doenca doenca){
+        this.infectado = true;
+        this.doenca = doenca;
+        this.ticksDesdeInfeccao = 0;
+        this.diasDesdeInfeccao = 0;
+    }
+
+    public void avancarInfeccao(){
+        if(isInfectado()){
+            ticksDesdeInfeccao++;
+            if(ticksDesdeInfeccao >= 3){
+                diasDesdeInfeccao++;
+                ticksDesdeInfeccao = 0;
+            }
+        }
+    }
+
+    public enum GravidadeSintoma{
+        NENHUM,
+        LEVE,
+        MODERADO,
+        GRAVE,
+        MORTE
+    }
+
+    public GravidadeSintoma getSintomaAtual(){
+        if(!isInfectado()){
+            return GravidadeSintoma.NENHUM;
+        }
+        return switch (diasDesdeInfeccao) {
+            case 1 -> GravidadeSintoma.LEVE;
+            case 2 -> GravidadeSintoma.MODERADO;
+            case 3 -> GravidadeSintoma.GRAVE;
+            default -> {
+                if (diasDesdeInfeccao >= 4) {
+                    yield GravidadeSintoma.MORTE;
+                }
+                yield GravidadeSintoma.NENHUM;
+            }
+        };
+    }
 
     // ===================== SETUP COMUM =====================
     @Override
