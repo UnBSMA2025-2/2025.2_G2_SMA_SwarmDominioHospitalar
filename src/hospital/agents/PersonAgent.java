@@ -2,8 +2,11 @@ package hospital.agents;
 
 import hospital.model.Bairro;
 import hospital.model.Doenca;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 public abstract class PersonAgent extends Agent {
 
@@ -48,9 +51,33 @@ public abstract class PersonAgent extends Agent {
         this.doenca = criarDoenca();
 
         System.out.println(getEmoji() + " " + getLocalName() + " criado(a)!");
-        adicionarAoBairro();
 
+        // Registra o agente no controlador de sincronização (SyncControllerAgent)
+        ACLMessage reg = new ACLMessage(ACLMessage.INFORM);
+        reg.setConversationId("REGISTER_AGENT");
+        reg.addReceiver(new AID("syncController", AID.ISLOCALNAME));
+        send(reg);
+
+        adicionarAoBairro();
         addBehaviour(criarBehaviour());
+    }
+
+    // ===================== SINCRONIZAÇÃO =====================
+    public void waitForNextTick() {
+        MessageTemplate mt = MessageTemplate.MatchConversationId("TICK_GO");
+        ACLMessage msg = blockingReceive(mt);
+        if (msg != null) {
+            int nextTick = Integer.parseInt(msg.getContent());
+            System.out.println("⏩ " + getLocalName() + " iniciado tick " + nextTick);
+        }
+    }
+
+    public void notifyTickDone(int currentTick) {
+        ACLMessage done = new ACLMessage(ACLMessage.INFORM);
+        done.setConversationId("TICK_DONE");
+        done.setContent(String.valueOf(currentTick));
+        done.addReceiver(new AID("syncController", AID.ISLOCALNAME));
+        send(done);
     }
 
     // ===================== MÉTODOS ABSTRATOS PARA SUBCLASSES =====================
@@ -64,3 +91,7 @@ public abstract class PersonAgent extends Agent {
         System.out.println("😴 " + getLocalName() + " encerrou suas atividades.");
     }
 }
+
+
+
+

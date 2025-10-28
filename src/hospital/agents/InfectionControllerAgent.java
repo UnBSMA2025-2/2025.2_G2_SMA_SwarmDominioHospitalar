@@ -21,11 +21,12 @@ public class InfectionControllerAgent extends Agent {
 
                 synchronized (aInfectar) {
                     if (!aInfectar.isEmpty()) {
-                        System.out.println("\n=== [Controlador] Processando infecções do tick ===");
+                        int tickAtual = SyncControllerAgent.getCurrentTick();
+                        System.out.println("\n=== [Controlador] Processando infecções do tick ===" + tickAtual);
                         for (PersonAgent p : aInfectar) {
                             if (!p.isInfectado()) {
                                 p.setInfectado(true);
-                                System.out.println("💉 " + p.getLocalName() + " foi infectado.");
+                                System.out.println("💉 " + p.getLocalName() +  " foi infectado no" + tickAtual);
                             }
                         }
                         aInfectar.clear();

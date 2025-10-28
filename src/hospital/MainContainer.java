@@ -15,6 +15,21 @@ public class MainContainer {
 
         ContainerController mainContainer = rt.createMainContainer(p);
 
+        try{
+            AgentController syncController = mainContainer.createNewAgent(
+                    "syncController",
+                    "hospital.agents.SyncControllerAgent",
+                    null
+            );
+            syncController.start();
+
+            System.out.println("Agente Controlador (✿◡‿◡) inicializado");
+
+        }catch (StaleProxyException e){
+            e.printStackTrace();
+        }
+
+
         try {
             AgentController launcher = mainContainer.createNewAgent(
                     "Launcher",
@@ -30,3 +45,4 @@ public class MainContainer {
         }
     }
 }
+

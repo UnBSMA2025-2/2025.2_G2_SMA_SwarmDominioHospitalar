@@ -1,12 +1,8 @@
 package hospital.behaviors;
 
 import hospital.agents.PersonAgent;
-import hospital.agents.ChildAgent;
-import hospital.agents.AdultAgent;
-import hospital.agents.ElderAgent;
 import hospital.enums.Local;
 import hospital.model.Bairro;
-import hospital.model.Doenca;
 import jade.core.behaviours.TickerBehaviour;
 
 import java.util.ArrayList;
@@ -20,7 +16,7 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     protected int diasCompletos = 0;
     protected final int LIMITE_DIAS = 5;
     protected int tickDoDia = 0;
-    private static List<PersonAgent> aInfectarNoTick = new ArrayList<>();// controla o tick global
+    private static List<PersonAgent> aInfectarNoTick = new ArrayList<>(); // controla o tick global
 
     public AbstractFSMBehavior(T agente, long period, Bairro bairro) {
         super(agente, period);
@@ -59,8 +55,16 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
             diasCompletos++;
             if (diasCompletos >= LIMITE_DIAS) {
                 myAgent.doDelete();
+                return;
             }
         }
+
+        // ===================== SINCRONIZAÇÃO GLOBAL DE TICK =====================
+        // 1. Notifica o controlador que este agente terminou o tick atual
+        agente.notifyTickDone(tickDoDia);
+
+        // 2. Espera até receber liberação do SyncControllerAgent para continuar
+        agente.waitForNextTick();
     }
 
     // ===================== MÉTODOS ABSTRATOS =====================
