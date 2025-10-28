@@ -25,7 +25,7 @@ public class InfectionControllerAgent extends Agent {
                         System.out.println("\n=== [Controlador] Processando infecções do tick ===" + tickAtual);
                         for (PersonAgent p : aInfectar) {
                             if (!p.isInfectado()) {
-                                p.setInfectado(true);
+                                p.infectar(p.getDoenca());
                                 System.out.println("💉 " + p.getLocalName() +  " foi infectado no" + tickAtual);
                             }
                         }

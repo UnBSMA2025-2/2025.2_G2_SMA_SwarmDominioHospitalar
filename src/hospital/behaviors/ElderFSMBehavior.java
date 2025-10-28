@@ -1,5 +1,6 @@
 package hospital.behaviors;
 
+import hospital.agents.AdultAgent;
 import hospital.agents.ElderAgent;
 import hospital.enums.Local;
 import hospital.model.Bairro;
@@ -15,18 +16,24 @@ public class ElderFSMBehavior extends AbstractFSMBehavior<ElderAgent> {
 
     @Override
     protected Local definirLocalDoDia(ElderAgent agente, int tickDoDia) {
-        return switch (tickDoDia) {
-            case 0 -> Local.TRABALHO;
-            case 1 -> {
-                int escolha = rand.nextInt(3);
-                yield switch (escolha) {
-                    case 0 -> Local.FESTA;
-                    case 1 -> Local.PARQUE;
-                    default -> Local.CASA;
-                };
-            }
-            default -> Local.CASA;
-        };
+        AdultAgent.GravidadeSintoma sintoma = agente.getSintomaAtual();
+
+        if (sintoma == AdultAgent.GravidadeSintoma.MORTE) {
+            myAgent.doDelete();
+            return null;
+        }
+
+        if (sintoma == AdultAgent.GravidadeSintoma.GRAVE) {
+            return Local.CASA;
+        }
+
+        // Rotina para idosos - geralmente ficam em casa, mas podem ir ao parque a tarde
+        switch (tickDoDia) {
+            case 0:
+            case 2: return Local.CASA;      // manhã e noite em casa
+            case 1: return Local.PARQUE;    // tarde no parque
+            default: return Local.CASA;
+        }
     }
 
     @Override
