@@ -90,6 +90,17 @@ public abstract class PersonAgent extends Agent {
     protected void takeDown() {
         System.out.println("😴 " + getLocalName() + " encerrou suas atividades.");
     }
+
+    // ===================== HOSPITALIZAÇÃO =====================
+    private boolean hospitalizado = false;
+    
+    public boolean isHospitalizado() {
+        return hospitalizado;
+    }
+    
+    public void setHospitalizado(boolean hospitalizado) {
+        this.hospitalizado = hospitalizado;
+    }
 }
 
 
