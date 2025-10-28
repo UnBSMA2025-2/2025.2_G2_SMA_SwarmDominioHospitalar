@@ -7,7 +7,8 @@ public enum Local {
     PARQUE("Parque"),
     ATIVIDADE("Atividade"),
     FESTA("Festa"),
-    FIM("FimDoDia");
+    FIM("FimDoDia"),
+    HOSPITAL("Hospital");
 
     private final String descricao;
 
