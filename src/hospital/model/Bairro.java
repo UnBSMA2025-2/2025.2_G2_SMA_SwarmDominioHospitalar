@@ -51,6 +51,15 @@ public class Bairro {
         posicaoHospital = new int[]{0, 3};
     }
 
+    // ====================== HOSPITAL ======================
+    public HospitalDeCampanhaAgent getHospitalAgente() {
+        return hospitalAgente;
+    }
+
+    public void setHospitalAgente(HospitalDeCampanhaAgent hospitalAgente) {
+        this.hospitalAgente = hospitalAgente;
+    }
+
     // ====================== MAPA ======================
 
     public Local getLocal(int x, int y) {
@@ -73,22 +82,12 @@ public class Bairro {
         return posicaoHospital;
     }
 
-    // Registra o agente hospital (para referência direta)
-    public void setHospitalAgente(HospitalDeCampanhaAgent hospital) {
-        this.hospitalAgente = hospital;
-    }
-
-    public HospitalDeCampanhaAgent getHospitalAgente() {
-        return hospitalAgente;
-    }
-
     // Verifica se o hospital está cheio
     public boolean isHospitalLotado(List<AID> internados, int capacidade) {
         return internados.size() >= capacidade;
     }
 
     // ====================== AGENTES ======================
-
     public void adicionarAgenteChild(ChildAgent agente) {
         todosChild.add(agente);
     }

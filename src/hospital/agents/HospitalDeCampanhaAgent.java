@@ -1,82 +1,75 @@
 package hospital.agents;
 
-import hospital.behaviors.HospitalDeCampanhaBehaviour;
+import hospital.bdi.*;
 import hospital.model.Bairro;
-import jade.core.AID;
 import jade.core.Agent;
-import java.util.*;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.core.AID;
 
 public class HospitalDeCampanhaAgent extends Agent {
 
-    private int capacidade = 5;
-    private final List<AID> internados = new ArrayList<>();
-    private final Map<AID, Integer> diasInternado = new HashMap<>();
-
-    private int posX;
-    private int posY;
+    private HospitalBeliefs beliefs;
+    private HospitalDesires desires;
+    private HospitalIntentions intentions;
     private Bairro bairro;
 
     @Override
     protected void setup() {
-        // Recupera o bairro passado como argumento
-        Object[] args = getArguments();
-        if (args != null && args.length > 0) {
-            this.bairro = (Bairro) args[0];
-            this.posX = bairro.getHospitalPos()[0];
-            this.posY = bairro.getHospitalPos()[1];
 
-            // Registra o hospital no bairro (para referência global)
-            bairro.setHospitalAgente(this);
+        Object[] args = getArguments();
+        if (args != null && args.length > 0 && args[0] instanceof Bairro) {
+            bairro = (Bairro) args[0];
+            bairro.setHospitalAgente(this); // 🔹 REGISTRA O HOSPITAL NO BAIRRO
+        } else {
+            System.err.println("⚠️ HospitalDeCampanhaAgent sem bairro recebido!");
+            doDelete();
+            return;
         }
 
-        System.out.println("🏥 " + getLocalName() + " pronto! Capacidade: " + capacidade +
-                " | Posição: (" + posX + "," + posY + ")");
+        this.beliefs = new HospitalBeliefs(5, 10);
+        this.desires = new HospitalDesires();
+        this.intentions = new HospitalIntentions(this, beliefs, desires);
 
-        // Inicia o comportamento de gestão hospitalar
-        addBehaviour(new HospitalDeCampanhaBehaviour(this, 1000));
+        System.out.println("🏥 " + getLocalName() + " (BDI ativo) iniciado e registrado no bairro.");
+
+        addBehaviour(new jade.core.behaviours.TickerBehaviour(this, 1000) {
+            @Override
+            protected void onTick() {
+                receberPedidos();
+                intentions.deliberar();
+                logStatus();
+            }
+        });
     }
 
-    // ===================== MÉTODOS DE GESTÃO =====================
 
-    public boolean temVaga() {
-        return internados.size() < capacidade;
+    private void receberPedidos() {
+        MessageTemplate mt = MessageTemplate.MatchConversationId("PEDIDO_HOSPITAL");
+        ACLMessage msg = receive(mt);
+        while (msg != null) {
+            AID paciente = msg.getSender();
+            if (beliefs.temVaga()) {
+                beliefs.internar(paciente);
+                ACLMessage resposta = msg.createReply();
+                resposta.setPerformative(ACLMessage.CONFIRM);
+                resposta.setContent("ADMITIDO");
+                send(resposta);
+                System.out.println("✅ Internação aceita: " + paciente.getLocalName());
+            } else {
+                ACLMessage resposta = msg.createReply();
+                resposta.setPerformative(ACLMessage.REFUSE);
+                resposta.setContent("LOTADO");
+                send(resposta);
+                System.out.println("🚫 Internação recusada (sem vagas): " + paciente.getLocalName());
+            }
+            msg = receive(mt);
+        }
     }
 
-    public void admitirPaciente(AID paciente) {
-        internados.add(paciente);
-        diasInternado.put(paciente, 0);
-        System.out.println("🏥 " + paciente.getLocalName() + " foi internado no " + getLocalName());
-    }
-
-    public void liberarPaciente(AID paciente) {
-        internados.remove(paciente);
-        diasInternado.remove(paciente);
-        System.out.println("💚 " + paciente.getLocalName() + " recebeu alta no " + getLocalName());
-    }
-
-    // ===================== GETTERS =====================
-
-    public List<AID> getInternados() {
-        return internados;
-    }
-
-    public Map<AID, Integer> getDiasInternado() {
-        return diasInternado;
-    }
-
-    public int getPosX() {
-        return posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    public Bairro getBairro() {
-        return bairro;
-    }
-
-    public int getCapacidade() {
-        return capacidade;
+    private void logStatus() {
+        System.out.println("🏥 [" + getLocalName() + "] Internados: " +
+                beliefs.getInternados().size() +
+                " | Recursos: " + beliefs.getRecursos());
     }
 }

@@ -21,6 +21,20 @@ public class LauncherAgents extends Agent {
         // Cria bairro compartilhado
         Bairro bairro = new Bairro();
 
+        // ===================== HOSPITAL DE CAMPANHA =====================
+        try {
+            Object[] hospitalArgs = new Object[]{bairro};
+            AgentController hospital = container.createNewAgent(
+                    "HospitalDeCampanha",
+                    "hospital.agents.HospitalDeCampanhaAgent",
+                    hospitalArgs
+            );
+            hospital.start();
+            System.out.println("✅ Hospital de Campanha lançado com sucesso!");
+        } catch (StaleProxyException e) {
+            System.err.println("Erro ao criar Hospital de Campanha: " + e.getMessage());
+        }
+
         // ===================== CRIA CRIANÇAS =====================
         String[][] criancas = {
                 {"Criança1", "idade: 8", "atividade: futebol"},
@@ -123,7 +137,6 @@ public class LauncherAgents extends Agent {
         }
 
         System.out.println("✅ Controlador foi lançado com sucesso!");
-
 
         // ===================== MONITOR CENTRAL DO BAIRRO =====================
         addBehaviour(new TickerBehaviour(this, 1200) {

@@ -18,25 +18,23 @@ public abstract class PersonAgent extends Agent {
     protected int homeX;
     protected int homeY;
     protected boolean casaDefinida = false;
+
     protected boolean infectado = false;
     protected Doenca doenca;
     protected double vulnerabilidade; // 0.0 (resistente) → 1.0 (muito vulnerável)
+
     private GravidadeSintoma sintomaAtual = GravidadeSintoma.NENHUM;
     protected final Random rand = new Random();
     private int ticksDesdeInfeccao = 0;
-    private int diasDesdeInfeccao = -1;   // -1 significa que não está infectado
-    private int ticksDesdeUltimaMudanca = 0; // controle de tempo entre pioras
+    private int diasDesdeInfeccao = -1;   // -1 significa não infectado
+    private int ticksDesdeUltimaMudanca = 0;
 
     // ===================== ENUM DE SINTOMAS =====================
     public enum GravidadeSintoma {
-        NENHUM,
-        LEVE,
-        MODERADO,
-        GRAVE,
-        MORTE
+        NENHUM, LEVE, MODERADO, GRAVE, MORTE
     }
 
-    // ===================== POSIÇÃO =====================
+    // ===================== GETTERS E SETTERS =====================
     public int getPosX() { return posX; }
     public int getPosY() { return posY; }
     public void setPos(int x, int y) { this.posX = x; this.posY = y; }
@@ -51,14 +49,14 @@ public abstract class PersonAgent extends Agent {
     public boolean isInfectado() { return infectado; }
     public void setInfectado(boolean infectado) { this.infectado = infectado; }
 
+    public Doenca getDoenca() { return doenca; }
     public double getVulnerabilidade() { return vulnerabilidade; }
     public void setVulnerabilidade(double vulnerabilidade) { this.vulnerabilidade = vulnerabilidade; }
 
-    protected void configurarVulnerabilidade() {
-        this.vulnerabilidade = 1.0; // padrão neutro
-    }
+    public GravidadeSintoma getSintomaAtual() { return sintomaAtual; }
+    public void setSintomaAtual(GravidadeSintoma sintoma) { this.sintomaAtual = sintoma; }
 
-    public Doenca getDoenca() { return doenca; }
+    protected void configurarVulnerabilidade() { this.vulnerabilidade = 0.5 + rand.nextDouble() * 0.5; }
 
     public void infectar(Doenca doenca) {
         this.infectado = true;
@@ -68,52 +66,41 @@ public abstract class PersonAgent extends Agent {
         this.ticksDesdeUltimaMudanca = 0;
     }
 
-    // ===================== GETTERS E SETTERS DE SINTOMA =====================
-    public GravidadeSintoma getSintomaAtual() {
-        return sintomaAtual;
-    }
-
-    public void setSintomaAtual(GravidadeSintoma sintoma) {
-        this.sintomaAtual = sintoma;
-    }
-
-    // ============================================================
-    //  PROGRESSÃO PROBABILÍSTICA DE SINTOMAS (MAIS LENTA)
-    // ============================================================
-
+    // ===================== PROGRESSÃO PROBABILÍSTICA =====================
     public void avancarInfeccao() {
         if (!infectado || sintomaAtual == GravidadeSintoma.MORTE) return;
 
         ticksDesdeInfeccao++;
         ticksDesdeUltimaMudanca++;
 
-        // Define um intervalo mínimo entre pioras (para dar tempo de infectar)
-        int intervaloMinimo = 3 + rand.nextInt(3); // entre 3 e 5 ticks
+        // Intervalo menor: doença mais agressiva
+        int intervaloMinimo = 2 + rand.nextInt(2); // entre 2 e 3 ticks
         if (ticksDesdeUltimaMudanca < intervaloMinimo) return;
 
         double chancePiorar = 0.0;
         double chanceMelhorar = 0.0;
 
-        // Reduz a agressividade das chances
         switch (sintomaAtual) {
             case NENHUM -> {
-                chancePiorar = vulnerabilidade * 0.25; // antes era 0.5
+                // Mesmo quem está assintomático tem risco real de piorar
+                chancePiorar = vulnerabilidade * 0.35;
             }
             case LEVE -> {
-                chancePiorar = vulnerabilidade * 0.4; // antes era 0.7
-                chanceMelhorar = (1 - vulnerabilidade) * 0.1;
+                chancePiorar = vulnerabilidade * 0.55;
+                chanceMelhorar = (1 - vulnerabilidade) * 0.05; // difícil melhorar
             }
             case MODERADO -> {
-                chancePiorar = vulnerabilidade * 0.55; // antes era 0.85
-                chanceMelhorar = (1 - vulnerabilidade) * 0.15;
+                chancePiorar = vulnerabilidade * 0.75;
+                chanceMelhorar = (1 - vulnerabilidade) * 0.08;
             }
             case GRAVE -> {
-                chancePiorar = vulnerabilidade * 0.65; // antes era 0.95
-                chanceMelhorar = (1 - vulnerabilidade) * 0.2;
+                chancePiorar = vulnerabilidade * 0.9;
+                chanceMelhorar = (1 - vulnerabilidade) * 0.1;
             }
-            default -> { return; }
+            default -> {}
         }
 
+        // Pequena variação aleatória pra deixar natural
         double variacao = (rand.nextDouble() * 0.1) - 0.05;
         chancePiorar = Math.min(1.0, Math.max(0.0, chancePiorar + variacao));
 
@@ -134,9 +121,9 @@ public abstract class PersonAgent extends Agent {
             case LEVE -> sintomaAtual = GravidadeSintoma.MODERADO;
             case MODERADO -> sintomaAtual = GravidadeSintoma.GRAVE;
             case GRAVE -> sintomaAtual = GravidadeSintoma.MORTE;
-            case MORTE -> {}
+            default -> {}
         }
-        System.out.println(getLocalName() + " piorou para " + sintomaAtual + " ⚠️");
+        System.out.println("⚠️ " + getLocalName() + " piorou para " + sintomaAtual + "!");
     }
 
     private void melhorarSintoma() {
@@ -146,16 +133,14 @@ public abstract class PersonAgent extends Agent {
             case LEVE -> sintomaAtual = GravidadeSintoma.NENHUM;
             default -> {}
         }
-        System.out.println(getLocalName() + " melhorou para " + sintomaAtual + " ✅");
+        System.out.println("✅ " + getLocalName() + " melhorou para " + sintomaAtual + "!");
     }
 
-    // ===================== SETUP COMUM =====================
+    // ===================== SETUP =====================
     @Override
     protected void setup() {
         Object[] args = getArguments();
-        if (args != null && args.length > 0) {
-            this.bairro = (Bairro) args[0];
-        }
+        if (args != null && args.length > 0) this.bairro = (Bairro) args[0];
 
         this.doenca = criarDoenca();
         configurarVulnerabilidade();
@@ -163,7 +148,7 @@ public abstract class PersonAgent extends Agent {
         System.out.println(getEmoji() + " " + getLocalName() +
                 " criado(a)! Vulnerabilidade: " + String.format("%.2f", vulnerabilidade));
 
-        // Registra o agente no controlador de sincronização
+        // Registra no controlador de ticks
         ACLMessage reg = new ACLMessage(ACLMessage.INFORM);
         reg.setConversationId("REGISTER_AGENT");
         reg.addReceiver(new AID("syncController", AID.ISLOCALNAME));
@@ -171,6 +156,20 @@ public abstract class PersonAgent extends Agent {
 
         adicionarAoBairro();
         addBehaviour(criarBehaviour());
+
+        // 🔹 Comportamento para responder consultas de vulnerabilidade
+        addBehaviour(new jade.core.behaviours.CyclicBehaviour(this) {
+            @Override
+            public void action() {
+                ACLMessage msg = receive(MessageTemplate.MatchConversationId("CONSULTA_VULNERABILIDADE"));
+                if (msg != null) {
+                    ACLMessage reply = msg.createReply();
+                    reply.setConversationId("RESPOSTA_VULNERABILIDADE");
+                    reply.setContent(String.valueOf(getVulnerabilidade()));
+                    send(reply);
+                } else block();
+            }
+        });
     }
 
     // ===================== SINCRONIZAÇÃO =====================

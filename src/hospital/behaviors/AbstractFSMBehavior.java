@@ -38,17 +38,7 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     protected void onTick() {
         T agente = (T) myAgent;
 
-        // ===================== VERIFICA SE ESTÁ VIVO =====================
-        if (agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.MORTE) {
-            System.out.println("⚰️ " + agente.getLocalName() + " está morto. Encerrando comportamento e removendo agente.");
-            myAgent.doDelete();
-            return;
-        }
-
-        // ===================== AVANÇA INFECÇÃO =====================
-        agente.avancarInfeccao();
-
-        // ===================== ATRIBUI CASA FIXA =====================
+        // ===================== CASA FIXA =====================
         if (!agente.isCasaDefinida()) {
             int[] posCasa = encontrarCasaDisponivel(agente);
             agente.setCasa(posCasa[0], posCasa[1]);
@@ -56,29 +46,24 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
             agente.setCasaDefinida(true);
         }
 
-        // ===================== VERIFICA SITUAÇÃO DE DOENÇA =====================
-        if (agente.isInfectado() &&
-                (agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.MODERADO ||
-                        agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.GRAVE)) {
+        // ===================== AVANÇA INFECÇÃO =====================
+        agente.avancarInfeccao();
 
+        // ===================== CHECA HOSPITAL =====================
+        boolean indoHospital = agente.isInfectado() && deveProcurarHospital(agente);
+
+        if (indoHospital) {
+            // Teleporta para hospital
             int[] posHospital = bairro.getHospitalPos();
+            agente.setPos(posHospital[0], posHospital[1]);
 
-            // Caminha até o hospital enquanto não internado
-            if (!internado) {
-                moverAgenteGradualmente(agente, posHospital[0], posHospital[1]);
-                System.out.println("🚶 " + agente.getLocalName() + " indo para o hospital... (" +
-                        agente.getPosX() + "," + agente.getPosY() + ")");
+            // Solicita internação se ainda não tentou
+            if (!tentouHospital && !internado) {
+                solicitarInternacao(agente);
+                tentouHospital = true;
             }
 
-            // Se chegou ao hospital, envia pedido de internação
-            if (agente.getPosX() == posHospital[0] && agente.getPosY() == posHospital[1]) {
-                if (!tentouHospital && !internado) {
-                    solicitarInternacao(agente);
-                    tentouHospital = true;
-                }
-            }
-
-            // Se já internado, aplica chance de melhora
+            // Chance de melhora se internado
             if (internado) {
                 ticksNoHospital++;
                 double chanceMelhora = Math.min(0.9, ticksNoHospital * 0.05);
@@ -101,54 +86,47 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
             }
 
         } else {
-            // ===================== ROTINA NORMAL =====================
-            Local destino = definirLocalDoDia(agente, tickDoDia);
-            int[] posDestino = encontrarPosicaoLocal(destino, agente);
-            moverAgenteGradualmente(agente, posDestino[0], posDestino[1]);
+            // ===================== ROTINA DIÁRIA =====================
+            Local localAtual = definirLocalDoDia(agente, tickDoDia);
 
-            System.out.println("🚶 " + agente.getLocalName() + " movendo-se para " + destino +
-                    " (" + agente.getPosX() + "," + agente.getPosY() + ")");
+            if (localAtual == Local.CASA) {
+                agente.setPos(agente.getHomeX(), agente.getHomeY());
+            } else {
+                int[] pos = encontrarPosicaoLocal(localAtual, agente);
+                agente.setPos(pos[0], pos[1]);
+            }
         }
 
-        // ===================== EVITA INFECÇÃO DE MORTOS =====================
-        if (agente.getSintomaAtual() != PersonAgent.GravidadeSintoma.MORTE) {
-            checarInfeccaoGenerica(agente, bairro.getTodosAgentesNoLocal(agente.getPosX(), agente.getPosY()));
-        }
+        // ===================== CHECA INFECÇÃO =====================
+        checarInfeccaoGenerica(agente, bairro.getTodosAgentesNoLocal(agente.getPosX(), agente.getPosY()));
 
-        // ===================== CONTROLE DE CICLO DE VIDA =====================
+        // ===================== PRÓXIMO TICK =====================
         tickDoDia++;
         if (tickDoDia > 2) {
             tickDoDia = 0;
             diasCompletos++;
             if (diasCompletos >= LIMITE_DIAS) {
-                System.out.println("😴 " + agente.getLocalName() + " encerrou suas atividades diárias.");
                 myAgent.doDelete();
-                return;
             }
         }
-
-        // ===================== SINCRONIZAÇÃO COM CONTROLADOR =====================
-        agente.notifyTickDone(tickDoDia);
-        agente.waitForNextTick();
     }
 
+    protected boolean deveProcurarHospital(T agente) {
+        PersonAgent.GravidadeSintoma sintoma = agente.getSintomaAtual();
+        double v = agente.getVulnerabilidade();
 
-    // ============== MOVIMENTAÇÃO E DESLOCAMENTO =================
-    // preparando para futura simulação grafica
+        // Mortos não procuram hospital
+        if (sintoma == PersonAgent.GravidadeSintoma.MORTE) return false;
 
-    protected void moverAgenteGradualmente(T agente, int destinoX, int destinoY) {
-        int atualX = agente.getPosX();
-        int atualY = agente.getPosY();
+        // Vulnerabilidade alta: vai se estiver pelo menos moderado
+        if (v > 0.5) {
+            return sintoma == PersonAgent.GravidadeSintoma.MODERADO
+                    || sintoma == PersonAgent.GravidadeSintoma.GRAVE;
+        }
 
-        if (atualX < destinoX) atualX++;
-        else if (atualX > destinoX) atualX--;
-
-        if (atualY < destinoY) atualY++;
-        else if (atualY > destinoY) atualY--;
-
-        agente.setPos(atualX, atualY);
+        // Vulnerabilidade baixa: só vai se estiver grave
+        return sintoma == PersonAgent.GravidadeSintoma.GRAVE;
     }
-
 
     // ============== COMUNICAÇÃO COM O HOSPITAL ==================
 
