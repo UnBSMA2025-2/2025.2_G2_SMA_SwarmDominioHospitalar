@@ -3,14 +3,19 @@ package hospital.model;
 import hospital.agents.ChildAgent;
 import hospital.agents.AdultAgent;
 import hospital.agents.ElderAgent;
+import hospital.agents.HospitalDeCampanhaAgent;
 import hospital.enums.Local;
+import jade.core.AID;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bairro {
     private final Local[][] mapa;
-    private final int[] posicaoHospital; // Armazena a posição do único hospital
+    private final int[] posicaoHospital; // posição fixa do único hospital
+
+    // Referência ao agente hospital (opcional, útil para consultas)
+    private HospitalDeCampanhaAgent hospitalAgente;
 
     // Listas separadas para cada tipo de agente
     private final List<ChildAgent> todosChild = new ArrayList<>();
@@ -18,14 +23,14 @@ public class Bairro {
     private final List<ElderAgent> todosElder = new ArrayList<>();
 
     public Bairro() {
-        // Mapa 4x4 com apenas 1 hospital
+        // Mapa 4x4 com um hospital fixo
         mapa = new Local[4][4];
 
-        // Preenchendo o mapa
+        // Preenchendo o mapa com locais
         mapa[0][0] = Local.CASA;
         mapa[0][1] = Local.ESCOLA;
         mapa[0][2] = Local.PARQUE;
-        mapa[0][3] = Local.HOSPITAL;  // ÚNICO HOSPITAL
+        mapa[0][3] = Local.HOSPITAL; // ÚNICO HOSPITAL
 
         mapa[1][0] = Local.PARQUE;
         mapa[1][1] = Local.ATIVIDADE;
@@ -37,7 +42,7 @@ public class Bairro {
         mapa[2][2] = Local.PARQUE;
         mapa[2][3] = Local.ESCOLA;
 
-        mapa[3][0] = Local.CASA;  // mudar para FESTA quando for implementado
+        mapa[3][0] = Local.CASA; // futuramente FESTA
         mapa[3][1] = Local.ATIVIDADE;
         mapa[3][2] = Local.PARQUE;
         mapa[3][3] = Local.CASA;
@@ -46,7 +51,8 @@ public class Bairro {
         posicaoHospital = new int[]{0, 3};
     }
 
-    // ====================== MÉTODOS DO MAPA ======================
+    // ====================== MAPA ======================
+
     public Local getLocal(int x, int y) {
         if (x >= 0 && x < mapa.length && y >= 0 && y < mapa[0].length) {
             return mapa[x][y];
@@ -62,18 +68,27 @@ public class Bairro {
         return mapa[0].length;
     }
 
-    // Retorna a posição do único hospital
-    public int[] getHospital() {
+    // Retorna a posição fixa do hospital
+    public int[] getHospitalPos() {
         return posicaoHospital;
     }
 
-    // Método para verificar se o hospital está lotado
-    public boolean isHospitalLotado() {
-        List<Object> agentesNoHospital = getTodosAgentesNoLocal(posicaoHospital[0], posicaoHospital[1]);
-        return agentesNoHospital.size() >= 5; // Capacidade máxima de 5 pessoas
+    // Registra o agente hospital (para referência direta)
+    public void setHospitalAgente(HospitalDeCampanhaAgent hospital) {
+        this.hospitalAgente = hospital;
     }
 
-    // ====================== MÉTODOS DE AGENTES ======================
+    public HospitalDeCampanhaAgent getHospitalAgente() {
+        return hospitalAgente;
+    }
+
+    // Verifica se o hospital está cheio
+    public boolean isHospitalLotado(List<AID> internados, int capacidade) {
+        return internados.size() >= capacidade;
+    }
+
+    // ====================== AGENTES ======================
+
     public void adicionarAgenteChild(ChildAgent agente) {
         todosChild.add(agente);
     }
@@ -98,7 +113,15 @@ public class Bairro {
         return todosElder;
     }
 
-    // Retorna os agentes na célula (x,y)
+    // Retorna todos os agentes em uma célula (x, y)
+    public List<Object> getTodosAgentesNoLocal(int x, int y) {
+        List<Object> lista = new ArrayList<>();
+        lista.addAll(getAgentesNoLocalChild(x, y));
+        lista.addAll(getAgentesNoLocalAdult(x, y));
+        lista.addAll(getAgentesNoLocalElder(x, y));
+        return lista;
+    }
+
     public List<ChildAgent> getAgentesNoLocalChild(int x, int y) {
         List<ChildAgent> lista = new ArrayList<>();
         for (ChildAgent agente : todosChild) {
@@ -129,20 +152,20 @@ public class Bairro {
         return lista;
     }
 
-    public List<Object> getTodosAgentesNoLocal(int x, int y) {
-        List<Object> lista = new ArrayList<>();
-        lista.addAll(getAgentesNoLocalChild(x, y));
-        lista.addAll(getAgentesNoLocalAdult(x, y));
-        lista.addAll(getAgentesNoLocalElder(x, y));
-        return lista;
-    }
+    // ====================== VISUALIZAÇÃO ======================
 
     public void imprimirEstado(int tick) {
-        System.out.println("\nTick " + tick + ":");
+        System.out.println("\n📅 Tick " + tick + ":");
+
         for (int i = 0; i < getLinhas(); i++) {
             for (int j = 0; j < getColunas(); j++) {
                 List<Object> agentesAqui = getTodosAgentesNoLocal(i, j);
                 StringBuilder celula = new StringBuilder("[ ");
+
+                // Mostra o símbolo do hospital
+                if (mapa[i][j] == Local.HOSPITAL) {
+                    celula.append("🏥 ");
+                }
 
                 for (Object a : agentesAqui) {
                     String nome;
@@ -152,15 +175,12 @@ public class Bairro {
                     if (a instanceof ChildAgent c) {
                         nome = c.getLocalName();
                         infectado = c.isInfectado();
-                        hospitalizado = c.isHospitalizado();
                     } else if (a instanceof AdultAgent a2) {
                         nome = a2.getLocalName();
                         infectado = a2.isInfectado();
-                        hospitalizado = a2.isHospitalizado();
                     } else if (a instanceof ElderAgent e) {
                         nome = e.getLocalName();
                         infectado = e.isInfectado();
-                        hospitalizado = e.isHospitalizado();
                     } else {
                         nome = "?";
                     }
@@ -181,23 +201,15 @@ public class Bairro {
             System.out.println();
         }
 
-        // Estatísticas
+        // Estatísticas gerais
         long totalInfectados = todosChild.stream().filter(ChildAgent::isInfectado).count()
                 + todosAdult.stream().filter(AdultAgent::isInfectado).count()
                 + todosElder.stream().filter(ElderAgent::isInfectado).count();
 
-        long totalHospitalizados = todosChild.stream().filter(ChildAgent::isHospitalizado).count()
-                + todosAdult.stream().filter(AdultAgent::isHospitalizado).count()
-                + todosElder.stream().filter(ElderAgent::isHospitalizado).count();
-
         long totalAgentes = todosChild.size() + todosAdult.size() + todosElder.size();
-        
-        // Informação sobre lotação do hospital
-        boolean hospitalLotado = isHospitalLotado();
-        String statusHospital = hospitalLotado ? "🏥 LOTADO" : "🏥 Com vagas";
-        
-        System.out.println("📊 Estatísticas - Infectados: " + totalInfectados + 
-                         " | Hospitalizados: " + totalHospitalizados + 
-                         " | Total: " + totalAgentes + " | " + statusHospital);
+
+        System.out.println("\n📊 Estatísticas: Infectados = " + totalInfectados +
+                " | Total de agentes = " + totalAgentes +
+                " | Hospital em (" + posicaoHospital[0] + "," + posicaoHospital[1] + ")");
     }
 }

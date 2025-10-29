@@ -5,7 +5,11 @@ import hospital.model.Doenca;
 import hospital.behaviors.ElderFSMBehavior;
 import jade.core.behaviours.TickerBehaviour;
 
+import java.util.Random;
+
 public class ElderAgent extends PersonAgent {
+
+    protected Random rand = new Random();
 
     @Override
     protected TickerBehaviour criarBehaviour() {
@@ -25,5 +29,11 @@ public class ElderAgent extends PersonAgent {
     @Override
     protected String getEmoji() {
         return "🧓";
+    }
+
+    @Override
+    protected void configurarVulnerabilidade() {
+        double v = Math.pow(rand.nextDouble(), 0.5); // maioria alta, raros baixos
+        this.vulnerabilidade = 0.2 + v * 0.8; // faixa total 0.2–1.0
     }
 }

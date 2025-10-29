@@ -5,8 +5,11 @@ import hospital.model.Doenca;
 import hospital.behaviors.ChildFSMBehavior;
 import jade.core.behaviours.TickerBehaviour;
 
+import java.util.Random;
+
 public class ChildAgent extends PersonAgent {
 
+    protected Random rand = new Random();
     private boolean pacienteZero = false;
 
     @Override
@@ -43,6 +46,12 @@ public class ChildAgent extends PersonAgent {
     @Override
     protected String getEmoji() {
         return "👶";
+    }
+
+    @Override
+    protected void configurarVulnerabilidade() {
+        double v = Math.pow(rand.nextDouble(), 2.5); // maioria baixa, raros altos
+        this.vulnerabilidade = 0.1 + v * 0.9; // faixa total 0.1–1.0
     }
 
     public void setPacienteZero(boolean pacienteZero) {
