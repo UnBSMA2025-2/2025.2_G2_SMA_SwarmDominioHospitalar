@@ -1,5 +1,6 @@
 package hospital.agents;
 
+import hospital.behaviors.AbstractFSMBehavior;
 import hospital.model.Bairro;
 import hospital.model.Doenca;
 import jade.core.AID;
@@ -21,20 +22,21 @@ public abstract class PersonAgent extends Agent {
 
     protected boolean infectado = false;
     protected Doenca doenca;
-    protected double vulnerabilidade; // 0.0 (resistente) → 1.0 (muito vulnerável)
+    protected double vulnerabilidade;
 
     private GravidadeSintoma sintomaAtual = GravidadeSintoma.NENHUM;
     protected final Random rand = new Random();
     private int ticksDesdeInfeccao = 0;
-    private int diasDesdeInfeccao = -1;   // -1 significa não infectado
+    private int diasDesdeInfeccao = -1;
     private int ticksDesdeUltimaMudanca = 0;
 
-    // ===================== ENUM DE SINTOMAS =====================
+    private AbstractFSMBehavior<?> behavior;
+
     public enum GravidadeSintoma {
         NENHUM, LEVE, MODERADO, GRAVE, MORTE
     }
 
-    // ===================== GETTERS E SETTERS =====================
+    // ---------------- Getters / Setters ----------------
     public int getPosX() { return posX; }
     public int getPosY() { return posY; }
     public void setPos(int x, int y) { this.posX = x; this.posY = y; }
@@ -56,7 +58,9 @@ public abstract class PersonAgent extends Agent {
     public GravidadeSintoma getSintomaAtual() { return sintomaAtual; }
     public void setSintomaAtual(GravidadeSintoma sintoma) { this.sintomaAtual = sintoma; }
 
-    protected void configurarVulnerabilidade() { this.vulnerabilidade = 0.5 + rand.nextDouble() * 0.5; }
+    protected void configurarVulnerabilidade() {
+        this.vulnerabilidade = 0.5 + rand.nextDouble() * 0.5;
+    }
 
     public void infectar(Doenca doenca) {
         this.infectado = true;
@@ -66,28 +70,28 @@ public abstract class PersonAgent extends Agent {
         this.ticksDesdeUltimaMudanca = 0;
     }
 
-    // ===================== PROGRESSÃO PROBABILÍSTICA =====================
+    // FSM Behaviour reference
+    public void setBehavior(AbstractFSMBehavior<?> behavior) { this.behavior = behavior; }
+    public AbstractFSMBehavior<?> getBehavior() { return behavior; }
+
+    // ---------------- Progressão da infecção ----------------
     public void avancarInfeccao() {
         if (!infectado || sintomaAtual == GravidadeSintoma.MORTE) return;
 
         ticksDesdeInfeccao++;
         ticksDesdeUltimaMudanca++;
 
-        // Intervalo menor: doença mais agressiva
-        int intervaloMinimo = 2 + rand.nextInt(2); // entre 2 e 3 ticks
+        int intervaloMinimo = 2 + rand.nextInt(2);
         if (ticksDesdeUltimaMudanca < intervaloMinimo) return;
 
         double chancePiorar = 0.0;
         double chanceMelhorar = 0.0;
 
         switch (sintomaAtual) {
-            case NENHUM -> {
-                // Mesmo quem está assintomático tem risco real de piorar
-                chancePiorar = vulnerabilidade * 0.35;
-            }
+            case NENHUM -> chancePiorar = vulnerabilidade * 0.35;
             case LEVE -> {
                 chancePiorar = vulnerabilidade * 0.55;
-                chanceMelhorar = (1 - vulnerabilidade) * 0.05; // difícil melhorar
+                chanceMelhorar = (1 - vulnerabilidade) * 0.05;
             }
             case MODERADO -> {
                 chancePiorar = vulnerabilidade * 0.75;
@@ -97,15 +101,12 @@ public abstract class PersonAgent extends Agent {
                 chancePiorar = vulnerabilidade * 0.9;
                 chanceMelhorar = (1 - vulnerabilidade) * 0.1;
             }
-            default -> {}
         }
 
-        // Pequena variação aleatória pra deixar natural
         double variacao = (rand.nextDouble() * 0.1) - 0.05;
         chancePiorar = Math.min(1.0, Math.max(0.0, chancePiorar + variacao));
 
         double sorte = rand.nextDouble();
-
         if (sorte < chancePiorar) {
             piorarSintoma();
             ticksDesdeUltimaMudanca = 0;
@@ -120,8 +121,14 @@ public abstract class PersonAgent extends Agent {
             case NENHUM -> sintomaAtual = GravidadeSintoma.LEVE;
             case LEVE -> sintomaAtual = GravidadeSintoma.MODERADO;
             case MODERADO -> sintomaAtual = GravidadeSintoma.GRAVE;
-            case GRAVE -> sintomaAtual = GravidadeSintoma.MORTE;
-            default -> {}
+            case GRAVE -> {
+                sintomaAtual = GravidadeSintoma.MORTE;
+                System.out.println("⚠️ " + getLocalName() + " piorou para MORTE!");
+                infectado = false;
+                if (bairro != null) bairro.marcarComoMorto(this);
+                doDelete();
+                return;
+            }
         }
         System.out.println("⚠️ " + getLocalName() + " piorou para " + sintomaAtual + "!");
     }
@@ -131,12 +138,11 @@ public abstract class PersonAgent extends Agent {
             case GRAVE -> sintomaAtual = GravidadeSintoma.MODERADO;
             case MODERADO -> sintomaAtual = GravidadeSintoma.LEVE;
             case LEVE -> sintomaAtual = GravidadeSintoma.NENHUM;
-            default -> {}
         }
         System.out.println("✅ " + getLocalName() + " melhorou para " + sintomaAtual + "!");
     }
 
-    // ===================== SETUP =====================
+    // ---------------- Setup ----------------
     @Override
     protected void setup() {
         Object[] args = getArguments();
@@ -148,16 +154,19 @@ public abstract class PersonAgent extends Agent {
         System.out.println(getEmoji() + " " + getLocalName() +
                 " criado(a)! Vulnerabilidade: " + String.format("%.2f", vulnerabilidade));
 
-        // Registra no controlador de ticks
         ACLMessage reg = new ACLMessage(ACLMessage.INFORM);
         reg.setConversationId("REGISTER_AGENT");
         reg.addReceiver(new AID("syncController", AID.ISLOCALNAME));
         send(reg);
 
         adicionarAoBairro();
-        addBehaviour(criarBehaviour());
 
-        // 🔹 Comportamento para responder consultas de vulnerabilidade
+        TickerBehaviour fsm = criarBehaviour();
+        if (fsm instanceof AbstractFSMBehavior<?> fsmTyped) {
+            setBehavior(fsmTyped);
+        }
+        addBehaviour(fsm);
+
         addBehaviour(new jade.core.behaviours.CyclicBehaviour(this) {
             @Override
             public void action() {
@@ -172,7 +181,6 @@ public abstract class PersonAgent extends Agent {
         });
     }
 
-    // ===================== SINCRONIZAÇÃO =====================
     public void waitForNextTick() {
         MessageTemplate mt = MessageTemplate.MatchConversationId("TICK_GO");
         ACLMessage msg = blockingReceive(mt);
@@ -190,7 +198,6 @@ public abstract class PersonAgent extends Agent {
         send(done);
     }
 
-    // ===================== MÉTODOS ABSTRATOS =====================
     protected abstract TickerBehaviour criarBehaviour();
     protected abstract void adicionarAoBairro();
     protected abstract Doenca criarDoenca();

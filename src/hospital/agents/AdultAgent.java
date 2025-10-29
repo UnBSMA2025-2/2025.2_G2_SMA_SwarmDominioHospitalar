@@ -12,6 +12,14 @@ public class AdultAgent extends PersonAgent {
     protected Random rand = new Random();
 
     @Override
+    protected void setup() {
+        super.setup();
+        var fsm = new AdultFSMBehavior(this, 1000, bairro);
+        setBehavior(fsm);
+        addBehaviour(fsm);
+    }
+
+    @Override
     protected TickerBehaviour criarBehaviour() {
         return new AdultFSMBehavior(this, 1000, bairro);
     }

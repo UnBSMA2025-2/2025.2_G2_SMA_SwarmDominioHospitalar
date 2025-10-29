@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ChildFSMBehavior extends AbstractFSMBehavior<ChildAgent> {
 
+
     public ChildFSMBehavior(ChildAgent agente, long period, Bairro bairro) {
         super(agente, period, bairro);
     }

@@ -17,7 +17,7 @@ public class ChildAgent extends PersonAgent {
         super.setup();
 
         Object[] args = getArguments();
-        if (args.length > 2) {
+        if (args != null && args.length > 2) {
             String[] dados = (String[]) args[1];
             boolean pacienteZero = (boolean) args[2];
             if (pacienteZero) setPacienteZero(true);
@@ -26,7 +26,13 @@ public class ChildAgent extends PersonAgent {
             for (String d : dados) sb.append(d).append(" | ");
             System.out.println("👶 " + getLocalName() + " descrição: " + sb.toString());
         }
+
+        // Garante que o FSM seja salvo no PersonAgent
+        var fsm = new ChildFSMBehavior(this, 1000, bairro);
+        setBehavior(fsm);
+        addBehaviour(fsm);
     }
+
 
     @Override
     protected TickerBehaviour criarBehaviour() {

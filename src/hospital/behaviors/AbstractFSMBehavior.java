@@ -29,6 +29,9 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     private int ticksNoHospital = 0;
     private final AID hospitalAID = new AID("hospital1", AID.ISLOCALNAME);
 
+    // Controle de vida/morte
+    private boolean morto = false;
+
     public AbstractFSMBehavior(T agente, long period, Bairro bairro) {
         super(agente, period);
         this.bairro = bairro;
@@ -37,6 +40,16 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     @Override
     protected void onTick() {
         T agente = (T) myAgent;
+
+        // ===================== CHECA SE ESTÁ MORTO =====================
+        if (morto || agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.MORTE) {
+            if (!morto) {
+                morto = true;
+                System.out.println("💀 " + agente.getLocalName() + " faleceu e será removido da simulação.");
+            }
+            myAgent.doDelete(); // encerra o agente JADE
+            return; // não faz mais nada neste tick
+        }
 
         // ===================== CASA FIXA =====================
         if (!agente.isCasaDefinida()) {
@@ -116,7 +129,7 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
         double v = agente.getVulnerabilidade();
 
         // Mortos não procuram hospital
-        if (sintoma == PersonAgent.GravidadeSintoma.MORTE) return false;
+        if (sintoma == PersonAgent.GravidadeSintoma.MORTE || morto) return false;
 
         // Vulnerabilidade alta: vai se estiver pelo menos moderado
         if (v > 0.5) {
@@ -130,10 +143,9 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
 
     // ============== COMUNICAÇÃO COM O HOSPITAL ==================
 
-
     private void solicitarInternacao(T agente) {
         // Evita envio de mensagens por agentes mortos
-        if (agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.MORTE) {
+        if (morto || agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.MORTE) {
             System.out.println("⚰️ Pedido de internação ignorado: " + agente.getLocalName() + " já faleceu.");
             return;
         }
@@ -161,6 +173,8 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     // ====================== INFECÇÃO =============================
 
     protected void checarInfeccaoGenerica(T agente, List<Object> agentesNoLocal) {
+        if (morto || agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.MORTE) return;
+
         List<PersonAgent> paraInfectar = new ArrayList<>();
 
         for (Object outro : agentesNoLocal) {
@@ -184,9 +198,7 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
         }
     }
 
-
     // ====================== AUXILIARES ===========================
-
 
     protected abstract Local definirLocalDoDia(T agente, int tickDoDia);
     protected abstract int[] encontrarCasaDisponivel(T agente);
@@ -208,5 +220,15 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
 
     public static List<PersonAgent> getAInfectarNoTick() {
         return aInfectarNoTick;
+    }
+
+    // ====================== VIDA / MORTE ===========================
+
+    public boolean isMorto() {
+        return morto;
+    }
+
+    public void setMorto(boolean morto) {
+        this.morto = morto;
     }
 }
