@@ -1,5 +1,6 @@
 package hospital.agents;
 
+import hospital.logging.LoggerSMA;
 import hospital.model.Bairro;
 import hospital.model.Doenca;
 import hospital.behaviors.ChildFSMBehavior;
@@ -24,15 +25,21 @@ public class ChildAgent extends PersonAgent {
 
             StringBuilder sb = new StringBuilder();
             for (String d : dados) sb.append(d).append(" | ");
-            System.out.println("👶 " + getLocalName() + " descrição: " + sb.toString());
+
+            if (pacienteZero) {
+                LoggerSMA.event(this, "🦠 %s é o PACIENTE ZERO! Descrição: %s", getLocalName(), sb.toString());
+            } else {
+                LoggerSMA.info(this, "👶 %s criado(a). Descrição: %s", getLocalName(), sb.toString());
+            }
         }
 
-        // Garante que o FSM seja salvo no PersonAgent
+        // Cria o FSM e adiciona ao agente
         var fsm = new ChildFSMBehavior(this, 1000, bairro);
         setBehavior(fsm);
         addBehaviour(fsm);
-    }
 
+        LoggerSMA.event(this, "👶 %s configurado com FSM ChildFSMBehavior e adicionado ao bairro.", getLocalName());
+    }
 
     @Override
     protected TickerBehaviour criarBehaviour() {
@@ -42,6 +49,7 @@ public class ChildAgent extends PersonAgent {
     @Override
     protected void adicionarAoBairro() {
         bairro.adicionarAgenteChild(this);
+        LoggerSMA.info(this, "🏘️ %s registrado no bairro como criança.", getLocalName());
     }
 
     @Override
@@ -62,6 +70,9 @@ public class ChildAgent extends PersonAgent {
 
     public void setPacienteZero(boolean pacienteZero) {
         this.pacienteZero = pacienteZero;
-        if (pacienteZero) this.infectado = true;
+        if (pacienteZero) {
+            this.infectado = true;
+            LoggerSMA.event(this, "💉 %s definido como paciente zero e infectado no início da simulação.", getLocalName());
+        }
     }
 }

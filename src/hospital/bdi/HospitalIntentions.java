@@ -1,6 +1,7 @@
 package hospital.bdi;
 
 import hospital.agents.HospitalDeCampanhaAgent;
+import hospital.logging.LoggerSMA;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -23,10 +24,10 @@ public class HospitalIntentions {
     public void deliberar() {
         ticks++;
 
-        // 1 dia = 3 ticks
+        // 1 dia = 3 ticks → recarrega recursos
         if (ticks % 3 == 0) {
             beliefs.recarregarRecursos();
-            System.out.println("🌅 Novo dia no hospital! Recursos recarregados: " + beliefs.getRecursos());
+            LoggerSMA.info(agent, "🌅 Novo dia no hospital! Recursos recarregados: %d", beliefs.getRecursos());
         }
 
         List<AID> curados = new ArrayList<>();
@@ -51,12 +52,21 @@ public class HospitalIntentions {
 
             // Custo estratégico: mais vulnerável = mais gasto
             int custo = 1 + (vulnerabilidade > 0.5 ? 2 : 0);
-            if (!beliefs.temRecursosSuficientes(custo)) continue;
+            if (!beliefs.temRecursosSuficientes(custo)) {
+                LoggerSMA.warn(agent, "⚠️ Recursos insuficientes para tratar %s (custo: %d).",
+                        paciente.getLocalName(), custo);
+                continue;
+            }
+
             beliefs.consumirRecursos(custo);
+            LoggerSMA.event(agent, "🏥 Tratando %s (custo: %d | recursos restantes: %d)",
+                    paciente.getLocalName(), custo, beliefs.getRecursos());
 
             // Chance de cura: base + dias internado + vulnerabilidade
             double chanceCura = 0.2 + beliefs.getDiasInternado().get(paciente) * 0.2 + vulnerabilidade * 0.3;
-            if (rand.nextDouble() < chanceCura) curados.add(paciente);
+            if (rand.nextDouble() < chanceCura) {
+                curados.add(paciente);
+            }
         }
 
         // Envia alta médica para curados
@@ -67,8 +77,9 @@ public class HospitalIntentions {
             alta.setContent("CURADO");
             alta.addReceiver(paciente);
             agent.send(alta);
-            System.out.println("💚 Alta médica de " + paciente.getLocalName() +
-                    " | Recursos restantes: " + beliefs.getRecursos());
+
+            LoggerSMA.info(agent, "💚 Alta médica de %s | Recursos restantes: %d",
+                    paciente.getLocalName(), beliefs.getRecursos());
         }
 
         // Evitar lotação extrema
@@ -76,9 +87,10 @@ public class HospitalIntentions {
             Optional<AID> maisAntigo = beliefs.getDiasInternado().entrySet().stream()
                     .max(Map.Entry.comparingByValue())
                     .map(Map.Entry::getKey);
+
             maisAntigo.ifPresent(p -> {
                 beliefs.liberar(p);
-                System.out.println("⚠️ Alta antecipada para aliviar lotação: " + p.getLocalName());
+                LoggerSMA.warn(agent, "⚠️ Alta antecipada para aliviar lotação: %s", p.getLocalName());
             });
         }
     }

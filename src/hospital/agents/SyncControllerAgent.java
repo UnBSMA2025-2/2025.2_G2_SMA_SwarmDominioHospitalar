@@ -1,5 +1,6 @@
 package hospital.agents;
 
+import hospital.logging.LoggerSMA;
 import hospital.model.Bairro;
 import jade.core.AID;
 import jade.core.Agent;
@@ -7,7 +8,6 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 
 import java.util.HashSet;
@@ -26,7 +26,7 @@ public class SyncControllerAgent extends Agent {
 
     @Override
     protected void setup() {
-        System.out.println("🧭 " + getLocalName() + " iniciado agente de sincronização (✿◡‿◡)");
+        LoggerSMA.system("🧭 %s iniciado agente de sincronização (✿◡‿◡)", getLocalName());
 
         // Pega o bairro (caso tenha sido passado como argumento)
         Object[] args = getArguments();
@@ -43,7 +43,7 @@ public class SyncControllerAgent extends Agent {
 
                 if (msg != null) {
                     registeredAgents.add(msg.getSender());
-                    System.out.println(msg.getSender().getLocalName() + " registrado no sincronizador.");
+                    LoggerSMA.info(myAgent, "📋 %s registrado no sincronizador.", msg.getSender().getLocalName());
                 } else {
                     block();
                 }
@@ -62,8 +62,11 @@ public class SyncControllerAgent extends Agent {
 
                     // Quando todos terminam o tick, libera o próximo
                     if (finishedAgents.containsAll(registeredAgents) && !registeredAgents.isEmpty()) {
-                        System.out.println("✅ [SYNC] Tick " + currentTick + " finalizado. Liberando tick " + (currentTick + 1));
+                        LoggerSMA.event(myAgent, "✅ [SYNC] Tick %d finalizado. Liberando tick %d.",
+                                currentTick, currentTick + 1);
+
                         currentTick++;
+                        LoggerSMA.setTick(currentTick);
 
                         for (AID agent : registeredAgents) {
                             ACLMessage go = new ACLMessage(ACLMessage.INFORM);
@@ -74,7 +77,9 @@ public class SyncControllerAgent extends Agent {
                         }
 
                         finishedAgents.clear();
-                        System.out.println("\n-------------------- Tick " + currentTick + " --------------------\n");
+
+                        LoggerSMA.system("\n-------------------- Tick %d --------------------\n", currentTick);
+                        LoggerSMA.flushTick();
                     }
                 } else {
                     block();
@@ -105,14 +110,14 @@ public class SyncControllerAgent extends Agent {
                         + bairro.getTodosElder().stream()
                         .filter(PersonAgent::isInfectado).count();
 
-                System.out.println("📊 [Monitor] Vivos: " + vivos + " | Infectados: " + infectados +
-                        " | Tick atual: " + currentTick);
+                LoggerSMA.info(myAgent, "📊 [Monitor] Vivos: %d | Infectados: %d | Tick atual: %d",
+                        vivos, infectados, currentTick);
 
                 // ===================== CONDIÇÃO DE PARADA =====================
                 if (infectados == 0 || vivos == 0) {
-                    System.out.println("\n🔚 Condição de parada atingida: " +
-                            (infectados == 0 ? "Nenhum infectado." : "Todos morreram.") +
-                            "\nEncerrando simulação...");
+                    LoggerSMA.warn(myAgent,
+                            "\n🔚 Condição de parada atingida: %s\nEncerrando simulação...",
+                            infectados == 0 ? "Nenhum infectado." : "Todos morreram.");
 
                     encerrarSimulacao();
                 }
@@ -139,15 +144,17 @@ public class SyncControllerAgent extends Agent {
             for (AID agent : registeredAgents) {
                 try {
                     getContainerController().getAgent(agent.getLocalName()).kill();
+                    LoggerSMA.event(this, "💤 %s encerrado.", agent.getLocalName());
                 } catch (ControllerException ignored) {}
             }
 
-            System.out.println("💤 Todos os agentes encerrados. Finalizando container principal...");
+            LoggerSMA.system("💤 Todos os agentes encerrados. Finalizando container principal...");
             Thread.sleep(1000);
             getContainerController().kill();
             doDelete();
 
         } catch (Exception e) {
+            LoggerSMA.error(this, "❌ Erro ao encerrar simulação: %s", e.getMessage());
             e.printStackTrace();
         }
     }

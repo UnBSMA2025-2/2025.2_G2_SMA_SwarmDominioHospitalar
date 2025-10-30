@@ -7,29 +7,26 @@ import hospital.agents.HospitalDeCampanhaAgent;
 import hospital.agents.PersonAgent;
 import hospital.behaviors.AbstractFSMBehavior;
 import hospital.enums.Local;
+import hospital.logging.LoggerSMA;
 import jade.core.AID;
-import jade.core.Agent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bairro {
     private final Local[][] mapa;
-    private final int[] posicaoHospital; // posição fixa do único hospital
+    private final int[] posicaoHospital;
 
-    // Referência ao agente hospital (opcional, útil para consultas)
     private HospitalDeCampanhaAgent hospitalAgente;
 
-    // Listas separadas para cada tipo de agente
     private final List<ChildAgent> todosChild = new ArrayList<>();
     private final List<AdultAgent> todosAdult = new ArrayList<>();
     private final List<ElderAgent> todosElder = new ArrayList<>();
 
-    // ✅ Lista de agentes marcados para remoção (sincronizada com PersonAgent)
+    // lista sincronizada com PersonAgent
     private final List<PersonAgent> mortosPendentes = new ArrayList<>();
 
     public Bairro() {
-        // Mapa 4x4 com um hospital fixo
         mapa = new Local[4][4];
 
         mapa[0][0] = Local.CASA;
@@ -56,37 +53,18 @@ public class Bairro {
     }
 
     // ====================== HOSPITAL ======================
-    public HospitalDeCampanhaAgent getHospitalAgente() {
-        return hospitalAgente;
-    }
-
-    public void setHospitalAgente(HospitalDeCampanhaAgent hospitalAgente) {
-        this.hospitalAgente = hospitalAgente;
-    }
+    public HospitalDeCampanhaAgent getHospitalAgente() { return hospitalAgente; }
+    public void setHospitalAgente(HospitalDeCampanhaAgent hospitalAgente) { this.hospitalAgente = hospitalAgente; }
 
     // ====================== MAPA ======================
     public Local getLocal(int x, int y) {
-        if (x >= 0 && x < mapa.length && y >= 0 && y < mapa[0].length) {
-            return mapa[x][y];
-        }
+        if (x >= 0 && x < mapa.length && y >= 0 && y < mapa[0].length) return mapa[x][y];
         return null;
     }
-
-    public int getLinhas() {
-        return mapa.length;
-    }
-
-    public int getColunas() {
-        return mapa[0].length;
-    }
-
-    public int[] getHospitalPos() {
-        return posicaoHospital;
-    }
-
-    public boolean isHospitalLotado(List<AID> internados, int capacidade) {
-        return internados.size() >= capacidade;
-    }
+    public int getLinhas() { return mapa.length; }
+    public int getColunas() { return mapa[0].length; }
+    public int[] getHospitalPos() { return posicaoHospital; }
+    public boolean isHospitalLotado(List<AID> internados, int capacidade) { return internados.size() >= capacidade; }
 
     // ====================== AGENTES ======================
     public void adicionarAgenteChild(ChildAgent agente) { todosChild.add(agente); }
@@ -99,70 +77,64 @@ public class Bairro {
 
     // ====================== REMOÇÃO SINCRONIZADA ======================
 
-    /** ✅ Marca o agente como morto (chamado por PersonAgent ao morrer). */
+    /** Marca o agente como morto (chamado por PersonAgent ao morrer). */
     public synchronized void marcarComoMorto(PersonAgent agente) {
         if (!mortosPendentes.contains(agente)) {
             mortosPendentes.add(agente);
-            System.out.println("☠️ Marcando " + agente.getLocalName() + " para remoção.");
+            LoggerSMA.warn(agente, "☠️ Marcando %s para remoção.", agente.getLocalName());
         }
     }
 
-    /** ✅ Remove mortos marcados das listas principais. */
+    /** Remove mortos marcados das listas principais. */
     public synchronized void removerAgentesMortos() {
-        // Remoção garantida mesmo que FSM ainda não tenha atualizado o estado
         if (!mortosPendentes.isEmpty()) {
             for (PersonAgent morto : new ArrayList<>(mortosPendentes)) {
-                if (morto instanceof ChildAgent c) {
-                    todosChild.remove(c);
-                } else if (morto instanceof AdultAgent a) {
-                    todosAdult.remove(a);
-                } else if (morto instanceof ElderAgent e) {
-                    todosElder.remove(e);
-                }
+                if (morto instanceof ChildAgent c) todosChild.remove(c);
+                else if (morto instanceof AdultAgent a) todosAdult.remove(a);
+                else if (morto instanceof ElderAgent e) todosElder.remove(e);
+
                 mortosPendentes.remove(morto);
-                System.out.println("🧹 Removendo " + morto.getLocalName() + " do bairro (morto).");
+                LoggerSMA.event(morto, "🧹 Removendo %s do bairro (morto).", morto.getLocalName());
             }
         }
 
         // (Fallback) caso algum FSM ainda sinalize isMorto()
         todosChild.removeIf(c -> {
-            boolean morto = false;
-            if (c.getBehavior() != null && c.getBehavior() instanceof AbstractFSMBehavior) {
-                AbstractFSMBehavior<?> b = (AbstractFSMBehavior<?>) c.getBehavior();
-                morto = b.isMorto();
-            }
+            boolean morto = isMortoFSM(c);
             if (morto) {
-                System.out.println("🧹 Removendo " + c.getLocalName() + " do bairro (FSM morto).");
+                LoggerSMA.event(c, "🧹 Removendo %s do bairro (FSM morto).", c.getLocalName());
                 return true;
             }
             return false;
         });
 
         todosAdult.removeIf(a -> {
-            boolean morto = false;
-            if (a.getBehavior() != null && a.getBehavior() instanceof AbstractFSMBehavior) {
-                AbstractFSMBehavior<?> b = (AbstractFSMBehavior<?>) a.getBehavior();
-                morto = b.isMorto();
-            }
+            boolean morto = isMortoFSM(a);
             if (morto) {
-                System.out.println("🧹 Removendo " + a.getLocalName() + " do bairro (FSM morto).");
+                LoggerSMA.event(a, "🧹 Removendo %s do bairro (FSM morto).", a.getLocalName());
                 return true;
             }
             return false;
         });
 
         todosElder.removeIf(e -> {
-            boolean morto = false;
-            if (e.getBehavior() != null && e.getBehavior() instanceof AbstractFSMBehavior) {
-                AbstractFSMBehavior<?> b = (AbstractFSMBehavior<?>) e.getBehavior();
-                morto = b.isMorto();
-            }
+            boolean morto = isMortoFSM(e);
             if (morto) {
-                System.out.println("🧹 Removendo " + e.getLocalName() + " do bairro (FSM morto).");
+                LoggerSMA.event(e, "🧹 Removendo %s do bairro (FSM morto).", e.getLocalName());
                 return true;
             }
             return false;
         });
+    }
+
+    private static boolean isMortoFSM(PersonAgent p) {
+        Object beh = p.getBehavior();
+        if (beh instanceof AbstractFSMBehavior) {
+            @SuppressWarnings("unchecked")
+            AbstractFSMBehavior<PersonAgent> b = (AbstractFSMBehavior<PersonAgent>) beh;
+            return b.isMorto();
+        }
+        return false;
     }
 
     // ====================== LOCALIZAÇÃO ======================
@@ -176,31 +148,25 @@ public class Bairro {
 
     public List<ChildAgent> getAgentesNoLocalChild(int x, int y) {
         List<ChildAgent> lista = new ArrayList<>();
-        for (ChildAgent agente : todosChild) {
-            if (agente.getPosX() == x && agente.getPosY() == y) {
+        for (ChildAgent agente : todosChild)
+            if (agente.getPosX() == x && agente.getPosY() == y)
                 lista.add(agente);
-            }
-        }
         return lista;
     }
 
     public List<AdultAgent> getAgentesNoLocalAdult(int x, int y) {
         List<AdultAgent> lista = new ArrayList<>();
-        for (AdultAgent agente : todosAdult) {
-            if (agente.getPosX() == x && agente.getPosY() == y) {
+        for (AdultAgent agente : todosAdult)
+            if (agente.getPosX() == x && agente.getPosY() == y)
                 lista.add(agente);
-            }
-        }
         return lista;
     }
 
     public List<ElderAgent> getAgentesNoLocalElder(int x, int y) {
         List<ElderAgent> lista = new ArrayList<>();
-        for (ElderAgent agente : todosElder) {
-            if (agente.getPosX() == x && agente.getPosY() == y) {
+        for (ElderAgent agente : todosElder)
+            if (agente.getPosX() == x && agente.getPosY() == y)
                 lista.add(agente);
-            }
-        }
         return lista;
     }
 
@@ -208,9 +174,11 @@ public class Bairro {
     public void imprimirEstado(int tick) {
         removerAgentesMortos();
 
-        System.out.println("\n📅 Tick " + tick + ":");
+        LoggerSMA.setTick(tick);
+        LoggerSMA.system("\n📅 Tick %d:", tick);
 
         for (int i = 0; i < getLinhas(); i++) {
+            StringBuilder linha = new StringBuilder();
             for (int j = 0; j < getColunas(); j++) {
                 List<Object> agentesAqui = getTodosAgentesNoLocal(i, j);
                 StringBuilder celula = new StringBuilder("[ ");
@@ -234,15 +202,15 @@ public class Bairro {
                         nome = "?";
                     }
 
-                    if (infectado) celula.append("💀").append(nome).append(", ");
+                    if (infectado) celula.append("🤮").append(nome).append(", ");
                     else celula.append(nome).append(", ");
                 }
 
                 if (!agentesAqui.isEmpty()) celula.setLength(celula.length() - 2);
                 celula.append(" ] ");
-                System.out.print(celula);
+                linha.append(celula);
             }
-            System.out.println();
+            LoggerSMA.system(linha.toString());
         }
 
         long totalInfectados = todosChild.stream().filter(ChildAgent::isInfectado).count()
@@ -251,8 +219,10 @@ public class Bairro {
 
         long totalAgentes = todosChild.size() + todosAdult.size() + todosElder.size();
 
-        System.out.println("\n📊 Estatísticas: Infectados = " + totalInfectados +
-                " | Total de agentes = " + totalAgentes +
-                " | Hospital em (" + posicaoHospital[0] + "," + posicaoHospital[1] + ")");
+        LoggerSMA.info(null,
+                "\n📊 Estatísticas: Infectados = %d | Total de agentes = %d | Hospital em (%d,%d)",
+                totalInfectados, totalAgentes, posicaoHospital[0], posicaoHospital[1]);
+
+        LoggerSMA.flushTick();
     }
 }

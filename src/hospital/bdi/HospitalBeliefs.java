@@ -45,5 +45,5 @@ public class HospitalBeliefs {
     public List<AID> getInternados() { return internados; }
     public Map<AID, Integer> getDiasInternado() { return diasInternado; }
     public int getRecursos() { return recursos; }
-    public int getCapacidadeMax() { return capacidadeMax; }
+    public int getCapacidade() { return capacidadeMax; }
 }

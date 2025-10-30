@@ -2,6 +2,7 @@ package hospital.behaviors;
 
 import hospital.agents.PersonAgent;
 import hospital.enums.Local;
+import hospital.logging.LoggerSMA;
 import hospital.model.Bairro;
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
@@ -45,10 +46,10 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
         if (morto || agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.MORTE) {
             if (!morto) {
                 morto = true;
-                System.out.println("💀 " + agente.getLocalName() + " faleceu e será removido da simulação.");
+                LoggerSMA.error(agente, "💀 %s faleceu e será removido da simulação.", agente.getLocalName());
             }
             myAgent.doDelete(); // encerra o agente JADE
-            return; // não faz mais nada neste tick
+            return;
         }
 
         // ===================== CASA FIXA =====================
@@ -57,6 +58,7 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
             agente.setCasa(posCasa[0], posCasa[1]);
             agente.setPos(posCasa[0], posCasa[1]);
             agente.setCasaDefinida(true);
+            LoggerSMA.info(agente, "🏠 %s definiu casa em (%d,%d).", agente.getLocalName(), posCasa[0], posCasa[1]);
         }
 
         // ===================== AVANÇA INFECÇÃO =====================
@@ -66,9 +68,10 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
         boolean indoHospital = agente.isInfectado() && deveProcurarHospital(agente);
 
         if (indoHospital) {
-            // Teleporta para hospital
             int[] posHospital = bairro.getHospitalPos();
             agente.setPos(posHospital[0], posHospital[1]);
+            LoggerSMA.event(agente, "🚑 %s movendo-se para o hospital em (%d,%d).",
+                    agente.getLocalName(), posHospital[0], posHospital[1]);
 
             // Solicita internação se ainda não tentou
             if (!tentouHospital && !internado) {
@@ -84,7 +87,7 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
                     agente.setInfectado(false);
                     agente.setSintomaAtual(PersonAgent.GravidadeSintoma.NENHUM);
                     internado = false;
-                    System.out.println("💚 " + agente.getLocalName() + " se recuperou no hospital!");
+                    LoggerSMA.info(agente, "💚 %s se recuperou no hospital!", agente.getLocalName());
                 }
             }
 
@@ -95,19 +98,20 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
                 agente.setInfectado(false);
                 agente.setSintomaAtual(PersonAgent.GravidadeSintoma.NENHUM);
                 internado = false;
-                System.out.println("💚 " + agente.getLocalName() + " recebeu alta médica!");
+                LoggerSMA.event(agente, "💚 %s recebeu alta médica!", agente.getLocalName());
             }
 
         } else {
             // ===================== ROTINA DIÁRIA =====================
             Local localAtual = definirLocalDoDia(agente, tickDoDia);
-
             if (localAtual == Local.CASA) {
                 agente.setPos(agente.getHomeX(), agente.getHomeY());
             } else {
                 int[] pos = encontrarPosicaoLocal(localAtual, agente);
                 agente.setPos(pos[0], pos[1]);
             }
+            //LoggerSMA.info(agente, "🚶 %s moveu-se para %s (%d,%d).",
+            //        agente.getLocalName(), localAtual, agente.getPosX(), agente.getPosY());
         }
 
         // ===================== CHECA INFECÇÃO =====================
@@ -119,6 +123,7 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
             tickDoDia = 0;
             diasCompletos++;
             if (diasCompletos >= LIMITE_DIAS) {
+                LoggerSMA.warn(agente, "🕰️ %s completou o limite de dias (%d) e será encerrado.", agente.getLocalName(), LIMITE_DIAS);
                 myAgent.doDelete();
             }
         }
@@ -144,9 +149,8 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     // ============== COMUNICAÇÃO COM O HOSPITAL ==================
 
     private void solicitarInternacao(T agente) {
-        // Evita envio de mensagens por agentes mortos
         if (morto || agente.getSintomaAtual() == PersonAgent.GravidadeSintoma.MORTE) {
-            System.out.println("⚰️ Pedido de internação ignorado: " + agente.getLocalName() + " já faleceu.");
+            LoggerSMA.warn(agente, "⚰️ Pedido de internação ignorado: %s já faleceu.", agente.getLocalName());
             return;
         }
 
@@ -156,16 +160,17 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
         pedido.addReceiver(hospitalAID);
         myAgent.send(pedido);
 
-        System.out.println("🏥 " + agente.getLocalName() + " solicitou internação em " + hospitalAID.getLocalName());
+        LoggerSMA.event(agente, "🏥 %s solicitou internação em %s.", agente.getLocalName(), hospitalAID.getLocalName());
 
         MessageTemplate mt = MessageTemplate.MatchConversationId("PEDIDO_HOSPITAL");
         ACLMessage resposta = myAgent.receive(mt);
         if (resposta != null) {
             if ("ADMITIDO".equals(resposta.getContent())) {
                 internado = true;
-                System.out.println("✅ " + agente.getLocalName() + " foi internado com sucesso!");
+                LoggerSMA.info(agente, "✅ %s foi internado com sucesso!", agente.getLocalName());
             } else if ("LOTADO".equals(resposta.getContent())) {
-                System.out.println("🚫 " + hospitalAID.getLocalName() + " está lotado! " + agente.getLocalName() + " não conseguiu vaga.");
+                LoggerSMA.warn(agente, "🚫 %s está lotado! %s não conseguiu vaga.",
+                        hospitalAID.getLocalName(), agente.getLocalName());
             }
         }
     }
@@ -179,13 +184,14 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
 
         for (Object outro : agentesNoLocal) {
             if (outro instanceof PersonAgent p) {
-                // Mortos não infectam
                 if (p.getSintomaAtual() == PersonAgent.GravidadeSintoma.MORTE) continue;
 
                 if (p.isInfectado() && p.getDoenca() != null && !agente.isInfectado()) {
                     double pTrans = p.getDoenca().getBeta() * p.getDoenca().getInfectividade();
                     if (rand.nextDouble() < pTrans) {
                         paraInfectar.add(agente);
+                        LoggerSMA.event(agente, "💉 %s foi exposto à infecção por %s (β=%.2f).",
+                                agente.getLocalName(), p.getLocalName(), pTrans);
                     }
                 }
             }
@@ -205,15 +211,11 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
 
     protected int[] encontrarPosicaoLocal(Local local, T agente) {
         List<int[]> posicoes = new ArrayList<>();
-
         for (int i = 0; i < bairro.getLinhas(); i++) {
             for (int j = 0; j < bairro.getColunas(); j++) {
-                if (bairro.getLocal(i, j) == local) {
-                    posicoes.add(new int[]{i, j});
-                }
+                if (bairro.getLocal(i, j) == local) posicoes.add(new int[]{i, j});
             }
         }
-
         if (posicoes.isEmpty()) return new int[]{agente.getPosX(), agente.getPosY()};
         return posicoes.get(rand.nextInt(posicoes.size()));
     }
@@ -224,11 +226,6 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
 
     // ====================== VIDA / MORTE ===========================
 
-    public boolean isMorto() {
-        return morto;
-    }
-
-    public void setMorto(boolean morto) {
-        this.morto = morto;
-    }
+    public boolean isMorto() { return morto; }
+    public void setMorto(boolean morto) { this.morto = morto; }
 }

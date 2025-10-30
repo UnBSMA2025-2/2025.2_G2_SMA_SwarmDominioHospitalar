@@ -1,12 +1,12 @@
 package hospital.agents;
 
+import hospital.logging.LoggerSMA;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import hospital.model.Bairro;
-import java.util.concurrent.CyclicBarrier;
 
 import java.util.Random;
 
@@ -14,11 +14,9 @@ public class LauncherAgents extends Agent {
 
     @Override
     protected void setup() {
-        System.out.println("🚀 " + getLocalName() + " iniciado. Lançando agentes...");
+        LoggerSMA.system("🚀 %s iniciado. Preparando ambiente e agentes...", getLocalName());
 
         ContainerController container = getContainerController();
-
-        // Cria bairro compartilhado
         Bairro bairro = new Bairro();
 
         // ===================== HOSPITAL DE CAMPANHA =====================
@@ -30,10 +28,12 @@ public class LauncherAgents extends Agent {
                     hospitalArgs
             );
             hospital.start();
-            System.out.println("✅ Hospital de Campanha lançado com sucesso!");
+            LoggerSMA.event(this, "🏥 Hospital de Campanha lançado com sucesso!");
         } catch (StaleProxyException e) {
-            System.err.println("Erro ao criar Hospital de Campanha: " + e.getMessage());
+            LoggerSMA.error(this, "❌ Erro ao criar Hospital de Campanha: %s", e.getMessage());
         }
+
+        Random rand = new Random();
 
         // ===================== CRIA CRIANÇAS =====================
         String[][] criancas = {
@@ -43,28 +43,22 @@ public class LauncherAgents extends Agent {
                 {"Criança4", "idade: 9", "atividade: balé"},
                 {"Criança5", "idade: 6", "atividade: corrida"}
         };
-
-        Random rand = new Random();
         int indiceZero = rand.nextInt(criancas.length); // paciente zero
 
         for (int i = 0; i < criancas.length; i++) {
-            String[] dados = criancas[i];
-            boolean isPacienteZero = (i == indiceZero);
-
             try {
-                Object[] argsChild = new Object[]{bairro, dados, isPacienteZero};
-
+                Object[] argsChild = new Object[]{bairro, criancas[i], i == indiceZero};
                 AgentController child = container.createNewAgent(
-                        dados[0],
+                        criancas[i][0],
                         "hospital.agents.ChildAgent",
                         argsChild
                 );
-
                 child.start();
             } catch (StaleProxyException e) {
-                System.err.println("Erro ao criar " + dados[0] + ": " + e.getMessage());
+                LoggerSMA.error(this, "❌ Erro ao criar %s: %s", criancas[i][0], e.getMessage());
             }
         }
+        LoggerSMA.event(this, "👶 5 crianças criadas (Paciente Zero: Criança%d).", indiceZero + 1);
 
         // ===================== CRIA IDOSOS =====================
         String[][] idosos = {
@@ -72,26 +66,20 @@ public class LauncherAgents extends Agent {
                 {"Idoso2", "idade: 68", "atividade: hidroginástica"},
                 {"Idoso3", "idade: 75", "atividade: leitura e descanso"}
         };
-
         for (String[] dados : idosos) {
             try {
-                Object[] elderArgs = new Object[dados.length + 1];
-                elderArgs[0] = bairro;
-                for (int i = 0; i < dados.length; i++) {
-                    elderArgs[i + 1] = dados[i];
-                }
-
+                Object[] elderArgs = new Object[]{bairro, dados};
                 AgentController elder = container.createNewAgent(
                         dados[0],
-                        "hospital.agents.ElderAgent", // Corrigido: antes estava AdultAgent!
+                        "hospital.agents.ElderAgent",
                         elderArgs
                 );
-
                 elder.start();
             } catch (StaleProxyException e) {
-                System.err.println("Erro ao criar " + dados[0] + ": " + e.getMessage());
+                LoggerSMA.error(this, "❌ Erro ao criar %s: %s", dados[0], e.getMessage());
             }
         }
+        LoggerSMA.event(this, "🧓 3 idosos criados com sucesso.");
 
         // ===================== CRIA ADULTOS =====================
         String[][] adultos = {
@@ -101,48 +89,43 @@ public class LauncherAgents extends Agent {
                 {"Adulto4", "idade: 35", "profissão: enfermeiro hospitalar"},
                 {"Adulto5", "idade: 30", "profissão: arquiteto urbano"}
         };
-
         for (String[] dados : adultos) {
             try {
-                Object[] adultArgs = new Object[dados.length + 1];
-                adultArgs[0] = bairro;
-                for (int i = 0; i < dados.length; i++) {
-                    adultArgs[i + 1] = dados[i];
-                }
-
+                Object[] adultArgs = new Object[]{bairro, dados};
                 AgentController adult = container.createNewAgent(
                         dados[0],
                         "hospital.agents.AdultAgent",
                         adultArgs
                 );
-
                 adult.start();
             } catch (StaleProxyException e) {
-                System.err.println("Erro ao criar " + dados[0] + ": " + e.getMessage());
+                LoggerSMA.error(this, "❌ Erro ao criar %s: %s", dados[0], e.getMessage());
             }
         }
+        LoggerSMA.event(this, "🧑‍💼 5 adultos criados com sucesso.");
 
-        System.out.println("✅ Todos os agentes (crianças, adultos e idosos) foram lançados com sucesso!");
+        LoggerSMA.system("✅ Todos os agentes (crianças, adultos e idosos) foram lançados com sucesso!");
 
+        // ===================== CONTROLADOR DE INFECÇÃO =====================
         try {
-            Object[] args = new Object[]{};
             AgentController controller = container.createNewAgent(
                     "InfectionController",
                     "hospital.agents.InfectionControllerAgent",
-                    args
+                    new Object[]{bairro}
             );
             controller.start();
+            LoggerSMA.event(this, "🦠 Controlador de Infecção lançado com sucesso!");
         } catch (Exception e) {
-            System.err.println("Erro ao criar controlador: " + e.getMessage());
+            LoggerSMA.error(this, "❌ Erro ao criar controlador de infecção: %s", e.getMessage());
         }
 
-        System.out.println("✅ Controlador foi lançado com sucesso!");
-
         // ===================== MONITOR CENTRAL DO BAIRRO =====================
-        addBehaviour(new TickerBehaviour(this, 1200) {
+        addBehaviour(new TickerBehaviour(this, 1500) {
             private int tick = 0;
+
             @Override
             protected void onTick() {
+                LoggerSMA.system("📅 Tick %d — Atualizando estado do bairro...", tick);
                 bairro.imprimirEstado(tick++);
             }
         });
@@ -150,6 +133,6 @@ public class LauncherAgents extends Agent {
 
     @Override
     protected void takeDown() {
-        System.out.println("🛑 " + getLocalName() + " foi encerrado.");
+        LoggerSMA.system("🛑 %s foi encerrado.", getLocalName());
     }
 }

@@ -1,6 +1,7 @@
 package hospital.agents;
 
 import hospital.behaviors.AbstractFSMBehavior;
+import hospital.logging.LoggerSMA;
 import hospital.model.Bairro;
 import hospital.model.Doenca;
 import jade.core.AID;
@@ -58,6 +59,7 @@ public abstract class PersonAgent extends Agent {
     public GravidadeSintoma getSintomaAtual() { return sintomaAtual; }
     public void setSintomaAtual(GravidadeSintoma sintoma) { this.sintomaAtual = sintoma; }
 
+    // ---------------- Configuração inicial ----------------
     protected void configurarVulnerabilidade() {
         this.vulnerabilidade = 0.5 + rand.nextDouble() * 0.5;
     }
@@ -68,6 +70,8 @@ public abstract class PersonAgent extends Agent {
         this.ticksDesdeInfeccao = 0;
         this.diasDesdeInfeccao = 0;
         this.ticksDesdeUltimaMudanca = 0;
+
+        LoggerSMA.event(this, "💉 %s foi infectado com %s.", getLocalName(), doenca.getNome());
     }
 
     // FSM Behaviour reference
@@ -103,6 +107,7 @@ public abstract class PersonAgent extends Agent {
             }
         }
 
+        // Leve ruído probabilístico para evitar repetição idêntica
         double variacao = (rand.nextDouble() * 0.1) - 0.05;
         chancePiorar = Math.min(1.0, Math.max(0.0, chancePiorar + variacao));
 
@@ -123,14 +128,14 @@ public abstract class PersonAgent extends Agent {
             case MODERADO -> sintomaAtual = GravidadeSintoma.GRAVE;
             case GRAVE -> {
                 sintomaAtual = GravidadeSintoma.MORTE;
-                System.out.println("⚠️ " + getLocalName() + " piorou para MORTE!");
+                LoggerSMA.warn(this, "☠️ %s faleceu (piorou para MORTE).", getLocalName());
                 infectado = false;
                 if (bairro != null) bairro.marcarComoMorto(this);
                 doDelete();
                 return;
             }
         }
-        System.out.println("⚠️ " + getLocalName() + " piorou para " + sintomaAtual + "!");
+        LoggerSMA.warn(this, "⚠️ %s piorou para %s.", getLocalName(), sintomaAtual);
     }
 
     private void melhorarSintoma() {
@@ -139,7 +144,7 @@ public abstract class PersonAgent extends Agent {
             case MODERADO -> sintomaAtual = GravidadeSintoma.LEVE;
             case LEVE -> sintomaAtual = GravidadeSintoma.NENHUM;
         }
-        System.out.println("✅ " + getLocalName() + " melhorou para " + sintomaAtual + "!");
+        LoggerSMA.info(this, "💚 %s melhorou para %s.", getLocalName(), sintomaAtual);
     }
 
     // ---------------- Setup ----------------
@@ -151,8 +156,8 @@ public abstract class PersonAgent extends Agent {
         this.doenca = criarDoenca();
         configurarVulnerabilidade();
 
-        System.out.println(getEmoji() + " " + getLocalName() +
-                " criado(a)! Vulnerabilidade: " + String.format("%.2f", vulnerabilidade));
+        LoggerSMA.system("%s %s criado(a) | Vulnerabilidade: %.2f",
+                getEmoji(), getLocalName(), vulnerabilidade);
 
         ACLMessage reg = new ACLMessage(ACLMessage.INFORM);
         reg.setConversationId("REGISTER_AGENT");
@@ -162,11 +167,10 @@ public abstract class PersonAgent extends Agent {
         adicionarAoBairro();
 
         TickerBehaviour fsm = criarBehaviour();
-        if (fsm instanceof AbstractFSMBehavior<?> fsmTyped) {
-            setBehavior(fsmTyped);
-        }
+        if (fsm instanceof AbstractFSMBehavior<?> fsmTyped) setBehavior(fsmTyped);
         addBehaviour(fsm);
 
+        // Responde à consulta de vulnerabilidade (Hospital usa isso)
         addBehaviour(new jade.core.behaviours.CyclicBehaviour(this) {
             @Override
             public void action() {
@@ -181,12 +185,13 @@ public abstract class PersonAgent extends Agent {
         });
     }
 
+    // ---------------- Sincronização de ticks ----------------
     public void waitForNextTick() {
         MessageTemplate mt = MessageTemplate.MatchConversationId("TICK_GO");
         ACLMessage msg = blockingReceive(mt);
         if (msg != null) {
             int nextTick = Integer.parseInt(msg.getContent());
-            System.out.println("⏩ " + getLocalName() + " iniciado tick " + nextTick);
+            LoggerSMA.event(this, "⏩ Tick %d iniciado para %s.", nextTick, getLocalName());
         }
     }
 
@@ -198,6 +203,7 @@ public abstract class PersonAgent extends Agent {
         send(done);
     }
 
+    // ---------------- Métodos abstratos ----------------
     protected abstract TickerBehaviour criarBehaviour();
     protected abstract void adicionarAoBairro();
     protected abstract Doenca criarDoenca();
@@ -205,6 +211,6 @@ public abstract class PersonAgent extends Agent {
 
     @Override
     protected void takeDown() {
-        System.out.println("😴 " + getLocalName() + " encerrou suas atividades.");
+        LoggerSMA.event(this, "😴 %s finalizado.", getLocalName());
     }
 }

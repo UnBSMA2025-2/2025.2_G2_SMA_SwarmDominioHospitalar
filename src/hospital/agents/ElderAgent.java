@@ -1,5 +1,6 @@
 package hospital.agents;
 
+import hospital.logging.LoggerSMA;
 import hospital.model.Bairro;
 import hospital.model.Doenca;
 import hospital.behaviors.ElderFSMBehavior;
@@ -13,10 +14,13 @@ public class ElderAgent extends PersonAgent {
 
     @Override
     protected void setup() {
-        super.setup();
+        super.setup(); // chamada base já faz registro, vulnerabilidade, etc.
+
         var fsm = new ElderFSMBehavior(this, 1000, bairro);
         setBehavior(fsm);
         addBehaviour(fsm);
+
+        LoggerSMA.event(this, "👴 %s configurado com FSM ElderFSMBehavior e adicionado ao bairro.", getLocalName());
     }
 
     @Override
@@ -27,6 +31,7 @@ public class ElderAgent extends PersonAgent {
     @Override
     protected void adicionarAoBairro() {
         bairro.adicionarAgenteElder(this);
+        LoggerSMA.info(this, "🏘️ %s registrado no bairro como idoso.", getLocalName());
     }
 
     @Override
