@@ -2,6 +2,7 @@ package hospital.agents;
 
 import hospital.logging.LoggerSMA;
 import hospital.model.Cidade;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
@@ -52,6 +53,12 @@ public class LauncherAgents extends Agent {
                             hospitalArgs
                     );
                     hospital.start();
+
+                    // ==== Armazena AID do hospital
+
+                    AID hospitalAID = new AID("hospital" + bairroId, AID.ISLOCALNAME);
+                    bairro.setHospitalAID(hospitalAID);
+
                     LoggerSMA.event(this, "🏥 Hospital de Campanha%s lançado com sucesso!", bairroId);
                 } catch (StaleProxyException e) {
                     LoggerSMA.error(this, "❌ Erro ao criar Hospital de Campanha%s: %s",bairroId, e.getMessage());

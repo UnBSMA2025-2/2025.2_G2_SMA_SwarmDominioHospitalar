@@ -17,6 +17,8 @@ public class Bairro {
     private final Local[][] mapa;
     private final int[] posicaoHospital;
 
+    private AID hospitalAID;
+
     private HospitalDeCampanhaAgent hospitalAgente;
 
     private final List<ChildAgent> todosChild = new ArrayList<>();
@@ -55,6 +57,15 @@ public class Bairro {
     // ====================== HOSPITAL ======================
     public HospitalDeCampanhaAgent getHospitalAgente() { return hospitalAgente; }
     public void setHospitalAgente(HospitalDeCampanhaAgent hospitalAgente) { this.hospitalAgente = hospitalAgente; }
+
+    public void setHospitalAID(AID hospitalAID){
+        this.hospitalAID = hospitalAID;
+    }
+
+    public AID getHospitalAID(){
+        return hospitalAID;
+    }
+
 
     // ====================== MAPA ======================
     public Local getLocal(int x, int y) {
