@@ -2,6 +2,7 @@ package hospital.agents;
 
 import hospital.logging.LoggerSMA;
 import hospital.model.Bairro;
+import hospital.model.Cidade;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -18,7 +19,7 @@ public class SyncControllerAgent extends Agent {
     private final Set<AID> registeredAgents = new HashSet<>();
     private final Set<AID> finishedAgents = new HashSet<>();
     private static int currentTick = 0;
-    private Bairro bairro;
+    private Cidade cidade;
 
     public static int getCurrentTick() {
         return currentTick;
@@ -28,10 +29,10 @@ public class SyncControllerAgent extends Agent {
     protected void setup() {
         LoggerSMA.system("🧭 %s iniciado agente de sincronização (✿◡‿◡)", getLocalName());
 
-        // Pega o bairro (caso tenha sido passado como argumento)
+        // Pega a cidade (caso tenha sido passado como argumento)
         Object[] args = getArguments();
-        if (args != null && args.length > 0 && args[0] instanceof Bairro b) {
-            this.bairro = b;
+        if (args != null && args.length > 0 && args[0] instanceof Cidade c) {
+            this.cidade = c;
         }
 
         // ===================== REGISTRO DE AGENTES =====================
@@ -91,33 +92,53 @@ public class SyncControllerAgent extends Agent {
         addBehaviour(new TickerBehaviour(this, 2000) { // a cada 2 segundos
             @Override
             protected void onTick() {
-                if (bairro == null) return; // evita NPE caso o bairro não tenha sido passado
+                if (cidade == null) return; // evita NPE caso a cidade não tenha sido passado
 
-                long vivos = bairro.getTodosChild().stream()
-                        .filter(c -> c.getSintomaAtual() != PersonAgent.GravidadeSintoma.MORTE)
-                        .count()
-                        + bairro.getTodosAdult().stream()
-                        .filter(a -> a.getSintomaAtual() != PersonAgent.GravidadeSintoma.MORTE)
-                        .count()
-                        + bairro.getTodosElder().stream()
-                        .filter(e -> e.getSintomaAtual() != PersonAgent.GravidadeSintoma.MORTE)
-                        .count();
+                long vivosTotal = 0;
+                long infectadosTotal = 0;
 
-                long infectados = bairro.getTodosChild().stream()
-                        .filter(PersonAgent::isInfectado).count()
-                        + bairro.getTodosAdult().stream()
-                        .filter(PersonAgent::isInfectado).count()
-                        + bairro.getTodosElder().stream()
-                        .filter(PersonAgent::isInfectado).count();
+                Bairro[][] bairros = cidade.getBairros();
 
-                LoggerSMA.info(myAgent, "📊 [Monitor] Vivos: %d | Infectados: %d | Tick atual: %d",
+                for(int i = 0; i < bairros.length ; i++){
+                    for(int j = 0; j< bairros[i].length; j++){
+
+                        Bairro bairro = bairros[i][j];
+                        String suffix = i + "" + j;
+
+                        long vivos = bairro.getTodosChild().stream()
+                                .filter(c -> c.getSintomaAtual() != PersonAgent.GravidadeSintoma.MORTE)
+                                .count()
+                                + bairro.getTodosAdult().stream()
+                                .filter(a -> a.getSintomaAtual() != PersonAgent.GravidadeSintoma.MORTE)
+                                .count()
+                                + bairro.getTodosElder().stream()
+                                .filter(e -> e.getSintomaAtual() != PersonAgent.GravidadeSintoma.MORTE)
+                                .count();
+
+                        long infectados = bairro.getTodosChild().stream()
+                                .filter(PersonAgent::isInfectado).count()
+                                + bairro.getTodosAdult().stream()
+                                .filter(PersonAgent::isInfectado).count()
+                                + bairro.getTodosElder().stream()
+                                .filter(PersonAgent::isInfectado).count();
+
+                        vivosTotal += vivos;
+                        infectadosTotal += infectados;
+
+                        LoggerSMA.info(myAgent, "📊 [Monitor Bairro_"+suffix+"] Vivos: %d | Infectados: %d | Tick atual: %d",
                         vivos, infectados, currentTick);
 
+                    }
+                }
+
+                LoggerSMA.info(myAgent, "📊 [Monitor Cidade] Vivos: %d | Infectados: %d | Tick atual: %d",
+                        vivosTotal, infectadosTotal, currentTick);
+
                 // ===================== CONDIÇÃO DE PARADA =====================
-                if (infectados == 0 || vivos == 0) {
+                if (infectadosTotal == 0 || vivosTotal == 0) {
                     LoggerSMA.warn(myAgent,
                             "\n🔚 Condição de parada atingida: %s\nEncerrando simulação...",
-                            infectados == 0 ? "Nenhum infectado." : "Todos morreram.");
+                            infectadosTotal == 0 ? "Nenhum infectado." : "Todos morreram.");
 
                     encerrarSimulacao();
                 }

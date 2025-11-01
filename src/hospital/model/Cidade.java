@@ -5,7 +5,7 @@ public class Cidade {
     private Bairro[][] bairros;
 
     public Cidade(int linhasBairro, int colunasBairro) {
-        bairros = new Bairro[2][2];
+        bairros = new Bairro[linhasBairro][colunasBairro];
 
         bairros[0][0] = new Bairro();
         bairros[0][1] = new Bairro();
