@@ -45,22 +45,36 @@ TEMPO: +/- 15min
 
 ## Participações
 
-|Nome do Membro | Contribuição | Significância da Contribuição para o Projeto (Excelente/Boa/Regular/Ruim/Nula) | Comprobatórios (ex. links para commits)
+|Nome do Membro | Contribuição | Significância da Contribuição para o Projeto (Excelente/Boa/Regular/Ruim/Nula) | Comprobatórios (ex. links para commits)|
 | -- | -- | -- | -- |
-| Pedro Lucas e Pablo Guilherme  |  Criação dos agentes (Criança, Adulto e Idoso) | Boa | [Adicionando esqueleto dos agentes Adulto e Idoso](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/49e84a40c6908eb52a585b4063017258515b01da) 
-| Pedro Lucas  |  Adiciona Classe Bairro e Doença | Boa | [added covid and infeccion](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/99e7d0863b4888c5eaf63d9e0f487ae66eec75e9)  
-| Pedro Lucas  |  Adiciona contágio e movimentação inicial na criança e no adulto | Boa | [added Adult](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/3672a812f39dd93c778dc692372146ac423377e4#diff-5cc7e104d0563a65d0bf5695d66f8f8600de51b67b01ecab1b18c3248ecb8667)  e [added Elder contagious](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/e7e57217a2aef6816ecba4efc985f4dfedf49517)  
-| Pedro Lucas  |  Refatora agentes para ter um agente abstrato para classes com métodos semelhantes | Boa | [cria agente abstrato](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/d2eba96e98f62b243baeb8494e79b89fbbec10a1) 
-| Pedro Lucas  |  Refatora máquina de ticks/estados para ter classe abstrata com métodos e funções semelhantes | Boa | [cria fsm abstrato](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/9203929d56f2416d0e1ade69187740e9ccca9592) 
-| Pedro Lucas  |  Refatora o hospital para ser um agente BDI | Boa | [hospital criado](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/33b82c6a8170407538f4e578612854ddc5ca4355) 
+| Pedro Lucas e Pablo Guilherme  |  Criação dos agentes (Criança, Adulto e Idoso) | Boa | [Adicionando esqueleto dos agentes Adulto e Idoso](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/49e84a40c6908eb52a585b4063017258515b01da) |
+| Pedro Lucas  |  Adiciona Classe Bairro e Doença | Boa | [added covid and infeccion](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/99e7d0863b4888c5eaf63d9e0f487ae66eec75e9)  |
+| Pedro Lucas  |  Adiciona contágio e movimentação inicial na criança e no adulto | Boa | [added Adult](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/3672a812f39dd93c778dc692372146ac423377e4#diff-5cc7e104d0563a65d0bf5695d66f8f8600de51b67b01ecab1b18c3248ecb8667)  e [added Elder contagious](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/e7e57217a2aef6816ecba4efc985f4dfedf49517)  |
+| Pedro Lucas  |  Refatora agentes para ter um agente abstrato para classes com métodos semelhantes | Boa | [cria agente abstrato](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/d2eba96e98f62b243baeb8494e79b89fbbec10a1) |
+| Pedro Lucas  |  Refatora máquina de ticks/estados para ter classe abstrata com métodos e funções semelhantes | Boa | [cria fsm abstrato](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/9203929d56f2416d0e1ade69187740e9ccca9592) |
+| Pedro Lucas  |  Refatora o hospital para ser um agente BDI | Boa | [hospital criado](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/33b82c6a8170407538f4e578612854ddc5ca4355) |
+|Pablo Guilherme e Thiago Vivan|Adicionando agente syncController para coordenação dos agentes| Boa |[Corrige erro de sincronização](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/dd5a16a45fe1e20ca1ad149e94068ba24befec1c)|
+|Pablo Guilherme e Pedro Lucas|Criação do primeiro agente hospital para testes| Boa |[Implementa HospitalDeCampanha como behavior](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/1e73db6783b54974f602d51835703e92a7a49224)|
+|Pablo Guilherme |Correção para remoção de agentes mortos na simulação| Boa |[Adicionando a remoção de agentes mortos pela doença ಥ_ಥ](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/d2247eb0ddd6b0e78998634d6b98ff17f94e2656)|
+|Pablo Guilherme e Thiago Vivan|Criação de um log padronizado para todo o projeto para melhora de debug| Boa |[Adicionando classe de Log para padronização e melhorando as informações da simulação](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/45f3c233ea98a61703405b1b873b4f1eaa0a1eb5)|
+|Pablo Guilherme|Criação de uma interface gráfica para facilitar a visualização da simulação| Boa |[Adicionando interface grafica e libs necessarias 😎](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/ca39f5fe56e4c44a88b6dfaf8826d5ea3fc86d3c)|
 
 ## Outros 
+
 ### Pedro Lucas
+
 1. Aprendi um novo paradigma de programação, compreendendo como os agentes de software podem ser aplicados para resolver uma ampla variedade de problemas. No entanto, percebi que o uso desse modelo exige tempo, paciência e uma curva de aprendizado significativa para entender seus conceitos e aplicá-los de forma eficiente.
 
 2. Trabalho Futuro: Acredito que a proposta possa ser expandida para uma implementação mais próxima do mundo real, incorporando um maior número de variáveis e condições. Dessa forma, seria possível obter resultados mais precisos e representativos, aprimorando a simulação e sua aplicabilidade prática.
 
+### Pablo Guilherme
+
+1. Durante o desenvolvimento deste projeto, explorei uma nova e fascinante área da programação. Aprendi diversos conceitos inéditos e enfrentei vários desafios que exigiram bastante raciocínio e paciência. Foi possível perceber que, embora se trate de um tema complexo, é também extremamente envolvente e recompensador de estudar.
+
+2. Para trabalhos futuros, acredito que aprimorar a comunicação entre os agentes, por exemplo, introduzindo comportamentos como o medo de se infectar durante a simulação, poderia enriquecer o modelo e torná-lo mais próximo da realidade, resultando em simulações mais dinâmicas e realistas.
+
 ## GithubPages:
+
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
 -  Commands
