@@ -35,8 +35,8 @@ bin/
 .DS_Store
 
 ### JADE ###
-*.jade-id
-*jade-*.jar
+#*.jade-id
+#*jade-*.jar
 APDescription.txt
 MTPs-Main-Container.txt
 sources.txt
