@@ -22,6 +22,7 @@ public abstract class PersonAgent extends Agent {
     protected boolean casaDefinida = false;
 
     protected boolean infectado = false;
+    protected boolean curado = false; // 🩹 novo atributo
     protected Doenca doenca;
     protected double vulnerabilidade;
 
@@ -52,6 +53,9 @@ public abstract class PersonAgent extends Agent {
     public boolean isInfectado() { return infectado; }
     public void setInfectado(boolean infectado) { this.infectado = infectado; }
 
+    public boolean isCurado() { return curado; }
+    public void setCurado(boolean curado) { this.curado = curado; }
+
     public Doenca getDoenca() { return doenca; }
     public double getVulnerabilidade() { return vulnerabilidade; }
     public void setVulnerabilidade(double vulnerabilidade) { this.vulnerabilidade = vulnerabilidade; }
@@ -66,6 +70,7 @@ public abstract class PersonAgent extends Agent {
 
     public void infectar(Doenca doenca) {
         this.infectado = true;
+        this.curado = false;
         this.doenca = doenca;
         this.ticksDesdeInfeccao = 0;
         this.diasDesdeInfeccao = 0;
@@ -74,7 +79,6 @@ public abstract class PersonAgent extends Agent {
         LoggerSMA.event(this, "💉 %s foi infectado com %s.", getLocalName(), doenca.getNome());
     }
 
-    // FSM Behaviour reference
     public void setBehavior(AbstractFSMBehavior<?> behavior) { this.behavior = behavior; }
     public AbstractFSMBehavior<?> getBehavior() { return behavior; }
 
@@ -107,7 +111,6 @@ public abstract class PersonAgent extends Agent {
             }
         }
 
-        // Leve ruído probabilístico para evitar repetição idêntica
         double variacao = (rand.nextDouble() * 0.1) - 0.05;
         chancePiorar = Math.min(1.0, Math.max(0.0, chancePiorar + variacao));
 
@@ -130,6 +133,14 @@ public abstract class PersonAgent extends Agent {
                 sintomaAtual = GravidadeSintoma.MORTE;
                 LoggerSMA.warn(this, "☠️ %s faleceu (piorou para MORTE).", getLocalName());
                 infectado = false;
+                curado = false;
+
+                // 🧩 Notifica o SyncController da morte antes de ser removido
+                ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+                msg.setConversationId("MORTE_AGENT");
+                msg.addReceiver(new AID("syncController", AID.ISLOCALNAME));
+                send(msg);
+
                 if (bairro != null) bairro.marcarComoMorto(this);
                 doDelete();
                 return;
@@ -142,7 +153,13 @@ public abstract class PersonAgent extends Agent {
         switch (sintomaAtual) {
             case GRAVE -> sintomaAtual = GravidadeSintoma.MODERADO;
             case MODERADO -> sintomaAtual = GravidadeSintoma.LEVE;
-            case LEVE -> sintomaAtual = GravidadeSintoma.NENHUM;
+            case LEVE -> {
+                sintomaAtual = GravidadeSintoma.NENHUM;
+                infectado = false;
+                curado = true;
+                LoggerSMA.info(this, "💚 %s se curou completamente!", getLocalName());
+                return;
+            }
         }
         LoggerSMA.info(this, "💚 %s melhorou para %s.", getLocalName(), sintomaAtual);
     }

@@ -54,6 +54,31 @@ public class Bairro {
         posicaoHospital = new int[]{0, 3};
     }
 
+    // ====================== NOVOS MÉTODOS PARA INTERFACE ======================
+    /** Retorna o mapa completo (para uso na interface gráfica). */
+    public Local[][] getMapa() {
+        return mapa;
+    }
+
+    /** Retorna todos os agentes (crianças, adultos e idosos) na posição informada. */
+    public List<PersonAgent> getAgentesNaPosicao(int x, int y) {
+        List<PersonAgent> lista = new ArrayList<>();
+
+        for (ChildAgent c : todosChild)
+            if (c.getPosX() == x && c.getPosY() == y)
+                lista.add(c);
+
+        for (AdultAgent a : todosAdult)
+            if (a.getPosX() == x && a.getPosY() == y)
+                lista.add(a);
+
+        for (ElderAgent e : todosElder)
+            if (e.getPosX() == x && e.getPosY() == y)
+                lista.add(e);
+
+        return lista;
+    }
+
     // ====================== HOSPITAL ======================
     public HospitalDeCampanhaAgent getHospitalAgente() { return hospitalAgente; }
     public void setHospitalAgente(HospitalDeCampanhaAgent hospitalAgente) { this.hospitalAgente = hospitalAgente; }
@@ -65,7 +90,6 @@ public class Bairro {
     public AID getHospitalAID(){
         return hospitalAID;
     }
-
 
     // ====================== MAPA ======================
     public Local getLocal(int x, int y) {

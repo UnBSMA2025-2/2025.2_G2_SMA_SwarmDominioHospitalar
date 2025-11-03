@@ -17,20 +17,21 @@ public class MainContainer {
 
         ContainerController mainContainer = rt.createMainContainer(p);
 
-
         try {
             // ===================== CIDADE =============================
-            Cidade cidade = new Cidade(2,2);
+            Cidade cidade = new Cidade(2, 2);
             Bairro[][] bairros = cidade.getBairros();
 
+            System.out.println("🏙️ Cidade inicializada com " + bairros.length + "x" + bairros[0].length + " bairros.");
 
             // ===================== SYNC CONTROLLER =====================
             AgentController syncController = mainContainer.createNewAgent(
-                    "syncController" ,
+                    "syncController",
                     "hospital.agents.SyncControllerAgent",
-                    new Object[]{cidade}
+                    new Object[]{cidade} // GUI é criada dentro dele
             );
             syncController.start();
+            System.out.println("🧭 SyncController iniciado (com interface gráfica).");
 
             // ===================== LAUNCHER (AGENTES PESSOAIS) =====================
             Object[] launcherArgs = new Object[]{cidade};
@@ -40,16 +41,13 @@ public class MainContainer {
                     launcherArgs
             );
             launcher.start();
+            System.out.println("🚀 Launcher de agentes pessoais iniciado.");
 
-            // ==================== Itera sobre bairros ==================
-            for(int i = 0; i< bairros.length; i++) {
-                for(int j = 0; j< bairros[i].length; j++) {
-
+            // ===================== HOSPITAIS POR BAIRRO =====================
+            for (int i = 0; i < bairros.length; i++) {
+                for (int j = 0; j < bairros[i].length; j++) {
                     Bairro bairro = bairros[i][j];
-                    String suffix = i + "" + j; //Para nomes unicos de bairro
-
-
-                    // ===================== HOSPITAL =====================
+                    String suffix = i + "" + j;
 
                     AgentController hospital = mainContainer.createNewAgent(
                             "hospital_" + suffix,
@@ -58,13 +56,11 @@ public class MainContainer {
                     );
                     hospital.start();
 
-                    System.out.println("✅ Bairo " + suffix + " iniciado com agentes SyncController, Hospital e Launcher.");
-
+                    System.out.printf("🏥 Bairro %s iniciado com hospital e agentes vinculados.%n", suffix);
                 }
             }
 
-            System.out.println("✅ Container JADE iniciado com 4 bairros na Cidade.");
-
+            System.out.println("✅ Container JADE iniciado com 4 bairros e interface visual integrada.");
 
         } catch (StaleProxyException e) {
             e.printStackTrace();
