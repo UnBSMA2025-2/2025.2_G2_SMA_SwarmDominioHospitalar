@@ -15,24 +15,23 @@
 | 15/018312  | Guilherme Lima Matos Leal               |
 
 ## Sobre 
-Descreva o seu projeto em linhas gerais. 
-Use referências, links, que permitam conhecer um pouco mais sobre o projeto.
-Capriche nessa seção, pois ela é a primeira a ser lida pelos interessados no projeto.
+Trata-se de uma aplicação baseada em sistemas multiagentes voltada à simulação de cidades artificiais, com o objetivo de analisar e compreender como hospitais podem compartilhar recursos para otimizar o fluxo e a vazão de pacientes em períodos de alta demanda, como durante a pandemia de COVID-19.
+
+Os agentes hospitalares foram desenvolvidos seguindo o modelo BDI (Belief-Desire-Intention), permitindo decisões autônomas e adaptativas, enquanto os agentes pacientes utilizam o TickerBehaviour para representar suas ações e interações no decorrer do dia a dia da simulação.
 
 ## Screenshots
 Adicione 2 ou mais screenshots do projeto em termos de interface e/ou funcionamento.
 
 ## Instalação 
-**Linguagens**: xxxxxx<br>
-**Tecnologias**: xxxxxx<br>
-Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
-Insira um manual ou um script para auxiliar ainda mais.
-Gifs animados e outras ilustrações são bem-vindos!
+**Linguagens**: Java<br>
+**Tecnologias**: Jade<br>
+
+Para executar o projeto, é necessário ter o Java devidamente configurado no ambiente e adicionar o JAR do JADE como biblioteca do projeto.
+
+Recomenda-se o uso do IntelliJ IDEA, pois ele oferece uma configuração mais simples e rápida tanto para o Java quanto para o JADE, facilitando o processo de execução e depuração da aplicação.
 
 ## Uso 
-Explique como usar seu projeto.
-Procure ilustrar em passos, com apoio de telas do software, seja com base na interface gráfica, seja com base no terminal.
-Nessa seção, deve-se revelar de forma clara sobre o funcionamento do software.
+Para utilizar a aplicação, é necessário acessar a branch **develop**, onde consta a aplicação. Após isso, executar o MainContainer para que a simulação inicie, após isso é somente acompanhar
 
 ## Vídeo
 Adicione 1 ou mais vídeos com a execução do projeto.
@@ -45,22 +44,21 @@ OBS: TODOS DEVEM PARTICIPAR, CONFERINDO PONTOS DE VISTA.
 TEMPO: +/- 15min
 
 ## Participações
-Apresente, brevemente, como cada membro do grupo contribuiu para o projeto.
+
 |Nome do Membro | Contribuição | Significância da Contribuição para o Projeto (Excelente/Boa/Regular/Ruim/Nula) | Comprobatórios (ex. links para commits)
 | -- | -- | -- | -- |
-| Fulano  |  Programação dos Fatos da Base de Conhecimento Lógica | Boa | Commit tal (com link)
+| Pedro Lucas e Pablo Guilherme  |  Criação dos agentes (Criança, Adulto e Idoso) | Boa | [Adicionando esqueleto dos agentes Adulto e Idoso](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/49e84a40c6908eb52a585b4063017258515b01da) 
+| Pedro Lucas  |  Adiciona Classe Bairro e Doença | Boa | [added covid and infeccion](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/99e7d0863b4888c5eaf63d9e0f487ae66eec75e9)  
+| Pedro Lucas  |  Adiciona contágio e movimentação inicial na criança e no adulto | Boa | [added Adult](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/3672a812f39dd93c778dc692372146ac423377e4#diff-5cc7e104d0563a65d0bf5695d66f8f8600de51b67b01ecab1b18c3248ecb8667)  e [added Elder contagious](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/e7e57217a2aef6816ecba4efc985f4dfedf49517)  
+| Pedro Lucas  |  Refatora agentes para ter um agente abstrato para classes com métodos semelhantes | Boa | [cria agente abstrato](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/d2eba96e98f62b243baeb8494e79b89fbbec10a1) 
+| Pedro Lucas  |  Refatora máquina de ticks/estados para ter classe abstrata com métodos e funções semelhantes | Boa | [cria fsm abstrato](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/9203929d56f2416d0e1ade69187740e9ccca9592) 
+| Pedro Lucas  |  Refatora o hospital para ser um agente BDI | Boa | [hospital criado](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/33b82c6a8170407538f4e578612854ddc5ca4355) 
 
 ## Outros 
-Quaisquer outras informações sobre o projeto podem ser descritas aqui. Não esqueça, entretanto, de informar sobre:
-(i) Lições Aprendidas;
-(ii) Percepções;
-(iii) Contribuições e Fragilidades, e
-(iV) Trabalhos Futuros.
+### Pedro Lucas
+1. Aprendi um novo paradigma de programação, compreendendo como os agentes de software podem ser aplicados para resolver uma ampla variedade de problemas. No entanto, percebi que o uso desse modelo exige tempo, paciência e uma curva de aprendizado significativa para entender seus conceitos e aplicá-los de forma eficiente.
 
-## Fontes
-Referencie, adequadamente, as referências utilizadas.
-Indique ainda sobre fontes de leitura complementares.
-
+2. Trabalho Futuro: Acredito que a proposta possa ser expandida para uma implementação mais próxima do mundo real, incorporando um maior número de variáveis e condições. Dessa forma, seria possível obter resultados mais precisos e representativos, aprimorando a simulação e sua aplicabilidade prática.
 
 ## GithubPages:
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
