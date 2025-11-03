@@ -1,28 +1,58 @@
 package hospital.model;
 
+/**
+ * Representa a cidade composta por uma grade de bairros.
+ * Cada bairro contém sua própria matriz 4x4 de locais e agentes.
+ */
 public class Cidade {
 
-    private Bairro[][] bairros;
+    private final Bairro[][] bairros;
+    private final int linhasBairro;
+    private final int colunasBairro;
 
+    /**
+     * Cria uma cidade com a quantidade de bairros informada.
+     * Exemplo: new Cidade(2, 2) cria uma cidade 2x2.
+     */
     public Cidade(int linhasBairro, int colunasBairro) {
-        bairros = new Bairro[2][2];
+        this.linhasBairro = linhasBairro;
+        this.colunasBairro = colunasBairro;
+        this.bairros = new Bairro[linhasBairro][colunasBairro];
 
-        bairros[0][0] = new Bairro();
-        bairros[0][1] = new Bairro();
-        bairros[1][0] = new Bairro();
-        bairros[1][1] = new Bairro();
-
+        // Inicializa todos os bairros automaticamente
+        for (int i = 0; i < linhasBairro; i++) {
+            for (int j = 0; j < colunasBairro; j++) {
+                bairros[i][j] = new Bairro();
+            }
+        }
     }
 
-    public  Bairro[][] getBairros() {
+    /** Retorna a matriz completa de bairros. */
+    public Bairro[][] getBairros() {
         return bairros;
     }
 
+    /** Retorna o bairro em uma posição específica. */
     public Bairro getBairro(int linha, int coluna) {
-        if(linha <0 || linha >1 || coluna <0 || coluna >2) {
-            throw new IndexOutOfBoundsException("Índice do bairro inválido");
+        if (linha < 0 || linha >= linhasBairro || coluna < 0 || coluna >= colunasBairro) {
+            throw new IndexOutOfBoundsException("Índice do bairro inválido: (" + linha + "," + coluna + ")");
         }
         return bairros[linha][coluna];
     }
 
+    /** Retorna o número total de linhas de bairros. */
+    public int getLinhasBairro() {
+        return linhasBairro;
+    }
+
+    /** Retorna o número total de colunas de bairros. */
+    public int getColunasBairro() {
+        return colunasBairro;
+    }
+
+    /** Retorna uma string resumindo a estrutura da cidade. */
+    @Override
+    public String toString() {
+        return String.format("Cidade %dx%d com %d bairros.", linhasBairro, colunasBairro, linhasBairro * colunasBairro);
+    }
 }

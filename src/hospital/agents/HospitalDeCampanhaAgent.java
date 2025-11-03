@@ -88,6 +88,13 @@ public class HospitalDeCampanhaAgent extends Agent {
         }
     }
 
+    public int getPacientesInternados() {
+        if (beliefs != null && beliefs.getInternados() != null) {
+            return beliefs.getInternados().size();
+        }
+        return 0;
+    }
+
     @Override
     protected void takeDown() {
         LoggerSMA.system("🛑 %s encerrado. Total final de internados: %d",

@@ -28,14 +28,17 @@ public abstract class AbstractFSMBehavior<T extends PersonAgent> extends TickerB
     private boolean tentouHospital = false;
     private boolean internado = false;
     private int ticksNoHospital = 0;
-    private final AID hospitalAID = new AID("hospital1", AID.ISLOCALNAME);
+    private AID hospitalAID;
 
     // Controle de vida/morte
     private boolean morto = false;
 
+
+
     public AbstractFSMBehavior(T agente, long period, Bairro bairro) {
         super(agente, period);
         this.bairro = bairro;
+        this.hospitalAID = bairro.getHospitalAID();
     }
 
     @Override
