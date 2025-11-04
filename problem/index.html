@@ -1,0 +1,450 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="canonical" href="https://unbsma2025-2.github.io/2025.2_G2_SMA_SwarmDominioHospitalar/problem/">
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    
+    <title>Problema V.1 - 2025.2 • SMA &amp; Swarm no Domínio Hospitalar</title>
+    
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/v4-shims.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href="//rsms.me/inter/inter.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&amp;subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="../css/base.min.css" rel="stylesheet">
+    <link href="../css/cinder.min.css" rel="stylesheet">
+
+    
+        
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/github.min.css">
+        
+    
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    
+
+     
+<link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+        </style></head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+
+            
+              <a class="navbar-brand" href="..">2025.2 • SMA &amp; Swarm no Domínio Hospitalar</a>
+            
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li>
+                        <a href="..">Início</a>
+                    </li>
+                
+                
+                
+                    <li>
+                        <a href="../investigando/">Investigando</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Problema V.1</a>
+                    </li>
+                
+                
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li>
+                        <a rel="prev" href="../investigando/">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a rel="next">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/edit/master/docs/problem.md">Edit on 2025.2_G2_SMA_SwarmDominioHospitalar</a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#estruturacao-do-problema">Estruturação do Problema</a></li>
+            <li class="second-level"><a href="#1-ambiente">1. Ambiente</a></li>
+                
+            <li class="second-level"><a href="#2-agentes">2. Agentes</a></li>
+                
+                <li class="third-level"><a href="#ciclo-de-vida">Ciclo de Vida</a></li>
+            <li class="second-level"><a href="#3-formulas-de-motivacao-para-acoes">3. Fórmulas de Motivação para Ações</a></li>
+                
+            <li class="second-level"><a href="#4-formulas-de-contaminacao-e-progressao-do-estado-de-saude-tempo-discreto">4. Fórmulas de Contaminação e Progressão do Estado de Saúde (Tempo Discreto)</a></li>
+                
+                <li class="third-level"><a href="#41-contaminacao">4.1 Contaminação</a></li>
+                <li class="third-level"><a href="#42-progressao-do-estado-de-saude">4.2 Progressão do Estado de Saúde</a></li>
+                <li class="third-level"><a href="#43-normalizacao-das-probabilidades">4.3 Normalização das Probabilidades</a></li>
+                <li class="third-level"><a href="#44-resumo-das-transicoes-tempo-discreto">4.4 Resumo das Transições (Tempo Discreto)</a></li>
+            <li class="second-level"><a href="#5-objetivos-da-simulacao">5. Objetivos da Simulação</a></li>
+                
+            <li class="second-level"><a href="#6-evolucoes-e-outras-perspectivas">6. Evoluções e outras perspectivas</a></li>
+                
+            <li class="second-level"><a href="#versionamento">Versionamento</a></li>
+                
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="estruturacao-do-problema">Estruturação do Problema<a class="headerlink" href="#estruturacao-do-problema" title="Permanent link">¶</a></h1>
+<h2 id="1-ambiente">1. Ambiente<a class="headerlink" href="#1-ambiente" title="Permanent link">¶</a></h2>
+<p>Para representar o espaço onde os indivíduos transitam e interagem, será utilizado um <strong>mapa quadriculado</strong>, em que cada célula representa uma <strong>casa</strong> ou um <strong>local de interesse</strong>.  </p>
+<p>Os locais de interesse são:  </p>
+<ul>
+<li>Escola (E)  </li>
+<li>Trabalho (T)  </li>
+<li>Supermercado (S)  </li>
+<li>Parque (P)  </li>
+<li>Festa (F)  </li>
+</ul>
+<p>Cada agente possui uma <strong>casa base (H)</strong> de onde parte e para onde retorna no fim do dia.</p>
+<p>Exemplo de representação:</p>
+<p>Imagem real da cidade:<br>
+<a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/googleImage.png" data-desc-position="bottom"><img alt="Imagem da Cidade" src="../assets/googleImage.png" width="100%"></a></p>
+<p>Representação em quadrados:<br>
+<a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/squareImage.png" data-desc-position="bottom"><img alt="Representação da Cidade" src="../assets/squareImage.png" width="100%"></a></p>
+<hr>
+<h2 id="2-agentes">2. Agentes<a class="headerlink" href="#2-agentes" title="Permanent link">¶</a></h2>
+<p>Os agentes serão modelados como <strong>autômatos probabilísticos</strong>, cada um com os seguintes atributos:</p>
+<ul>
+<li><strong>Idade</strong> (influencia rotina e suscetibilidade)  </li>
+<li><strong>Papel social</strong> (estudante, trabalhador, desempregado, etc.)  </li>
+<li>
+<p><strong>Estado de saúde</strong>:  </p>
+</li>
+<li>
+<p>Suscetível (S)  </p>
+</li>
+<li>Infectado (I)  </li>
+<li>Recuperado (R)  </li>
+</ul>
+<p>Fluxo dos agentes:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/agentFluxo_V2.png" data-desc-position="bottom"><img alt="Representação do fluxo do agente" src="../assets/agentFluxo_V2.png" width="100%"></a></p>
+<h3 id="ciclo-de-vida">Ciclo de Vida<a class="headerlink" href="#ciclo-de-vida" title="Permanent link">¶</a></h3>
+<ul>
+<li>O tempo é dividido em <strong>ticks</strong> (ex.: 3 a 4 por dia), que representam <strong>passos discretos de tempo</strong>.  </li>
+<li>Em cada tick, o agente decide uma ação, que pode ser <strong>controlada</strong> (rotina) ou <strong>esporádica</strong> (aleatória).  </li>
+</ul>
+<h4 id="acoes-controladas">Ações Controladas<a class="headerlink" href="#acoes-controladas" title="Permanent link">¶</a></h4>
+<ul>
+<li>Escola / Trabalho → ocorrem em 1 ou 2 ticks fixos do dia.  </li>
+<li>Supermercado → ocorre de forma esporádica.  </li>
+<li>Festa → ocorre em horários sociais (noites e finais de semana).  </li>
+</ul>
+<h4 id="acoes-em-caso-de-doenca">Ações em Caso de Doença<a class="headerlink" href="#acoes-em-caso-de-doenca" title="Permanent link">¶</a></h4>
+<p>Se infectado, o comportamento pode mudar:  </p>
+<ul>
+<li>Faltar ao trabalho/escola.  </li>
+<li>Permanecer em casa (repouso).  </li>
+<li>Buscar atendimento médico (dependendo da gravidade dos sintomas).  </li>
+</ul>
+<hr>
+<h2 id="3-formulas-de-motivacao-para-acoes">3. Fórmulas de Motivação para Ações<a class="headerlink" href="#3-formulas-de-motivacao-para-acoes" title="Permanent link">¶</a></h2>
+<p>A <strong>probabilidade de um agente realizar uma ação <span class="arithmatex">\(a\)</span> em um tick <span class="arithmatex">\(t\)</span></strong> é dada por:</p>
+<div class="arithmatex">\[
+P_a(t) = B_a \cdot A(t) \cdot M_i
+\]</div>
+<p><strong>Explicação:</strong><br>
+- <span class="arithmatex">\(B_a\)</span> → Base de motivação da ação: define a tendência natural do agente de realizar determinada ação.<br>
+- <span class="arithmatex">\(A(t)\)</span> → Ajuste temporal: considera hora do dia, dia da semana e fins de semana.<br>
+- <span class="arithmatex">\(M_i\)</span> → Fator individual: idade, papel social e sintomas de doença.</p>
+<p><strong>Exemplo:</strong><br>
+- Crianças → <span class="arithmatex">\(P_{escola}(t)\)</span> alto em dias úteis pela manhã.<br>
+- Adultos trabalhadores → <span class="arithmatex">\(P_{trabalho}(t)\)</span> alto em dias úteis, baixo em fins de semana.<br>
+- Todos → <span class="arithmatex">\(P_{supermercado}(t)\)</span> moderado e aleatório.<br>
+- Jovens → <span class="arithmatex">\(P_{festa}(t)\)</span> alto em fins de semana.  </p>
+<hr>
+<h2 id="4-formulas-de-contaminacao-e-progressao-do-estado-de-saude-tempo-discreto">4. Fórmulas de Contaminação e Progressão do Estado de Saúde (Tempo Discreto)<a class="headerlink" href="#4-formulas-de-contaminacao-e-progressao-do-estado-de-saude-tempo-discreto" title="Permanent link">¶</a></h2>
+<h3 id="41-contaminacao">4.1 Contaminação<a class="headerlink" href="#41-contaminacao" title="Permanent link">¶</a></h3>
+<p>A transmissão ocorre quando um agente <strong>suscetível (S)</strong> e um agente <strong>infectado (I)</strong> compartilham a mesma célula durante um tick:</p>
+<div class="arithmatex">\[
+P_{trans}(i,j) = \beta \cdot C_{loc} \cdot S_i \cdot I_j
+\]</div>
+<p><strong>Explicação:</strong><br>
+- <span class="arithmatex">\(\beta\)</span> → taxa básica de transmissão da doença.<br>
+- <span class="arithmatex">\(C_{loc}\)</span> → fator de contágio do local.<br>
+- <span class="arithmatex">\(S_i\)</span> → suscetibilidade do agente <span class="arithmatex">\(i\)</span>.<br>
+- <span class="arithmatex">\(I_j\)</span> → infectividade do agente <span class="arithmatex">\(j\)</span>.</p>
+<p><strong>Probabilidade composta para múltiplos infectados:</strong></p>
+<div class="arithmatex">\[
+P_{infec}(i) = 1 - \prod_{j \in I_{celula}} \left( 1 - P_{trans}(i,j) \right)
+\]</div>
+<p><strong>Explicação:</strong><br>
+- Cada infectado <span class="arithmatex">\(j\)</span> na célula oferece uma chance <strong>independente</strong> de infectar <span class="arithmatex">\(i\)</span>.<br>
+- <span class="arithmatex">\((1 - P_{trans}(i,j))\)</span> → probabilidade de <strong>não ser infectado por <span class="arithmatex">\(j\)</span></strong> neste tick.<br>
+- O produto calcula a probabilidade de <strong>não ser infectado por nenhum</strong>.<br>
+- Subtraindo de 1, obtemos a chance de ser infectado por <strong>pelo menos um</strong> infectado nesse tick.</p>
+<p><strong>Exemplo:</strong><br>
+- Dois infectados na célula: <span class="arithmatex">\(P_{trans}(i,j_1)=0.1\)</span>, <span class="arithmatex">\(P_{trans}(i,j_2)=0.2\)</span><br>
+- Probabilidade de não ser infectado: <span class="arithmatex">\(0.9 \cdot 0.8 = 0.72\)</span><br>
+- Probabilidade de ser infectado: <span class="arithmatex">\(1-0.72 = 0.28\)</span> (28% neste tick)</p>
+<hr>
+<h3 id="42-progressao-do-estado-de-saude">4.2 Progressão do Estado de Saúde<a class="headerlink" href="#42-progressao-do-estado-de-saude" title="Permanent link">¶</a></h3>
+<p>Cada tick, o agente infectado <span class="arithmatex">\(I\)</span> pode <strong>recuperar, morrer ou permanecer infectado</strong>.</p>
+<ol>
+<li><strong>Suscetível → Infectado</strong>  </li>
+</ol>
+<div class="arithmatex">\[
+S \xrightarrow{P_{infec}(i)} I
+\]</div>
+<ul>
+<li>
+<p>Probabilidade avaliada <strong>em cada tick</strong>, considerando todos os infectados na mesma célula.</p>
+</li>
+<li>
+<p><strong>Infectado → Recuperado</strong>  </p>
+</li>
+</ul>
+<div class="arithmatex">\[
+I \xrightarrow{P_{rec}} R
+\]</div>
+<ul>
+<li>
+<p><span class="arithmatex">\(P_{rec}\)</span> → probabilidade <strong>por tick</strong> de recuperação, já ajustada para o modelo discreto.</p>
+</li>
+<li>
+<p><strong>Infectado → Morto</strong>  </p>
+</li>
+</ul>
+<div class="arithmatex">\[
+I \xrightarrow{P_{mort}} D
+\]</div>
+<ul>
+<li><span class="arithmatex">\(P_{mort}\)</span> → probabilidade <strong>por tick</strong> de morte, ajustada por fatores individuais.</li>
+</ul>
+<hr>
+<h3 id="43-normalizacao-das-probabilidades">4.3 Normalização das Probabilidades<a class="headerlink" href="#43-normalizacao-das-probabilidades" title="Permanent link">¶</a></h3>
+<p>Para que recuperação e morte não ocorram simultaneamente no mesmo tick:</p>
+<div class="arithmatex">\[
+P_{rec}' = P_{rec} \cdot (1 - P_{mort})
+\]</div>
+<div class="arithmatex">\[
+P_{mort}' = P_{mort} \cdot (1 - P_{rec})
+\]</div>
+<ul>
+<li>Mantém a soma das probabilidades <span class="arithmatex">\(\leq 1\)</span> por tick.</li>
+</ul>
+<hr>
+<h3 id="44-resumo-das-transicoes-tempo-discreto">4.4 Resumo das Transições (Tempo Discreto)<a class="headerlink" href="#44-resumo-das-transicoes-tempo-discreto" title="Permanent link">¶</a></h3>
+<div class="arithmatex">\[
+\begin{cases}
+S \xrightarrow{P_{infec}(i)} I \\[2mm]
+I \xrightarrow{P_{rec}'} R \\[1mm]
+I \xrightarrow{P_{mort}'} D
+\end{cases}
+\]</div>
+<ul>
+<li>Cada tick:  </li>
+<li>Calcula-se infecção de suscetíveis.  </li>
+<li>Aplica-se recuperação ou morte dos infectados.  </li>
+<li>Permite acompanhar picos de contaminação, efeito do comportamento social e impacto das taxas de transmissão e mortalidade.</li>
+</ul>
+<hr>
+<h2 id="5-objetivos-da-simulacao">5. Objetivos da Simulação<a class="headerlink" href="#5-objetivos-da-simulacao" title="Permanent link">¶</a></h2>
+<ul>
+<li>Observar o impacto do comportamento social na propagação da doença.  </li>
+<li>Medir:  </li>
+<li>Número de infectados ao longo do tempo.  </li>
+<li>Picos de contaminação.  </li>
+<li>Tempo até estabilização (ou colapso das rotinas).</li>
+</ul>
+<h2 id="6-evolucoes-e-outras-perspectivas">6. Evoluções e outras perspectivas<a class="headerlink" href="#6-evolucoes-e-outras-perspectivas" title="Permanent link">¶</a></h2>
+<p>Durante a revisão bibliográfica e a elaboração deste documento, foram identificados alguns pontos relevantes que podem ser explorados em trabalhos futuros:</p>
+<ul>
+<li>O <strong>auto cuidado</strong> pode ser realizado conforme a intensidade e a natureza dos sintomas apresentados.  </li>
+<li>O <strong>diagnóstico médico inicial</strong> pode ser baseado nos sintomas observados e em sua intensidade.  </li>
+<li><strong>Tratamentos</strong> não são imediatos e podem ser modelados por uma <strong>distribuição lognormal</strong>, com média de 3 dias e intervalo de 0 a 10 dias, aplicável a todas as doenças.  </li>
+<li>Aplicação do <strong>princípio da homofilia</strong>, atribuindo maior probabilidade de interação entre indivíduos com características semelhantes.  </li>
+<li>Considerar o <strong>vento</strong> como fator de dispersão de doenças transmitidas ao ar livre, utilizando um modelo de <strong>sopro gaussiano modificado</strong> para simular a dispersão pelo vento.</li>
+<li>A implementação de mecanismos de compartilhamento de informações entre os agentes acerca do estado da calamidade pode incorporar elementos de percepção de risco ou medo de contaminação, tornando a simulação mais próxima do comportamento observado em cenários reais.</li>
+<li>Futuramente, o grupo planeja implementar agentes especializados que representem uma rede hospitalar, a qual seria submetida a situações de estresse diante do aumento de agentes doentes. O objetivo é modelar cenários de crise, como pandemias ou contextos de guerra, nos quais os hospitais atingem sua capacidade máxima e precisam se organizar de forma estratégica para salvar o maior número possível de pacientes.</li>
+</ul>
+<h2 id="versionamento">Versionamento<a class="headerlink" href="#versionamento" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Autor/Responsável</th>
+<th>Alterações Principais</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.0</td>
+<td>2025-09-21</td>
+<td>Pedro Lucas</td>
+<td>Criação do Documento e adição do problema.</td>
+</tr>
+<tr>
+<td>v1.1</td>
+<td>2025-09-22</td>
+<td>Pablo Guilherme</td>
+<td>Acrecimo de pontos no tópico 6.</td>
+</tr>
+</tbody>
+</table></div>
+        
+        
+    </div>
+
+    
+      <footer class="col-md-12 text-center">
+          
+          
+            <hr>
+            <p>
+            <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+            </p>
+          
+
+          
+          <br>
+            <small>Revised on: 2025-11-03</small>
+          
+          
+      </footer>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+
+    
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
+        
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    <script>var base_url = ".."</script>
+    
+    <script src="../js/base.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="../search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+</script></body></html>
