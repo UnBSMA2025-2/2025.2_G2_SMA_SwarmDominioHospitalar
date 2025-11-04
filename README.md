@@ -66,7 +66,7 @@ TEMPO: +/- 15min
 | Cainã Freitas | Adição de hospital e bairro 4x4 | Boa | [add hospital e bairro 4x4](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/9a9567d3df39f7fd8f7dfe5bf1f34a87968824d7) |
 | Cainã Freitas | Remoção de pasta de IDE e Limpeza do repo | Boa | [remove pasta de IDE](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/081abb21b2265f0824e5b7d471fa68126f5dd6e4) |
 
-## Outros 
+## Lições aprendidas  
 
 ### Pedro Lucas
 
@@ -82,9 +82,9 @@ TEMPO: +/- 15min
 
 ### Thiago Vivan Bastos
 
-1. Aprendi novos conceitos que relacionados ao paradigma de multi agentes que não havia trabalhado na disciplina de paradigmas, bem como a utilização da plataforma JADE e tive um pouco mais de contato com o java, já que não tinha muita noção da linguagem.
+1. Aprendi novos conceitos relacionados ao paradigma de multi agentes que não havia trabalhado na disciplina de paradigmas, bem como a utilização da plataforma JADE e tive um pouco mais de contato com o java, já que não tinha muita noção da linguagem.
 
-2. Para trabalhos futuros, acredito que poderiam ser feitas melhorias no comportamentos dos agentes que representam pessoas, adicionando mais comportamentos e responsividade de acordo com a doença, bem como, seria interessante adicionar doenças novas com sintomas e características diferentes. 
+2. Para trabalhos futuros, acredito que poderiam ser feitas melhorias no comportamentos dos agentes que representam pessoas, adicionando mais comportamentos, aleatoriadades e responsividade de acordo com a doença, bem como, seria interessante adicionar doenças novas com sintomas e características diferentes. 
 
 ### Cainã Freitas
 
