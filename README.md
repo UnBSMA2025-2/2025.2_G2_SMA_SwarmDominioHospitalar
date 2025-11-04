@@ -2,7 +2,7 @@
 
 **Disciplina**: FGA0053 - Sistemas Multiagentes <br>
 **Nro do Grupo (de acordo com a Planilha de Divisão dos Grupos)**: G2<br>
-**Frente de Pesquisa**: SMA & Swarm<br>
+**Frente de Pesquisa**: SMA & Swarm & Behaviour & BDI<br>
 
 ## Alunos
 | Matrícula  | Aluno                                   |
@@ -26,16 +26,28 @@ Os agentes hospitalares foram desenvolvidos seguindo o modelo BDI (Belief-Desire
 ![logs](assets/print3.jpeg)
 
 
-## Instalação 
-**Linguagens**: Java<br>
-**Tecnologias**: Jade<br>
+## Instalação  
+**Linguagem:** Java  
+**Tecnologia:** JADE  
 
-Para executar o projeto, é necessário ter o Java devidamente configurado no ambiente e adicionar o JAR do JADE como biblioteca do projeto.
+Para executar o projeto, é necessário ter o **Java** devidamente configurado no ambiente e adicionar o **JAR do JADE** e os **frameworks de interface gráfica** como bibliotecas do projeto, para permitir a execução correta da tela da simulação.  
 
-Recomenda-se o uso do IntelliJ IDEA, pois ele oferece uma configuração mais simples e rápida tanto para o Java quanto para o JADE, facilitando o processo de execução e depuração da aplicação.
+**JARs Externos:**  
+[Pasta de JARs](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/tree/develop/jarsExternos)  
 
-## Uso 
-Para utilizar a aplicação, é necessário acessar a branch **develop**, onde consta a aplicação. Após isso, executar o MainContainer para que a simulação inicie, após isso é somente acompanhar
+Exemplo dos JARs sendo usados:
+
+![JARs](assets/modules.jpg)
+
+Recomenda-se o uso do **IntelliJ IDEA**, pois ele oferece uma configuração mais simples e rápida tanto para o Java quanto para o JADE, facilitando o processo de **execução** e **depuração** da aplicação.  
+
+
+## Uso  
+Para utilizar a aplicação, é necessário acessar a branch **`develop`**, onde está localizada a versão funcional do projeto.  
+Após isso, execute o arquivo **`MainContainer`** para iniciar a simulação e acompanhar sua execução.  
+
+Também é possível rodar o script **`run.sh`** para automatizar o processo de inicialização do sistema:  
+[run.sh](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/blob/develop/run.sh)
 
 ## Vídeo
 Adicione 1 ou mais vídeos com a execução do projeto.
