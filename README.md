@@ -75,6 +75,14 @@ TEMPO: +/- 15min
 
 2. Para trabalhos futuros, acredito que aprimorar a comunicação entre os agentes, por exemplo, introduzindo comportamentos como o medo de se infectar durante a simulação, poderia enriquecer o modelo e torná-lo mais próximo da realidade, resultando em simulações mais dinâmicas e realistas.
 
+### Thiago Vivan Bastos
+
+1. Aprendi novos conceitos que relacionados ao paradigma de multi agentes que não havia trabalhado na disciplina de paradigmas, bem como a utilização da plataforma JADE e tive um pouco mais de contato com o java, já que não tinha muita noção da linguagem.
+
+2. Para trabalhos futuros, acredito que poderiam ser feitas melhorias no comportamentos dos agentes que representam pessoas, adicionando mais comportamentos e responsividade de acordo com a doença, bem como, seria interessante adicionar doenças novas com sintomas e características diferentes. 
+
+
+
 ## GithubPages:
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
