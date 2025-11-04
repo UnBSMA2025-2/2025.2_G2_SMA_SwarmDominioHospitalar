@@ -61,6 +61,11 @@ TEMPO: +/- 15min
 |Thiago Vivan|Criação da lógica inicial de progressão de doença e mudança de comportamentos de acordo com a gravidade de sintomas| Boa |[Lógica inicial de progressão](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/e735163984497fc39cb9d77b249eb460036c59ad)|
 |Thiago Vivan|Criação da cidade e refatoração de código para se adequar a vários bairros e agentes distintos| Boa |[Criação da Cidade](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/50cf05d8be5d5aed9c9f5de665ace79339661788)|
 |Thiago Vivan|Ajustes finais para correção na comunicação entre agentes e hospitais| Boa |[Ajustes de comunicação](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/8b3ae1280029fafd7b0fea6e3839b1d1d3e729c7)|
+| Cainã Freitas | Reestruturação do repositório e adição de script de execução | Boa | [add jade.jar pra rodar no futuro](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/df3b0c9e340baf3a7fb8b18a14cb8926f7a2f450), [add script](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/45597abc379c5b1c2ec0bb03ac3acd01a477fd4c) |
+| Cainã Freitas | Merge da funcionalidade de hospital | Boa | [Merge pull request #1 from UnBSMA2025-2/feat/hospital](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/dc946190c694c0bb98c8bd344f88180f5ddb9dc7) |
+| Cainã Freitas | Adição de hospital e bairro 4x4 | Boa | [add hospital e bairro 4x4](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/9a9567d3df39f7fd8f7dfe5bf1f34a87968824d7) |
+| Cainã Freitas | Remoção de pasta de IDE e Limpeza do repo | Boa | [remove pasta de IDE](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/081abb21b2265f0824e5b7d471fa68126f5dd6e4) |
+
 ## Outros 
 
 ### Pedro Lucas
@@ -81,7 +86,11 @@ TEMPO: +/- 15min
 
 2. Para trabalhos futuros, acredito que poderiam ser feitas melhorias no comportamentos dos agentes que representam pessoas, adicionando mais comportamentos e responsividade de acordo com a doença, bem como, seria interessante adicionar doenças novas com sintomas e características diferentes. 
 
+### Cainã Freitas
 
+1. Durante o desenvolvimento deste projeto, tive a oportunidade de me aprofundar na programação orientada a agentes e no framework JADE, o que me permitiu compreender na prática como sistemas multiagentes podem ser aplicados para modelar problemas complexos do mundo real. A experiência com a coordenação entre agentes, gestão do ciclo de vida e implementação de comportamentos autônomos foi particularmente valiosa para meu crescimento como desenvolvedor.
+
+2. Trabalho Futuro: Vejo potencial para expandir esta simulação incorporando mais variáveis epidemiológicas e fatores sociais que influenciam a propagação de doenças. Além disso, a implementação de mecanismos de aprendizado de máquina poderia tornar os agentes mais adaptativos, criando uma simulação ainda mais realista e predictive para auxiliar em estudos de saúde pública.
 
 ## GithubPages:
 
