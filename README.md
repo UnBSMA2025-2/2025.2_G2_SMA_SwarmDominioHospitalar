@@ -20,7 +20,11 @@ Trata-se de uma aplicação baseada em sistemas multiagentes voltada à simulaç
 Os agentes hospitalares foram desenvolvidos seguindo o modelo BDI (Belief-Desire-Intention), permitindo decisões autônomas e adaptativas, enquanto os agentes pacientes utilizam o TickerBehaviour para representar suas ações e interações no decorrer do dia a dia da simulação.
 
 ## Screenshots
-Adicione 2 ou mais screenshots do projeto em termos de interface e/ou funcionamento.
+
+![interface grafica](assets/print1.jpeg)
+
+![logs](assets/print3.jpeg)
+
 
 ## Instalação 
 **Linguagens**: Java<br>
