@@ -58,7 +58,9 @@ TEMPO: +/- 15min
 |Pablo Guilherme |Correção para remoção de agentes mortos na simulação| Boa |[Adicionando a remoção de agentes mortos pela doença ಥ_ಥ](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/d2247eb0ddd6b0e78998634d6b98ff17f94e2656)|
 |Pablo Guilherme e Thiago Vivan|Criação de um log padronizado para todo o projeto para melhora de debug| Boa |[Adicionando classe de Log para padronização e melhorando as informações da simulação](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/45f3c233ea98a61703405b1b873b4f1eaa0a1eb5)|
 |Pablo Guilherme|Criação de uma interface gráfica para facilitar a visualização da simulação| Boa |[Adicionando interface grafica e libs necessarias 😎](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/ca39f5fe56e4c44a88b6dfaf8826d5ea3fc86d3c)|
-
+|Thiago Vivan|Criação da lógica inicial de progressão de doença e mudança de comportamentos de acordo com a gravidade de sintomas| Boa |[Lógica inicial de progressão](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/e735163984497fc39cb9d77b249eb460036c59ad)|
+|Thiago Vivan|Criação da cidade e refatoração de código para se adequar a vários bairros e agentes distintos| Boa |[Criação da Cidade](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/50cf05d8be5d5aed9c9f5de665ace79339661788)|
+|Thiago Vivan|Ajustes finais para correção na comunicação entre agentes e hospitais| Boa |[Ajustes de comunicação](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/commit/8b3ae1280029fafd7b0fea6e3839b1d1d3e729c7)|
 ## Outros 
 
 ### Pedro Lucas
