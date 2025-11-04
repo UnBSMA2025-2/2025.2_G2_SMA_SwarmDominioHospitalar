@@ -50,14 +50,9 @@ Também é possível rodar o script **`run.sh`** para automatizar o processo de 
 [run.sh](https://github.com/UnBSMA2025-2/2025.2_G2_SMA_SwarmDominioHospitalar/blob/develop/run.sh)
 
 ## Vídeo
-Adicione 1 ou mais vídeos com a execução do projeto.
-Procure: 
-(i) Introduzir o projeto;
-(ii) Mostrar passo a passo o código, explicando-o, e deixando claro o que é de terceiros, e o que é contribuição real da equipe;
-(iii) Apresentar particularidades do Paradigma, da Linguagem, e das Tecnologias, e
-(iV) Apresentar lições aprendidas, contribuições, pendências, e ideias para trabalhos futuros.
-OBS: TODOS DEVEM PARTICIPAR, CONFERINDO PONTOS DE VISTA.
-TEMPO: +/- 15min
+Vídeo de apresentação:
+
+[Apresentação](https://www.youtube.com/watch?v=RRkMK4qpbVA)
 
 ## Participações
 
