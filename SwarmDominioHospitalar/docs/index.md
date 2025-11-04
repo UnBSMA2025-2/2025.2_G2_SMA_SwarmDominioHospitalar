@@ -21,9 +21,9 @@ Os agentes hospitalares foram desenvolvidos seguindo o modelo BDI (Belief-Desire
 
 ## Screenshots
 
-![interface grafica](assets/print1.jpeg)
+![interface grafica](../../assets/print1.jpeg)
 
-![logs](assets/print3.jpeg)
+![logs](../../assets/print3.jpeg)
 
 
 ## Instalação  
@@ -37,7 +37,7 @@ Para executar o projeto, é necessário ter o **Java** devidamente configurado n
 
 Exemplo dos JARs sendo usados:
 
-![JARs](assets/modules.jpg)
+![JARs](../../assets/modules.jpg)
 
 Recomenda-se o uso do **IntelliJ IDEA**, pois ele oferece uma configuração mais simples e rápida tanto para o Java quanto para o JADE, facilitando o processo de **execução** e **depuração** da aplicação.  
 
