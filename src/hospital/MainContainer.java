@@ -2,6 +2,7 @@ package hospital;
 
 import hospital.model.Bairro;
 import hospital.model.Cidade;
+import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -49,12 +50,17 @@ public class MainContainer {
                     Bairro bairro = bairros[i][j];
                     String suffix = i + "" + j;
 
+                    String hospitalAgentName = "hospital_" + suffix;
+
                     AgentController hospital = mainContainer.createNewAgent(
-                            "hospital_" + suffix,
+                            hospitalAgentName,
                             "hospital.agents.HospitalDeCampanhaAgent",
                             new Object[]{bairro}
                     );
                     hospital.start();
+
+                    AID hospitalAID = new AID(hospitalAgentName, AID.ISLOCALNAME);
+                    bairro.setHospitalAID(hospitalAID);
 
                     System.out.printf("🏥 Bairro %s iniciado com hospital e agentes vinculados.%n", suffix);
                 }

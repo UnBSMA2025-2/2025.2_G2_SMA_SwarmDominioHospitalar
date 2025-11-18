@@ -44,7 +44,7 @@ public class LauncherAgents extends Agent {
 
                 LoggerSMA.system("🏘️ Iniciando agentes para o Bairro %s...", bairroId);
 
-                // ===================== HOSPITAL DE CAMPANHA =====================
+/*                // ===================== HOSPITAL DE CAMPANHA =====================
                 try {
                     Object[] hospitalArgs = new Object[]{bairro};
                     AgentController hospital = container.createNewAgent(
@@ -63,7 +63,7 @@ public class LauncherAgents extends Agent {
                 } catch (StaleProxyException e) {
                     LoggerSMA.error(this, "❌ Erro ao criar Hospital de Campanha%s: %s",bairroId, e.getMessage());
                 }
-
+*/
                 Random rand = new Random();
 
                 // ===================== CRIA CRIANÇAS =====================
