@@ -12,6 +12,7 @@ import jade.core.AID;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class Bairro {
     private final Local[][] mapa;
@@ -31,27 +32,37 @@ public class Bairro {
     public Bairro() {
         mapa = new Local[4][4];
 
-        mapa[0][0] = Local.CASA;
-        mapa[0][1] = Local.ESCOLA;
-        mapa[0][2] = Local.PARQUE;
-        mapa[0][3] = Local.HOSPITAL;
+        // Criação de uma lista com todos os tipos de célula
+        ArrayList<Local> locais = new ArrayList<>();
+        locais.add(Local.CASA);
+        locais.add(Local.ESCOLA);
+        locais.add(Local.PARQUE);
+        locais.add(Local.HOSPITAL);
+        locais.add(Local.PARQUE);
+        locais.add(Local.ATIVIDADE);
+        locais.add(Local.ESCOLA);
+        locais.add(Local.CASA);
+        locais.add(Local.CASA);
+        locais.add(Local.ATIVIDADE);
+        locais.add(Local.PARQUE);
+        locais.add(Local.ESCOLA);
+        locais.add(Local.CASA);
+        locais.add(Local.ATIVIDADE);
+        locais.add(Local.PARQUE);
+        locais.add(Local.CASA);
 
-        mapa[1][0] = Local.PARQUE;
-        mapa[1][1] = Local.ATIVIDADE;
-        mapa[1][2] = Local.ESCOLA;
-        mapa[1][3] = Local.CASA;
+        // Embaralhar a lista
+        Collections.shuffle(locais);
 
-        mapa[2][0] = Local.CASA;
-        mapa[2][1] = Local.ATIVIDADE;
-        mapa[2][2] = Local.PARQUE;
-        mapa[2][3] = Local.ESCOLA;
+        // Preencher o mapa com os locais embaralhados
+        int index = 0;
+        for (int i = 0; i < mapa.length; i++) {
+            for (int j = 0; j < mapa[i].length; j++) {
+                mapa[i][j] = locais.get(index++);
+            }
+        }
 
-        mapa[3][0] = Local.CASA;
-        mapa[3][1] = Local.ATIVIDADE;
-        mapa[3][2] = Local.PARQUE;
-        mapa[3][3] = Local.CASA;
-
-        posicaoHospital = new int[]{0, 3};
+        posicaoHospital = new int[]{0, 3};  // Hospital sempre na posição (0, 3)
     }
 
     // ====================== NOVOS MÉTODOS PARA INTERFACE ======================
@@ -111,7 +122,6 @@ public class Bairro {
     public List<ElderAgent> getTodosElder() { return todosElder; }
 
     // ====================== REMOÇÃO SINCRONIZADA ======================
-
     /** Marca o agente como morto (chamado por PersonAgent ao morrer). */
     public synchronized void marcarComoMorto(PersonAgent agente) {
         if (!mortosPendentes.contains(agente)) {
